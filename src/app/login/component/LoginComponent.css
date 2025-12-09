@@ -1,0 +1,11 @@
+/* Login Component Styles */
+.login-gradient {
+    background: radial-gradient(circle at top left,
+            #A8E665 0%,
+            rgba(204, 88, 84, 0.08) 40%,
+            #22431E 100%);
+    backdrop-filter: blur(80px);
+    -webkit-backdrop-filter: blur(80px);
+    min-height: calc(100vh - 390px);
+    background-color: #000000;
+}
