@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
 
+// Configuración de fuente SF-Pro
+const sfPro = localFont({
+  src: "../fonts/SF-Pro.ttf",
+  variable: "--font-sf-pro",
+  display: "swap",
+  weight: "100 900",
+});
 
 export const metadata: Metadata = {
   title: "Bullcrux",
@@ -14,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={sfPro.variable}>
         {children}
       </body>
     </html>
