@@ -1,0 +1,38 @@
+.notification-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #FFFD02;
+    padding: 8px 12px;
+    border-radius: 8px;
+    min-width: 200px;
+    max-width: 400px;
+}
+
+.notification-profile-image {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.notification-profile-placeholder {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #E8E8E8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.notification-text {
+    font-size: 14px;
+    color: #000;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
