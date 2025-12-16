@@ -4,6 +4,7 @@ import Image from 'next/image';
 import bullcruxIcon from '../../../images/bullcrux-icon.svg';
 import searchIcon from '../../../images/search-icon.svg';
 import NotificationComponent from './NotificationComponent';
+import reyDelTicketIcon from '../../../images/rey-del-ticket.png';
 
 interface HomePageComponentProps {
 }
@@ -24,11 +25,13 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                     product="iPhone15ProMax"
                     ticketsCount={5}
                 />
-
                 {/* Search input */}
                 <div className="search-input">
                     <Image src={searchIcon} alt="Search icon" width={18} height={18} />
                 </div>
+            </div>
+            <div className='rey-del-ticket flex justify-center items-center mt-4'>
+                <Image src={reyDelTicketIcon} alt="Rey del ticket" width={197} height={54} />
             </div>
         </div>
     )

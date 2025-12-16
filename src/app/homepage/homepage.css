@@ -18,8 +18,10 @@
 }
 
 .bullcrux-icon {
-    width: 46px;
-    height: 46px;
+    min-width: 46px;
+    min-height: 46px;
+    max-width: 46px;
+    max-height: 46px;
     background-color: #94FF31;
     border-radius: 4px;
     display: flex;
@@ -37,8 +39,12 @@
 }
 
 .search-input {
-    width: 38px;
-    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+    max-width: 38px;
+    max-height: 38px;
+    min-width: 38px;
+    min-height: 38px;
     background-color: #E8E8E8;
     border-radius: 50%;
     display: flex;
