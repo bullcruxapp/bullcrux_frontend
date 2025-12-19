@@ -8,12 +8,12 @@
 }
 
 .homepage-container h1 {
-    font-size: 2rem;
+    font-size: 14px;
     margin-bottom: 1rem;
 }
 
 .homepage-container p {
-    font-size: 1.2rem;
+    font-size: 14px;
     color: #666;
 }
 
@@ -50,4 +50,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.raffle-large-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+}
+
+.raffle-cards-container {
+    width: 100%;
+}
+
+.raffle-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(176px, 1fr));
+    gap: 16px;
+    justify-content: center;
+    max-width: 100%;
 }
