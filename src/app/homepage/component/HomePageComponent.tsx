@@ -10,6 +10,7 @@ import iphoneImage from '../../../images/iphone.jpg';
 import tecladoImage from '../../../images/teclado.png';
 import RaffleLargeComponent from '../../../components/RaffleLargeComponent';
 import RaffleCardComponent from '../../../components/RaffleCardComponent';
+import CategoryFilterComponent from '../../../components/CategoryFilterComponent';
 
 interface HomePageComponentProps {
 }
@@ -49,6 +50,13 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                     onFreeTicketClick={() => console.log('Free ticket clicked')}
                 />
             </div>
+
+            {/* Category Filter */}
+            <CategoryFilterComponent
+                selectedCategory="Tecnología"
+                onCategoryChange={(category) => console.log('Category changed:', category)}
+                onFilterClick={() => console.log('Filter clicked')}
+            />
 
             {/* Raffle Cards Grid */}
             <div className="raffle-cards-container mt-6">
