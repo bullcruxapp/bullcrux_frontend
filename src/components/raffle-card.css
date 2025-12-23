@@ -1,0 +1,160 @@
+.raffle-card {
+    width: 100%;
+    height: 218px;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #262626;
+    display: flex;
+    flex-direction: column;
+}
+
+.raffle-card-image-container {
+    position: relative;
+    width: 100%;
+    min-height: 120px;
+    overflow: hidden;
+}
+
+.raffle-card-image-container img {
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: contain;
+}
+
+.raffle-card-favorite img {
+    width: 16px;
+}
+
+.raffle-card-badge {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    background-color: #8A38F566;
+    border-radius: 12px;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #FFFFFF;
+    font-size: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    z-index: 2;
+}
+
+.raffle-card-badge span {
+    white-space: nowrap;
+    font-size: 10px;
+}
+
+.raffle-card-favorite {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    background-color: #FFFFFF7A;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: transform 0.2s ease;
+}
+
+.raffle-card-favorite:hover {
+    transform: scale(1.1);
+}
+
+.raffle-card-favorite:active {
+    transform: scale(0.95);
+}
+
+.raffle-card-content {
+    flex: 1;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.raffle-card-progress-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.raffle-card-progress-bar {
+    width: 100%;
+    height: 4px;
+    background-color: #E8E8E8;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.raffle-card-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0B5210 0%, #127319 100%);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.raffle-card-progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.raffle-card-available {
+    font-size: 10px;
+    color: #FFFFFF;
+    font-weight: 400;
+}
+
+.raffle-card-progress-text {
+    font-size: 10px;
+    color: #FFFFFF;
+    font-weight: 400;
+}
+
+.raffle-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.raffle-card-description {
+    font-size: 10px;
+    color: #E8E8E8;
+    margin: 0;
+    line-height: 1.2;
+    opacity: 0.8;
+}
+
+.raffle-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    gap: 8px;
+}
+
+.raffle-card-price {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #94FF31;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.raffle-card-ticket-icon {
+    color: #94FF31;
+}
