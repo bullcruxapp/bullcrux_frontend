@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import filterIcon from '../images/icons/filter-icon.svg';
+import filterIcon from '../../images/icons/filter-icon.svg';
 import './category-filter.css';
 
 export type Category = 'Tecnología' | 'Gaming' | 'Hogar' | 'Moda';

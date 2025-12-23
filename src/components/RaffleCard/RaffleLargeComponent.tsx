@@ -1,8 +1,8 @@
 'use client'
 
 import Image from 'next/image';
-import FreeTicketButton from './FreeTicketButton';
 import './raffle-large.css';
+import FreeTicketButton from 'components/FreeTicketButton/FreeTicketButton';
 
 interface RaffleLargeComponentProps {
     image: string | any;

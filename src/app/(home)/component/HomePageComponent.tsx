@@ -8,9 +8,9 @@ import reyDelTicketIcon from '../../../images/rey-del-ticket.png';
 import macbookImage from '../../../images/macbook.jpg';
 import iphoneImage from '../../../images/iphone.jpg';
 import tecladoImage from '../../../images/teclado.png';
-import RaffleLargeComponent from '../../../components/RaffleLargeComponent';
-import RaffleCardComponent from '../../../components/RaffleCardComponent';
-import CategoryFilterComponent from '../../../components/CategoryFilterComponent';
+import CategoryFilterComponent from '../../../components/CategoryFilter/CategoryFilterComponent';
+import RaffleCardComponent from 'components/RaffleCard/RaffleCardComponent';
+import RaffleLargeComponent from 'components/RaffleCard/RaffleLargeComponent';
 
 interface HomePageComponentProps {
 }

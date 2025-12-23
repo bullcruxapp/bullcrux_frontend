@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react";
-import { TextInputComponent } from "../../../components/TextInputComponent";
+import { TextInputComponent } from "../../../components/TextInput/TextInputComponent";
 import { useLoading } from "hooks/useLoading";
 import { loginService } from "services/user.service";
 import { signIn } from "next-auth/react";
