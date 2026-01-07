@@ -1,0 +1,245 @@
+.product-detail-container {
+    min-height: 100vh;
+    background-color: #000000;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-detail-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1rem;
+    padding-top: 3rem;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+}
+
+.product-detail-back-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+
+.product-detail-back-button:hover {
+    opacity: 0.7;
+}
+
+.product-detail-slider-container {
+    width: 100%;
+    height: 50vh;
+    min-height: 400px;
+    position: relative;
+    margin-top: 0;
+}
+
+.product-detail-swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.product-detail-slide {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.product-detail-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.product-detail-content {
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background-color: #000000;
+}
+
+.product-detail-progress-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.product-detail-available {
+    font-size: 12px;
+    color: #FFFFFF;
+    white-space: nowrap;
+}
+
+.product-detail-progress-percent {
+    font-size: 12px;
+    color: #94FF31;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+.product-detail-progress-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.product-detail-progress-section {
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.product-detail-progress-fill {
+    height: 100%;
+    background-color: #94FF31;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.product-detail-title-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.product-detail-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.product-detail-price-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.product-detail-price {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.product-detail-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    background-color: #A855F7;
+    padding: 0.375rem 0.75rem;
+    border-radius: 16px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+.product-detail-share-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    transition: opacity 0.2s;
+}
+
+.product-detail-share-button:hover {
+    opacity: 0.7;
+}
+
+.product-detail-description-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.product-detail-description-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.product-detail-description-text {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.product-detail-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 1rem;
+}
+
+.product-detail-buy-button {
+    width: 100%;
+    height: 56px;
+    background-color: #94FF31;
+    border: none;
+    border-radius: 16px;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: opacity 0.2s;
+}
+
+.product-detail-buy-button:hover {
+    opacity: 0.9;
+}
+
+.product-detail-buy-button:active {
+    opacity: 0.8;
+}
+
+.product-detail-free-button {
+    width: 100%;
+    height: 56px;
+    background-color: transparent;
+    border: 1px solid #94FF31;
+    border-radius: 16px;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.product-detail-free-button:hover {
+    background-color: rgba(148, 255, 49, 0.1);
+}
+
+.product-detail-free-button:active {
+    background-color: rgba(148, 255, 49, 0.2);
+}

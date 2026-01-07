@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import FreeTicketButton from './FreeTicketButton';
 import './raffle-large.css';
@@ -10,13 +11,33 @@ interface RaffleLargeComponentProps {
     progress: number; // 0-100
     price: string;
     onFreeTicketClick?: () => void;
+    productId?: string;
+    onClick?: () => void;
 }
 
 const RaffleLargeComponent = (props: RaffleLargeComponentProps) => {
-    const { image, title, progress, price, onFreeTicketClick } = props;
+    const { image, title, progress, price, onFreeTicketClick, productId, onClick } = props;
+    const router = useRouter();
+
+    const handleCardClick = () => {
+        if (onClick) {
+            onClick();
+        } else if (productId) {
+            router.push(`/productDetail/${productId}`);
+        }
+    };
+
+    const handleFreeTicketClick = (e: React.MouseEvent) => {
+        e.stopPropagation(); // Evita que se active el onClick del card
+        onFreeTicketClick?.();
+    };
 
     return (
-        <div className="raffle-large">
+        <div
+            className="raffle-large"
+            onClick={handleCardClick}
+            style={{ cursor: (onClick || productId) ? 'pointer' : 'default' }}
+        >
             <div className="raffle-large-image">
                 <Image
                     src={image}
@@ -40,7 +61,9 @@ const RaffleLargeComponent = (props: RaffleLargeComponentProps) => {
                     <span className="raffle-large-price-label">Valuado: </span>
                     <span className="raffle-large-price-value">{price}</span>
                 </p>
-                <FreeTicketButton onClick={onFreeTicketClick} />
+                <div onClick={handleFreeTicketClick}>
+                    <FreeTicketButton onClick={handleFreeTicketClick} />
+                </div>
             </div>
         </div>
     );

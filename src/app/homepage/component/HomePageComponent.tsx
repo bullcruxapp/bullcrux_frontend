@@ -48,6 +48,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                     progress={65}
                     price="C$1.200.000"
                     onFreeTicketClick={() => console.log('Free ticket clicked')}
+                    productId="macbook-pro-2019"
                 />
             </div>
 
@@ -72,6 +73,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                         description="Ergonomic Design"
                         price="C$ 250"
                         onFreeTicketClick={() => console.log('Free ticket clicked')}
+                        productId="kryboard-k500"
                     />
                     <RaffleCardComponent
                         image={iphoneImage}
@@ -84,6 +86,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                         description="250GB"
                         price="C$ 250"
                         onFreeTicketClick={() => console.log('Free ticket clicked')}
+                        productId="iphone-16-pro-max"
                     />
                 </div>
             </div>

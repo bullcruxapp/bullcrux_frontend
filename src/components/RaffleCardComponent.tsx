@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import heartIcon from '../images/icons/heart-icon.svg';
 import heartSelectedIcon from '../images/icons/heart-selected-icon.svg';
@@ -26,6 +27,8 @@ interface RaffleCardComponentProps {
     description?: string;
     price: string;
     onFreeTicketClick?: () => void;
+    productId?: string;
+    onClick?: () => void;
 }
 
 const RaffleCardComponent = (props: RaffleCardComponentProps) => {
@@ -40,14 +43,31 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
         title,
         description,
         price,
-        onFreeTicketClick
+        onFreeTicketClick,
+        productId,
+        onClick
     } = props;
 
+    const router = useRouter();
     const [favorite, setFavorite] = useState(isFavorite);
 
-    const handleFavoriteClick = () => {
+    const handleFavoriteClick = (e: React.MouseEvent) => {
+        e.stopPropagation(); // Evita que se active el onClick del card
         setFavorite(!favorite);
         onFavoriteClick?.();
+    };
+
+    const handleCardClick = () => {
+        if (onClick) {
+            onClick();
+        } else if (productId) {
+            router.push(`/productDetail/${productId}`);
+        }
+    };
+
+    const handleFreeTicketClick = (e: React.MouseEvent) => {
+        e.stopPropagation(); // Evita que se active el onClick del card
+        onFreeTicketClick?.();
     };
 
     const getBadgeConfig = () => {
@@ -68,7 +88,7 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
     const badgeConfig = getBadgeConfig();
 
     return (
-        <div className="raffle-card">
+        <div className="raffle-card" onClick={handleCardClick} style={{ cursor: (onClick || productId) ? 'pointer' : 'default' }}>
             <div className="raffle-card-image-container">
                 <Image
                     src={image}
@@ -126,7 +146,9 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
                         />
                         <span>{price}</span>
                     </div>
-                    <FreeTicketButton onClick={onFreeTicketClick} />
+                    <div onClick={handleFreeTicketClick}>
+                        <FreeTicketButton onClick={handleFreeTicketClick} />
+                    </div>
                 </div>
             </div>
         </div>
