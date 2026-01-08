@@ -39,6 +39,7 @@ const LoginComponent = (props: LoginComponentProps) => {
         return;
       }
 
+
       setError(null);
       router.push('/');
       stopLoading();
@@ -47,6 +48,21 @@ const LoginComponent = (props: LoginComponentProps) => {
     catch (error) {
       console.error('Login error:', error);
       stopLoading();
+    }
+  }
+
+
+  const handleGoogleLogin = async () => {
+    startLoading()
+
+    try {
+      const user = await signIn("google", { 
+        callbackUrl: "/"
+      })
+      
+    } catch (e) {
+      setError("Error al iniciar sesión con Google")
+      stopLoading()
     }
   }
   return (
@@ -72,6 +88,7 @@ const LoginComponent = (props: LoginComponentProps) => {
                       className="flex items-center justify-center gap-2 bg-[#262626] text-white rounded-[16px] h-[56px] flex-1 border border-[#343434] font-bold"
                       onClick={() => {
                         // Agregar funcionalidad para login con Google
+                        handleGoogleLogin();
                       }}
                     >
                       <svg className="w-5 h-5" viewBox="0 0 24 24">
