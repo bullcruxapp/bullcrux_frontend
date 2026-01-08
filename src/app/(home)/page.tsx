@@ -7,13 +7,11 @@ import { getAllRaffles } from "services/raffles.service";
 export default async function HomePage() {
 
     const session = await getServerSession();
-    console.log("Session in homepage:", session);
 
     const [raffles] = await Promise.all([
         getAllRaffles()
     ]);
     
-    console.log(raffles)
     return (
         <HomePageComponent />
     )
