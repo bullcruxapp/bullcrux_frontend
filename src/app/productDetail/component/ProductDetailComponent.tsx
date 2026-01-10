@@ -185,6 +185,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                     price: productData.price,
                     priceValue: productData.priceValue,
                 }}
+                productId={productId}
             />
         </div>
     );

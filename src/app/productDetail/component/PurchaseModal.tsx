@@ -14,9 +14,10 @@ interface PurchaseModalProps {
         price: string;
         priceValue: number; // Valor numérico del precio para cálculos
     };
+    productId: string;
 }
 
-const PurchaseModal = ({ isOpen, onClose, product }: PurchaseModalProps) => {
+const PurchaseModal = ({ isOpen, onClose, product, productId }: PurchaseModalProps) => {
     const [quantity, setQuantity] = useState(1);
 
     if (!isOpen) return null;
@@ -34,7 +35,8 @@ const PurchaseModal = ({ isOpen, onClose, product }: PurchaseModalProps) => {
     const handlePurchase = () => {
         // Aquí se implementará la lógica de compra
         console.log('Comprar', quantity, 'tickets');
-        onClose();
+        // Redirigir a la página de éxito
+        window.location.href = `/productDetail/${productId}/success?quantity=${quantity}`;
     };
 
     const total = product.priceValue * quantity;

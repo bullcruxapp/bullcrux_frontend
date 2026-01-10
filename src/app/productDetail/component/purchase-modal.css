@@ -14,6 +14,12 @@
     padding: 0 16px;
 }
 
+.purchase-modal-overlay-completed {
+    background-color: #1a1a1a;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
 .purchase-modal-container {
     width: 100%;
     max-width: calc(100% - 32px);
@@ -194,4 +200,131 @@
 
 .purchase-modal-buy-button:active {
     opacity: 0.8;
+}
+
+/* Estilos para la vista de compra completada */
+.purchase-modal-success-card {
+    width: 380px;
+    max-width: 100%;
+    background-color: #262626;
+    border-radius: 16px;
+    overflow: visible;
+    margin: 0 auto;
+}
+
+.purchase-modal-success-image {
+    width: 100%;
+    height: 184px;
+    position: relative;
+    overflow: visible;
+}
+
+.purchase-modal-success-check {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 132px;
+    height: 132px;
+    z-index: 10;
+}
+
+.purchase-modal-success-check img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.purchase-modal-success-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.purchase-modal-success-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.purchase-modal-success-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #94FF31;
+    margin: 0;
+    text-align: left;
+}
+
+.purchase-modal-success-product-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+    text-align: left;
+}
+
+.purchase-modal-success-price {
+    font-size: 12px;
+    font-weight: 600;
+    color: #A8E665;
+    margin: 0;
+    text-align: left;
+}
+
+.purchase-modal-success-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.purchase-modal-share-button {
+    width: 100%;
+    height: 48px;
+    background-color: #94FF31;
+    border: none;
+    border-radius: 24px;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: opacity 0.2s;
+}
+
+.purchase-modal-share-button:hover {
+    opacity: 0.9;
+}
+
+.purchase-modal-share-button:active {
+    opacity: 0.8;
+}
+
+.purchase-modal-home-button {
+    width: 100%;
+    height: 48px;
+    background-color: transparent;
+    border: 1px solid #94FF31;
+    border-radius: 24px;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.purchase-modal-home-button:hover {
+    background-color: rgba(148, 255, 49, 0.1);
+}
+
+.purchase-modal-home-button:active {
+    background-color: rgba(148, 255, 49, 0.2);
 }
