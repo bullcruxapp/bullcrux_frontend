@@ -17,6 +17,7 @@ import ticketIcon from '../../../images/icons/ticket-icon.svg';
 import ticketIconBlack from '../../../images/icons/ticket-icon-black.svg';
 import shareIcon from '../../../images/icons/share-icon.svg';
 import FreeTicketButton from '../../../components/FreeTicketButton';
+import PurchaseModal from './PurchaseModal';
 import '../productDetail.css';
 
 interface ProductDetailComponentProps {
@@ -26,6 +27,7 @@ interface ProductDetailComponentProps {
 const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
     const router = useRouter();
     const [activeIndex, setActiveIndex] = useState(0);
+    const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
     const swiperRef = useRef<SwiperType | null>(null);
 
     // Por ahora usamos imágenes estáticas, luego se cambiarán desde la base de datos
@@ -45,6 +47,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
     const productData = {
         title: 'iPhone 16 Pro Max',
         price: 'CS 250',
+        priceValue: 250, // Valor numérico para cálculos
         badge: {
             text: 'SELLING FAST',
             icon: fireIcon,
@@ -52,6 +55,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
         progress: 25,
         available: '250 Disponibles',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        image: productImages[0], // Primera imagen del slider
     };
 
     return (
@@ -153,7 +157,10 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
 
                 {/* Botones de acción */}
                 <div className="product-detail-actions">
-                    <button className="product-detail-buy-button">
+                    <button
+                        className="product-detail-buy-button"
+                        onClick={() => setIsPurchaseModalOpen(true)}
+                    >
                         <Image
                             src={ticketIconBlack}
                             alt="Ticket"
@@ -167,6 +174,18 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                     </button>
                 </div>
             </div>
+
+            {/* Modal de compra */}
+            <PurchaseModal
+                isOpen={isPurchaseModalOpen}
+                onClose={() => setIsPurchaseModalOpen(false)}
+                product={{
+                    image: productData.image,
+                    title: productData.title,
+                    price: productData.price,
+                    priceValue: productData.priceValue,
+                }}
+            />
         </div>
     );
 };
