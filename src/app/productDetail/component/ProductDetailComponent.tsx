@@ -14,7 +14,8 @@ import macbookImage from '../../../images/macbook.jpg';
 import tecladoImage from '../../../images/teclado.png';
 import fireIcon from '../../../images/icons/fire-icon.svg';
 import ticketIcon from '../../../images/icons/ticket-icon.svg';
-import shapeIcon from '../../../images/icons/shape-icon.svg';
+import ticketIconBlack from '../../../images/icons/ticket-icon-black.svg';
+import shareIcon from '../../../images/icons/share-icon.svg';
 import FreeTicketButton from '../../../components/FreeTicketButton';
 import '../productDetail.css';
 
@@ -97,13 +98,15 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
             <div className="product-detail-content">
                 {/* Barra de progreso */}
                 <div className="product-detail-progress-section">
-                    <span className="product-detail-available">{productData.available}</span>
-                    <span className="product-detail-progress-percent">{productData.progress}%</span>
                     <div className="product-detail-progress-bar">
                         <div
                             className="product-detail-progress-fill"
                             style={{ width: `${productData.progress}%` }}
                         />
+                    </div>
+                    <div className="product-detail-progress-info">
+                        <span className="product-detail-available">{productData.available}</span>
+                        <span className="product-detail-progress-percent">{productData.progress}%</span>
                     </div>
                 </div>
 
@@ -115,8 +118,8 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                             <Image
                                 src={ticketIcon}
                                 alt="Ticket"
-                                width={17}
-                                height={13}
+                                width={20}
+                                height={16}
                             />
                             <span>{productData.price}</span>
                         </div>
@@ -133,7 +136,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                         )}
                         <button className="product-detail-share-button">
                             <Image
-                                src={shapeIcon}
+                                src={shareIcon}
                                 alt="Compartir"
                                 width={20}
                                 height={20}
@@ -152,10 +155,10 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                 <div className="product-detail-actions">
                     <button className="product-detail-buy-button">
                         <Image
-                            src={ticketIcon}
+                            src={ticketIconBlack}
                             alt="Ticket"
-                            width={20}
-                            height={15}
+                            width={18}
+                            height={14}
                         />
                         <span>Comprar un ticket</span>
                     </button>
