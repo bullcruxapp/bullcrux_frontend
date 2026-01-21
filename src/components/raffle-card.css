@@ -158,3 +158,45 @@
 .raffle-card-ticket-icon {
     color: #94FF31;
 }
+
+/* Estilos para vista de "Mis Sorteos" */
+.raffle-card-my-raffles {
+    height: 235px;
+}
+
+.raffle-card-my-raffles .raffle-card-footer {
+    justify-content: center;
+}
+
+.raffle-card-price-description {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #94FF31;
+    font-size: 10px;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.raffle-card-details-button {
+    width: 100%;
+    height: 32px;
+    background-color: #94FF31;
+    border: none;
+    border-radius: 16px;
+    color: #062D09;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.raffle-card-details-button:hover {
+    opacity: 0.9;
+}
+
+.raffle-card-details-button:active {
+    opacity: 0.8;
+}

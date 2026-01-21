@@ -6,7 +6,10 @@ import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import searchIcon from '../../../images/icons/search-icon.svg';
 import RaffleLargeComponent from '../../../components/RaffleLargeComponent';
+import RaffleCardComponent from '../../../components/RaffleCardComponent';
 import macbookImage from '../../../images/macbook.jpg';
+import iphoneImage from '../../../images/iphone.jpg';
+import tecladoImage from '../../../images/teclado.png';
 import './favoritos-component.css';
 
 interface FavoritosComponentProps {
@@ -133,10 +136,34 @@ const FavoritosComponent = (props: FavoritosComponentProps) => {
                         />
                     </div>
                 ) : (
-                    <>
-                        <h1>Mis Sorteos</h1>
-                        {/* Aquí irá el contenido de mis sorteos */}
-                    </>
+                    <div className="raffle-cards-container">
+                        <div className="raffle-cards-grid">
+                            <RaffleCardComponent
+                                image={tecladoImage}
+                                badge="activo"
+                                isFavorite={false}
+                                progress={23}
+                                available="150 Disponibles"
+                                progressText="23/127"
+                                title="Kryboard K500"
+                                price="C$ 250"
+                                productId="kryboard-k500"
+                                isMyRafflesView={true}
+                            />
+                            <RaffleCardComponent
+                                image={iphoneImage}
+                                badge="activo"
+                                isFavorite={false}
+                                progress={23}
+                                available="250 Disponibles"
+                                progressText="75/325"
+                                title="iPhone 16 Pro Max"
+                                price="C$ 1150"
+                                productId="iphone-16-pro-max"
+                                isMyRafflesView={true}
+                            />
+                        </div>
+                    </div>
                 )}
             </div>
         </div>

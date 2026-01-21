@@ -167,3 +167,14 @@
     justify-content: center;
     align-items: center;
 }
+
+.raffle-cards-container {
+    width: 100%;
+}
+
+.raffle-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    width: 100%;
+}
