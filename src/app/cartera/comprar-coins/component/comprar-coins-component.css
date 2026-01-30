@@ -1,0 +1,170 @@
+.comprar-coins-component .comprar-coins-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.5rem 0;
+    margin-bottom: 1.5rem;
+}
+
+.comprar-coins-back {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+
+.comprar-coins-back:hover {
+    opacity: 0.7;
+}
+
+.comprar-coins-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #94FF31;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+}
+
+.comprar-coins-spacer {
+    width: 24px;
+    flex-shrink: 0;
+}
+
+/* Cards */
+.comprar-coins-cards {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.comprar-coins-card-wrap {
+    height: 217px;
+    min-width: 0;
+    flex: 1;
+    max-width: 340px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+.comprar-coins-card-img {
+    object-fit: cover;
+}
+
+.comprar-coins-add-card {
+    width: 50px;
+    min-width: 50px;
+    height: 217px;
+    border: 1px dashed #A6A6A6;
+    border-radius: 12px;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s, border-color 0.2s;
+}
+
+.comprar-coins-add-card:hover {
+    opacity: 0.8;
+    border-color: #94FF31;
+}
+
+.comprar-coins-add-plus {
+    font-size: 28px;
+    font-weight: 300;
+    color: #A6A6A6;
+    line-height: 1;
+}
+
+.comprar-coins-add-card:hover .comprar-coins-add-plus {
+    color: #94FF31;
+}
+
+/* Recargas */
+.comprar-coins-recargas-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #FFFFFF;
+    margin: 0 0 12px 0;
+}
+
+.comprar-coins-recargas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.comprar-coins-recarga-btn {
+    padding: 8px 16px;
+    background-color: #262626;
+    border: 1px solid #343434;
+    border-radius: 8px;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: opacity 0.2s, border-color 0.2s;
+}
+
+.comprar-coins-recarga-btn:hover {
+    opacity: 0.9;
+    border-color: #94FF31;
+}
+
+/* Policies */
+.comprar-coins-policies {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.comprar-coins-check {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.comprar-coins-policies-text {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.4;
+}
+
+.comprar-coins-policies-link {
+    color: #94FF31;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.comprar-coins-policies-link:hover {
+    text-decoration: underline;
+}
+
+/* Pagar */
+.comprar-coins-pagar {
+    width: 100%;
+    height: 48px;
+    padding: 14px 24px;
+    background-color: #94FF31;
+    border: none;
+    border-radius: 48px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #062D09;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.comprar-coins-pagar:hover {
+    opacity: 0.9;
+}

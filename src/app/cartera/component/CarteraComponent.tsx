@@ -67,7 +67,9 @@ const CarteraComponent = () => {
                     </div>
                     <span className="saldo-label">Saldo actual</span>
                     <div className="saldo-separator" />
-                    <button type="button" className="saldo-btn-comprar">Comprar $COINs</button>
+                    <button type="button" className="saldo-btn-comprar" onClick={() => router.push('/cartera/comprar-coins')}>
+                        Comprar $COINs
+                    </button>
                 </div>
             </div>
 
