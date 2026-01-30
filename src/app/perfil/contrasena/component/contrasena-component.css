@@ -1,0 +1,123 @@
+/* Header con flecha de volver y título */
+.contrasena-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.5rem 0;
+    margin-bottom: 2rem;
+}
+
+.contrasena-back-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+
+.contrasena-back-button:hover {
+    opacity: 0.7;
+}
+
+.contrasena-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+}
+
+/* Formulario */
+.contrasena-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.contrasena-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 0;
+}
+
+.contrasena-label {
+    font-size: 14px;
+    font-weight: 400;
+    color: #949596;
+    margin: 0;
+}
+
+.contrasena-input-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.contrasena-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 0;
+    outline: none;
+}
+
+.contrasena-input::placeholder {
+    color: #949596;
+}
+
+.contrasena-toggle-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+}
+
+.contrasena-toggle-button:hover {
+    opacity: 0.7;
+}
+
+.contrasena-separator {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin-top: 1rem;
+}
+
+/* Botón de enviar */
+.contrasena-submit-button {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background-color: #34C759;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-top: 2rem;
+    font-size: 16px;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+.contrasena-submit-button:hover {
+    background-color: #30B050;
+    transform: translateY(-1px);
+}
+
+.contrasena-submit-button:active {
+    background-color: #2A9D47;
+    transform: translateY(0);
+}

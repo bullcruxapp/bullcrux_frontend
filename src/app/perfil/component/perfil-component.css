@@ -1,102 +1,177 @@
-.header {
-    width: 100%;
-    gap: 1rem;
-}
-
-.user-profile-container {
-    position: relative;
-}
-
-.user-profile {
+/* Header con flecha de volver y título */
+.perfil-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    cursor: pointer;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.5rem 0;
 }
 
-.profile-image {
-    width: 40px;
-    height: 40px;
+.perfil-back-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+
+.perfil-back-button:hover {
+    opacity: 0.7;
+}
+
+.perfil-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+}
+
+/* Información del usuario */
+.perfil-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: .8rem;
+}
+
+.perfil-user-image {
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    border: 1px solid #94FF31;
     object-fit: cover;
 }
 
-.profile-image-placeholder {
-    width: 40px;
-    height: 40px;
+.perfil-user-image-placeholder {
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    border: 1px solid #94FF31;
     background-color: #1a1a1a;
+    border: 1px solid #FFFFFF;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #FFFFFF;
-    font-size: 16px;
+    font-size: 32px;
     font-weight: 600;
 }
 
-.user-name {
+.perfil-greeting {
     font-size: 24px;
-    font-weight: 500;
+    font-weight: normal;
     color: #FFFFFF;
+    margin: 0;
 }
 
-.chevron-icon {
-    margin-left: -8px;
-    transition: transform 0.2s ease;
-}
-
-.chevron-icon.open {
-    transform: rotate(90deg);
-}
-
-.user-dropdown {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    background-color: #262626;
-    border: 1px solid #343434;
-    border-radius: 8px;
-    min-width: 180px;
-    z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-}
-
-.dropdown-item {
-    width: 100%;
-    padding: 12px 16px;
+/* Lista de opciones del menú */
+.perfil-menu-list {
     background-color: transparent;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.perfil-menu-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: 1rem 0;
+    background: transparent;
     border: none;
-    color: #FFFFFF;
-    font-size: 14px;
-    font-weight: 400;
-    text-align: left;
     cursor: pointer;
     transition: background-color 0.2s;
+    text-align: left;
 }
 
-.dropdown-item:hover {
-    background-color: #343434;
+.perfil-menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
-.dropdown-item:active {
-    background-color: #404040;
+.perfil-menu-item:active {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-.search-input {
-    min-width: 38px;
-    min-height: 38px;
-    max-width: 38px;
-    max-height: 38px;
-    background-color: #E8E8E8;
-    border-radius: 50%;
+.perfil-menu-icon {
+    font-size: 20px;
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-.perfil-content {
-    margin-top: 2rem;
+.perfil-menu-icon-img {
+    display: block;
+    object-fit: contain;
+    width: 16px;
+    height: 16px;
+}
+
+.perfil-menu-label {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 400;
+    color: #626262;
+}
+
+.perfil-menu-arrow {
+    margin-left: auto;
+    stroke: #626262;
+}
+
+.perfil-menu-arrow path {
+    stroke: #626262;
+}
+
+.perfil-menu-separator {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 0;
+}
+
+/* Botón de cerrar sesión */
+.perfil-logout-button {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background-color: #FF3B30;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-top: auto;
+    position: sticky;
+    bottom: calc(70px + 1.2rem);
+}
+
+.perfil-logout-button:hover {
+    background-color: #FF2D20;
+    transform: translateY(-1px);
+}
+
+.perfil-logout-button:active {
+    background-color: #E6342A;
+    transform: translateY(0);
+}
+
+.perfil-logout-icon {
+    flex-shrink: 0;
+}
+
+.perfil-logout-button span {
+    font-size: 16px;
+    font-weight: 500;
+    color: #FFFFFF;
 }

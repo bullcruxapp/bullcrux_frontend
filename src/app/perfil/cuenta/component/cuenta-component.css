@@ -1,0 +1,108 @@
+/* Header con flecha de volver y título */
+.cuenta-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.5rem 0;
+    margin-bottom: 2rem;
+}
+
+.cuenta-back-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+
+.cuenta-back-button:hover {
+    opacity: 0.7;
+}
+
+.cuenta-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+}
+
+/* Sección de información */
+.cuenta-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.cuenta-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 0;
+}
+
+.cuenta-label {
+    font-size: 14px;
+    font-weight: 400;
+    color: #949596;
+    margin: 0;
+}
+
+.cuenta-value-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.cuenta-value {
+    font-size: 14px;
+    font-weight: 400;
+    color: #FFFFFF;
+    flex: 1;
+}
+
+.cuenta-check-icon {
+    flex-shrink: 0;
+}
+
+.cuenta-phone-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.cuenta-phone-flag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.cuenta-phone-flag-img {
+    display: block;
+    object-fit: contain;
+    border-radius: 2px;
+}
+
+.cuenta-phone-container .cuenta-value {
+    flex: 1;
+}
+
+.cuenta-verified-badge {
+    font-size: 14px;
+    font-weight: 400;
+    color: #34C759;
+    flex-shrink: 0;
+}
+
+.cuenta-separator {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin-top: 1rem;
+}
