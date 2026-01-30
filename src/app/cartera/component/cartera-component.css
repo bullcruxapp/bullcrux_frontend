@@ -1,0 +1,263 @@
+.cartera-component .cartera-header {
+    width: 100%;
+    gap: 1rem;
+}
+
+.cartera-component .user-profile-container {
+    position: relative;
+}
+
+.cartera-component .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.cartera-component .profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #94FF31;
+    object-fit: cover;
+}
+
+.cartera-component .profile-image-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #94FF31;
+    background-color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.cartera-component .user-name {
+    font-size: 24px;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+.cartera-component .chevron-icon {
+    margin-left: -8px;
+    transition: transform 0.2s ease;
+}
+
+.cartera-component .chevron-icon.open {
+    transform: rotate(90deg);
+}
+
+.cartera-component .user-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background-color: #262626;
+    border: 1px solid #343434;
+    border-radius: 8px;
+    min-width: 180px;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.cartera-component .dropdown-item {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: transparent;
+    border: none;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cartera-component .dropdown-item:hover {
+    background-color: #343434;
+}
+
+.cartera-component .search-input {
+    min-width: 38px;
+    min-height: 38px;
+    max-width: 38px;
+    max-height: 38px;
+    background-color: #E8E8E8;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Saldo card */
+.saldo-card {
+    margin-top: 24px;
+    height: 217px;
+    padding: 1px;
+    border-radius: 16px;
+}
+
+.saldo-card-inner {
+    height: 100%;
+    border-radius: 15px;
+    padding: 24px;
+    background: radial-gradient(157.57% 251.47% at -34.86% -54.45%, rgba(148, 148, 148, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%);
+    display: flex;
+    flex-direction: column;
+}
+
+.saldo-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.saldo-amount {
+    font-size: 34px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-shadow: 0px 2px 4.3px 0px #0000004A;
+}
+
+.saldo-label {
+    display: block;
+    margin-top: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #A4A4A4;
+    text-align: center;
+}
+
+.saldo-separator {
+    height: 1px;
+    background-color: #A4A4A4;
+    width: 100%;
+    margin-top: 26px;
+    margin-bottom: 16px;
+}
+
+.saldo-btn-comprar {
+    width: 100%;
+    height: 48px;
+    padding: 14px 24px;
+    background-color: #94FF31;
+    border: none;
+    border-radius: 48px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #062D09;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.saldo-btn-comprar:hover {
+    opacity: 0.9;
+}
+
+/* Movimientos */
+.movimientos-title {
+    margin-top: 28px;
+    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+.movimientos-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.movimiento-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 68px;
+    min-height: 68px;
+    background-color: #262626;
+    border: 1px solid #343434;
+    border-radius: 16px;
+    padding: 10px 40px 10px 20px;
+    overflow: hidden;
+}
+
+.movimiento-icon-wrap {
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.movimiento-icon {
+    object-fit: contain;
+}
+
+.movimiento-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.movimiento-tipo {
+    font-size: 14px;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+.movimiento-desc {
+    font-size: 12px;
+    color: #989898;
+}
+
+.movimiento-monto-fecha {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.movimiento-monto {
+    font-size: 14px;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+.movimiento-monto.recarga {
+    color: #FFFFFF;
+}
+
+.movimiento-monto.gasto {
+    color: #FFFFFF;
+}
+
+.movimiento-fecha {
+    font-size: 12px;
+    color: #989898;
+}
+
+.movimiento-bar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 100%;
+    border-radius: 0 12px 12px 0;
+}
+
+.movimiento-bar.recarga {
+    background-color: #94FF31;
+}
+
+.movimiento-bar.gasto {
+    background-color: #DD5F40;
+}
