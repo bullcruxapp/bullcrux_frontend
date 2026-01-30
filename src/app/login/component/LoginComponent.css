@@ -1,21 +1,57 @@
-/* Login Component Styles */
-.login-gradient {
+/* Login: contenedor a pantalla completa, sin navbar */
+.login-page {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #000000;
+}
+
+/* imagen de cripto */
+.login-page__bg.login-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../../../images/loginBackground.png');
+    background-size: cover;
+    background-position: top center;
+    background-repeat: no-repeat;
+}
+
+/* Formulario de login*/
+.login-page__form.login-gradient {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 5vh;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
     background: radial-gradient(circle at top left,
             #A8E665 0%,
             rgba(204, 88, 84, 0.08) 40%,
             #22431E 100%);
     backdrop-filter: blur(80px);
     -webkit-backdrop-filter: blur(80px);
-    height: 100%;
     background-color: #000000;
     border-top-left-radius: 60px;
     border-top-right-radius: 60px;
 }
 
-.login-bg {
-    background-image: url('../../../images/loginBackground.png');
-    background-size: contain;
-    background-position: top;
-    background-position-y: -20%;
-    background-repeat: no-repeat;
+@media (min-width: 768px) {
+    .login-page__form.login-gradient {
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 430px;
+    }
+}
+
+/* Evitar desbordamiento horizontal */
+.login-gradient .login-content {
+    box-sizing: border-box;
+    max-width: 100%;
 }
