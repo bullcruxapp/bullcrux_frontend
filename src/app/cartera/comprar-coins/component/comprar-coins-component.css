@@ -77,9 +77,9 @@
 }
 
 .comprar-coins-add-plus {
-    font-size: 28px;
-    font-weight: 300;
-    color: #A6A6A6;
+    font-size: 24px;
+    font-weight: 400;
+    color: #FFFFFF;
     line-height: 1;
 }
 
@@ -98,7 +98,7 @@
 .comprar-coins-recargas-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    gap: 16px 24px;
     margin-bottom: 1.5rem;
 }
 

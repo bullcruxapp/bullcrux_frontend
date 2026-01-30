@@ -100,16 +100,16 @@
 /* Botón de enviar */
 .contrasena-submit-button {
     width: 100%;
-    padding: 1rem 1.5rem;
-    background-color: #34C759;
+    height: 48px;
+    padding: 14px 24px;
+    background-color: #94FF31;
     border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-    margin-top: 2rem;
+    border-radius: 48px;
     font-size: 16px;
     font-weight: 500;
-    color: #FFFFFF;
+    color: #062D09;
+    cursor: pointer;
+    transition: opacity 0.2s;
 }
 
 .contrasena-submit-button:hover {
