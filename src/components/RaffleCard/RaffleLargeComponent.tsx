@@ -5,6 +5,7 @@ import Image from 'next/image';
 import FreeTicketButton from './FreeTicketButton';
 import bellIcon from '../images/icons/icon-bell.svg';
 import './raffle-large.css';
+import FreeTicketButton from 'components/FreeTicketButton/FreeTicketButton';
 
 interface RaffleLargeComponentProps {
     image: string | any;

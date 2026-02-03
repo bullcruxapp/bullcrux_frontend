@@ -14,6 +14,7 @@ import ticketIcon from '../images/icons/ticket-icon.svg';
 import ticketArrowIcon from '../images/icons/ticket-arrow.svg';
 import FreeTicketButton from './FreeTicketButton';
 import './raffle-card.css';
+import FreeTicketButton from 'components/FreeTicketButton/FreeTicketButton';
 
 export type BadgeType = 'last-day' | 'selling-fast' | 'ends-soon' | 'limited-stock' | 'activo';
 
