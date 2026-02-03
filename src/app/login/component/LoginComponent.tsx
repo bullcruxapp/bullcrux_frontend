@@ -7,8 +7,6 @@ import { loginService } from "services/user.service";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useError } from "hooks/useError";
-import Image from "next/image";
-import loginBackground from "../../../images/loginBackground.png";
 import "./LoginComponent.css";
 
 interface LoginComponentProps {
@@ -66,20 +64,18 @@ const LoginComponent = (props: LoginComponentProps) => {
     }
   }
   return (
-    <div className="min-h-screen bg-black overflow-hidden">
-      {/* Imagen de fondo - Crypto */}
-      <div className="absolute w-full max-h-[290px] h-[290px] min-h-screen login-bg">
-        {/* Contenedor con gradiente - Login */}
-        <div className="fixed bottom-0 max-h-[650px] h-[650px] w-full mx-auto login-gradient overflow-hidden">
-          <div
-            className="w-full p-8"
-          >
-            {
-              isLoading ? <p className="text-white">Loading...</p> :
-                <>
+    <div className="login-page">
+      {/*imagen de cripto*/}
+      <div className="login-page__bg login-bg" aria-hidden />
+      {/* Formulario de login */}
+      <div className="login-page__form login-gradient">
+        <div className="login-content w-full max-w-full p-5 box-border">
+          {
+            isLoading ? <p className="text-white">Loading...</p> :
+              <>
 
-                  <h1 className="text-[40px] font-semibold text-[#EFEFEF] text-center">¡Bienvenido!</h1>
-                  <p className="text-[#A4A4A4] text-[14px] text-center">Welcome back, we missed you</p>
+                <h1 className="text-[40px] font-semibold text-[#EFEFEF] text-center">¡Bienvenido!</h1>
+                <p className="text-[#A4A4A4] text-[14px] text-center">Welcome back, we missed you</p>
 
                   {/* Botones de redes sociales */}
                   <div className="flex gap-4 mt-[60px]">
@@ -113,47 +109,45 @@ const LoginComponent = (props: LoginComponentProps) => {
                     </button>
                   </div>
 
-                  <div className="flex items-center gap-4 my-6 px-10">
-                    <div className="flex-1 h-px bg-[#343434]"></div>
-                    <span className="text-[#A4A4A4] text-[11px]">Or</span>
-                    <div className="flex-1 h-px bg-[#343434]"></div>
+                <div className="flex items-center gap-4 my-6 px-10">
+                  <div className="flex-1 h-px bg-[#343434]"></div>
+                  <span className="text-[#A4A4A4] text-[11px]">Or</span>
+                  <div className="flex-1 h-px bg-[#343434]"></div>
+                </div>
+
+                <form onSubmit={handleLogin} className="w-full">
+
+                  <TextInputComponent
+                    placeholder="Usuario"
+                    value={email}
+                    onChange={setEmail}
+                    label="Usuario"
+                  />
+                  <TextInputComponent
+                    placeholder="Contraseña"
+                    value={password}
+                    onChange={setPassword}
+                    label="Contraseña"
+                    type="password"
+                  />
+
+                  <div className="text-right mt-2">
+                    <a href="#" className="text-[#A4A4A4] text-sm">¿Olvidaste la contraseña?</a>
                   </div>
 
-                  <form onSubmit={handleLogin} className="w-full">
+                  <button
+                    type="submit"
+                    className="w-full h-[50px] rounded-2xl bg-[#94FF31] text-[#062D09] text-[16px] font-medium mt-6"
+                  >
+                    Sign in
+                  </button>
 
-                    <TextInputComponent
-                      placeholder="Usuario"
-                      value={email}
-                      onChange={setEmail}
-                      label="Usuario"
-                    />
-                    <TextInputComponent
-                      placeholder="Contraseña"
-                      value={password}
-                      onChange={setPassword}
-                      label="Contraseña"
-                      type="password"
-                    />
-
-                    <div className="text-right mt-2">
-                      <a href="#" className="text-[#A4A4A4] text-sm">¿Olvidaste la contraseña?</a>
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="w-full h-[50px] rounded-2xl bg-[#94FF31] text-[#062D09] text-[16px] font-medium mt-6"
-                    >
-                      Sign in
-                    </button>
-
-                    {error && <p className="text-red-500 mt-2">{error}</p>}
-                  </form>
-                </>
-            }
-          </div>
+                  {error && <p className="text-red-500 mt-2">{error}</p>}
+                </form>
+              </>
+          }
         </div>
       </div>
-
     </div>
   )
 }

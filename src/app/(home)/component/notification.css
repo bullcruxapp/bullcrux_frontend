@@ -7,8 +7,9 @@
     padding-left: 12px;
     padding-right: 12px;
     border-radius: 8px;
-    min-width: 245px;
-    max-width: 400px;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
 }
 
 .notification-profile-image {

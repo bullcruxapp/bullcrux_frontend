@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import NavbarComponent from "../components/Navbar/NavbarComponent";
+import NavbarWrapper from "../components/NavbarWrapper";
+import SessionProviderWrapper from "../components/SessionProviderWrapper";
 
 // Configuración de fuente SF-Pro
 const sfPro = localFont({
@@ -24,8 +25,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={sfPro.variable}>
-        {children}
-        <NavbarComponent />
+        <SessionProviderWrapper>
+          <div className="app-container">
+            {children}
+            <NavbarWrapper />
+          </div>
+        </SessionProviderWrapper>
       </body>
     </html>
   );

@@ -1,0 +1,112 @@
+/* Header con flecha de volver y título */
+.idioma-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.5rem 0;
+    margin-bottom: 2rem;
+}
+
+.idioma-back-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+
+.idioma-back-button:hover {
+    opacity: 0.7;
+}
+
+.idioma-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+}
+
+/* Selector de idioma */
+.idioma-selector-wrapper {
+    position: relative;
+}
+
+.idioma-selector {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+}
+
+.idioma-selected-text {
+    font-size: 16px;
+    font-weight: 400;
+    color: #626262;
+    flex: 1;
+}
+
+.idioma-chevron {
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+
+.idioma-chevron.open {
+    transform: rotate(180deg);
+}
+
+.idioma-separator {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 0;
+}
+
+/* Dropdown de idiomas */
+.idioma-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.idioma-option {
+    width: 100%;
+    padding: 1rem;
+    background: transparent;
+    border: none;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.idioma-option:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.idioma-option.selected {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #34C759;
+}
+
+.idioma-option:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}

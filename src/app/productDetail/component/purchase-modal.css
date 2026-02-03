@@ -1,0 +1,336 @@
+.purchase-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+}
+
+.purchase-modal-overlay-completed {
+    background-color: #1a1a1a;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.purchase-modal-container {
+    width: 100%;
+    max-width: calc(100% - 32px);
+    min-height: 528px;
+    max-height: 90vh;
+    background-color: #1a1a1a;
+    border-radius: 24px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+    .purchase-modal-container {
+        max-width: 430px;
+    }
+}
+
+.purchase-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.purchase-modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.purchase-modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+}
+
+.purchase-modal-close:hover {
+    opacity: 0.7;
+}
+
+.purchase-modal-card {
+    width: 380px;
+    max-width: 100%;
+    background-color: #262626;
+    border-radius: 16px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.purchase-modal-card-image {
+    width: 100%;
+    height: 184px;
+    position: relative;
+    overflow: hidden;
+}
+
+.purchase-modal-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.purchase-modal-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.purchase-modal-divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 8px 0 8px 0;
+}
+
+.purchase-modal-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.purchase-modal-product-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.purchase-modal-product-subtitle {
+    font-size: 14px;
+    font-weight: 400;
+    color: #949596;
+    margin: 0;
+}
+
+.purchase-modal-product-price {
+    font-size: 12px;
+    font-weight: 600;
+    color: #A8E665;
+    margin: 0;
+}
+
+.purchase-modal-quantity {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.purchase-modal-quantity-button {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #94FF31;
+    border: 1px solid #062D09;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+    padding: 0;
+}
+
+.purchase-modal-quantity-button:hover:not(:disabled) {
+    opacity: 0.8;
+}
+
+.purchase-modal-quantity-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.purchase-modal-quantity-value {
+    font-size: 20px;
+    font-weight: 500;
+    color: #FFFFFF;
+    min-width: 24px;
+    text-align: center;
+}
+
+
+.purchase-modal-total-label {
+    font-size: 14px;
+    font-weight: 400;
+    color: #FFFFFF;
+}
+
+.purchase-modal-total-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+.purchase-modal-buy-button {
+    width: 100%;
+    height: 48px;
+    background-color: #94FF31;
+    border: none;
+    border-radius: 24px;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: opacity 0.2s;
+    margin-top: auto;
+}
+
+.purchase-modal-buy-button:hover {
+    opacity: 0.9;
+}
+
+.purchase-modal-buy-button:active {
+    opacity: 0.8;
+}
+
+/* Estilos para la vista de compra completada */
+.purchase-modal-success-card {
+    width: 380px;
+    max-width: 100%;
+    background-color: #262626;
+    border-radius: 16px;
+    overflow: visible;
+    margin: 0 auto;
+}
+
+.purchase-modal-success-image {
+    width: 100%;
+    height: 184px;
+    position: relative;
+    overflow: visible;
+}
+
+.purchase-modal-success-check {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 132px;
+    height: 132px;
+    z-index: 10;
+}
+
+.purchase-modal-success-check img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.purchase-modal-success-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.purchase-modal-success-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.purchase-modal-success-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #94FF31;
+    margin: 0;
+    text-align: left;
+}
+
+.purchase-modal-success-product-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+    text-align: left;
+}
+
+.purchase-modal-success-price {
+    font-size: 12px;
+    font-weight: 600;
+    color: #A8E665;
+    margin: 0;
+    text-align: left;
+}
+
+.purchase-modal-success-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.purchase-modal-share-button {
+    width: 100%;
+    height: 48px;
+    background-color: #94FF31;
+    border: none;
+    border-radius: 24px;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: opacity 0.2s;
+}
+
+.purchase-modal-share-button:hover {
+    opacity: 0.9;
+}
+
+.purchase-modal-share-button:active {
+    opacity: 0.8;
+}
+
+.purchase-modal-home-button {
+    width: 100%;
+    height: 48px;
+    background-color: transparent;
+    border: 1px solid #94FF31;
+    border-radius: 24px;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.purchase-modal-home-button:hover {
+    background-color: rgba(148, 255, 49, 0.1);
+}
+
+.purchase-modal-home-button:active {
+    background-color: rgba(148, 255, 49, 0.2);
+}
