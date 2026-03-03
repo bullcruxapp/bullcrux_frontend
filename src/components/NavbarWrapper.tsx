@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import NavbarComponent from './NavbarComponent'
+import NavbarComponent from './Navbar/NavbarComponent'
 
 const RUTAS_SIN_NAVBAR = ['/login', '/registro']
 

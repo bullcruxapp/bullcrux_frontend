@@ -13,7 +13,7 @@ export default async function HomePage() {
     ]);
     
     return (
-        <HomePageComponent />
+        <HomePageComponent raffles={raffles} />
     )
 }
 

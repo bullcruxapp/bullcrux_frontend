@@ -7,12 +7,31 @@ import { useRouter } from 'next/navigation';
 import searchIcon from '../../../images/icons/search-icon.svg';
 import rendimientoIcon from '../../../images/icons/rendimiento.png';
 import './cartera-component.css';
+import { TransactionType } from 'models/enums/TransactionType';
 
-const CarteraComponent = () => {
+interface Transaction {
+    id: string;
+    userId: string;
+    type: TransactionType;
+    amount: number;
+    description: string;
+    createdAt: string;
+    status: string;
+}
+
+interface CarteraComponentProps {
+    balance: number;
+    transactions: Transaction[];
+}
+
+const CarteraComponent = (props: CarteraComponentProps) => {
+
     const { data: session } = useSession();
     const router = useRouter();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+    const { balance, transactions } = props;
 
     const userName = session?.user?.name || session?.user?.email || 'Usuario';
     const userImage = session?.user?.image || null;
@@ -32,6 +51,11 @@ const CarteraComponent = () => {
     const handleSignOut = async () => {
         await signOut({ redirect: false, callbackUrl: '/login' });
         router.push('/login');
+    };
+
+    const formateDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
     };
 
     return (
@@ -63,7 +87,7 @@ const CarteraComponent = () => {
             <div className="saldo-card">
                 <div className="saldo-card-inner">
                     <div className="saldo-row">
-                        <span className="saldo-amount">C$ 1.565.900,00</span>
+                        <span className="saldo-amount">C$ {balance.toLocaleString('es-ES')} </span>
                     </div>
                     <span className="saldo-label">Saldo actual</span>
                     <div className="saldo-separator" />
@@ -75,34 +99,28 @@ const CarteraComponent = () => {
 
             <h2 className="movimientos-title">Movimientos</h2>
             <div className="movimientos-list">
-                <div className="movimiento-item movimiento-recarga">
-                    <div className="movimiento-icon-wrap">
-                        <Image src={rendimientoIcon} alt="Rendimiento" width={40} height={40} className="movimiento-icon" />
-                    </div>
-                    <div className="movimiento-info">
-                        <span className="movimiento-tipo">Rendimiento</span>
-                        <span className="movimiento-desc">sorteo x</span>
-                    </div>
-                    <div className="movimiento-monto-fecha">
-                        <span className="movimiento-monto recarga">+ $978.56</span>
-                        <span className="movimiento-fecha">15 de Abril</span>
-                    </div>
-                    <div className="movimiento-bar recarga" />
-                </div>
-                <div className="movimiento-item movimiento-gasto">
-                    <div className="movimiento-icon-wrap">
-                        <Image src={rendimientoIcon} alt="Rendimiento" width={40} height={40} className="movimiento-icon" />
-                    </div>
-                    <div className="movimiento-info">
-                        <span className="movimiento-tipo">Rendimiento</span>
-                        <span className="movimiento-desc">sorteo x</span>
-                    </div>
-                    <div className="movimiento-monto-fecha">
-                        <span className="movimiento-monto gasto">- $250.00</span>
-                        <span className="movimiento-fecha">12 de Abril</span>
-                    </div>
-                    <div className="movimiento-bar gasto" />
-                </div>
+                {transactions.length === 0 ? (
+                    <p className="no-movimientos">No hay movimientos recientes.</p>
+                ) : (
+                    transactions.map((tx) => (
+                        <div className={`movimiento-item ${(tx.type === TransactionType.DEPOSIT || tx.type === TransactionType.WIN) ? 'movimiento-recarga' : 'movimiento-gasto'}`} key={tx.id}>
+                            <div className="movimiento-icon-wrap">
+                                <Image src={rendimientoIcon} alt="Rendimiento" width={40} height={40} className="movimiento-icon" />
+                            </div>
+                            <div className="movimiento-info">
+                                <span className="movimiento-tipo">{tx.type}</span>
+                                <span className="movimiento-desc">{tx.description}</span>
+                            </div>
+                            <div className="movimiento-monto-fecha">
+                                <span className={`movimiento-monto ${tx.type === TransactionType.DEPOSIT || tx.type === TransactionType.WIN ? 'recarga' : 'gasto'}`}>{(tx.type === TransactionType.DEPOSIT || tx.type === TransactionType.WIN) ? '+' : '-'} ${tx.amount.toLocaleString('es-ES')}</span>
+                                <span className="movimiento-fecha">{formateDate(tx.createdAt)}</span>
+                            </div>
+                            <div className={`movimiento-bar ${tx.type === TransactionType.DEPOSIT || tx.type === TransactionType.WIN ? 'recarga' : 'gasto'}`} />
+                        </div>
+                    ))
+                )
+                }
+
             </div>
         </div>
     );

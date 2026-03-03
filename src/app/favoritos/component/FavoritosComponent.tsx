@@ -5,12 +5,12 @@ import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import searchIcon from '../../../images/icons/search-icon.svg';
-import RaffleLargeComponent from '../../../components/RaffleLargeComponent';
-import RaffleCardComponent from '../../../components/RaffleCardComponent';
 import macbookImage from '../../../images/macbook.jpg';
 import iphoneImage from '../../../images/iphone.jpg';
 import tecladoImage from '../../../images/teclado.png';
 import './favoritos-component.css';
+import RaffleLargeComponent from 'components/RaffleCard/RaffleLargeComponent';
+import RaffleCardComponent from 'components/RaffleCard/RaffleCardComponent';
 
 interface FavoritosComponentProps {
 }

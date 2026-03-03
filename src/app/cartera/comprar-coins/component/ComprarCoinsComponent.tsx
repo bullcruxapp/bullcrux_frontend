@@ -6,13 +6,63 @@ import Link from 'next/link';
 import cardPlaceholder from '../../../../images/card-placeholder.png';
 import checkIcon from '../../../../images/icons/check2.png';
 import './comprar-coins-component.css';
+import { useState } from 'react';
+import { getServerSession } from 'next-auth';
+import { authOptions } from 'lib/auth';
+import { getPaymentLinkFromMercadoPago } from 'services/transaction.service';
 
-const RECARGAS = ['$ 500', '$ 1000', '$ 1500', '$ 2000', '$ 2500', '$ 3000'];
+const RECARGAS = [{
+    label: '$ 500',
+    value: 500
+}, {
+    label: '$ 1000',
+    value: 1000
+}, {
+    label: '$ 1500',
+    value: 1500
+}, {
+    label: '$ 2000',
+    value: 2000
+}, {
+    label: '$ 2500',
+    value: 2500
+}, {
+    label: '$ 3000',
+    value: 3000
+}];
 
-const ComprarCoinsComponent = () => {
+interface ComprarCoinsComponentProps {
+    bearerToken: string;
+    userId: string;
+}
+
+const ComprarCoinsComponent = (props : ComprarCoinsComponentProps) => {
     const router = useRouter();
+    const [amountSelected, setAmountSelected] = useState<string | null>(null);
 
     const handleBack = () => router.back();
+
+    const handlePagar = async () => {
+        try {
+            if (!props.bearerToken) {
+                router.push('/login');
+                return;
+            }
+
+            const paymentLink = await getPaymentLinkFromMercadoPago(amountSelected ? parseInt(amountSelected) : 0, props.bearerToken, props.userId);
+
+            if (paymentLink) {
+                window.location.href = paymentLink;
+            } else {
+                console.error('No se recibió un enlace de pago válido.');
+            }
+
+        } catch (error) {
+            console.error('Error al generar el enlace de pago:', error);
+        }
+    };  
+
+
 
     return (
         <div className="comprar-coins-container comprar-coins-component">
@@ -44,8 +94,8 @@ const ComprarCoinsComponent = () => {
             <h2 className="comprar-coins-recargas-title">Recargas</h2>
             <div className="comprar-coins-recargas-grid">
                 {RECARGAS.map((val) => (
-                    <button key={val} type="button" className="comprar-coins-recarga-btn">
-                        {val}
+                    <button key={val.label} type="button" className="comprar-coins-recarga-btn" onClick={() => setAmountSelected(val.value.toString())}>
+                        {val.label}
                     </button>
                 ))}
             </div>
@@ -61,7 +111,7 @@ const ComprarCoinsComponent = () => {
                 </p>
             </div>
 
-            <button type="button" className="comprar-coins-pagar">
+            <button disabled={!amountSelected || amountSelected === '0'} type="button" className="comprar-coins-pagar" onClick={handlePagar}>
                 Pagar
             </button>
         </div>

@@ -11,11 +11,17 @@ import tecladoImage from '../../../images/teclado.png';
 import CategoryFilterComponent from '../../../components/CategoryFilter/CategoryFilterComponent';
 import RaffleCardComponent from 'components/RaffleCard/RaffleCardComponent';
 import RaffleLargeComponent from 'components/RaffleCard/RaffleLargeComponent';
+import { Raffle } from 'models/raffle.model';
 
 interface HomePageComponentProps {
+    raffles: Raffle[];
 }
 
 const HomePageComponent = (props: HomePageComponentProps) => {
+
+    const { raffles } = props;
+
+    console.log('Raffles:', raffles);
 
     return (
         <div className="homepage-container">
@@ -62,7 +68,24 @@ const HomePageComponent = (props: HomePageComponentProps) => {
             {/* Raffle Cards Grid */}
             <div className="raffle-cards-container mt-6">
                 <div className="raffle-cards-grid">
-                    <RaffleCardComponent
+                    {
+                        raffles.map(raffle => <RaffleCardComponent
+                            image={raffle.productImage || ''}
+                            isFavorite={false}
+                            progress={23} // VER COMO PODEMOS CALCULAR ESTO DESPUES
+                            available='23' // VER COMO PODEMOS CALCULAR ESTO DESPUES
+                            progressText='75/325' //VER COMO PODEMOS CALCULAR ESTO DESPUES
+                            title={raffle.title}
+                            description={raffle.description}
+                            price={`C$ ${raffle.ticketPriceCoins}`}
+                            onFreeTicketClick={() => console.log('Free ticket clicked')}
+                            productId={raffle.id}
+                            key={raffle.id}
+                        />
+
+                        )
+                    }
+                    {/* <RaffleCardComponent
                         image={tecladoImage}
                         badge="last-day"
                         isFavorite={false}
@@ -74,20 +97,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                         price="C$ 250"
                         onFreeTicketClick={() => console.log('Free ticket clicked')}
                         productId="kryboard-k500"
-                    />
-                    <RaffleCardComponent
-                        image={iphoneImage}
-                        badge="selling-fast"
-                        isFavorite={true}
-                        progress={23}
-                        available="250 Disponibles"
-                        progressText="75/325"
-                        title="iPhone 16"
-                        description="250GB"
-                        price="C$ 250"
-                        onFreeTicketClick={() => console.log('Free ticket clicked')}
-                        productId="iphone-16-pro-max"
-                    />
+                    /> */}
                 </div>
             </div>
         </div>

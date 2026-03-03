@@ -2,8 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import FreeTicketButton from './FreeTicketButton';
-import bellIcon from '../images/icons/icon-bell.svg';
+import bellIcon from '../../images/icons/icon-bell.svg';
 import './raffle-large.css';
 import FreeTicketButton from 'components/FreeTicketButton/FreeTicketButton';
 
