@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import { TextInputComponent } from "../../../components/TextInput/TextInputComponent";
-import { useLoading } from "hooks/useLoading";
-import { loginService } from "services/user.service";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useError } from "hooks/useError";
 import "./LoginComponent.css";
+import { useError } from "@/hooks/useError";
+import { useLoading } from "@/hooks/useLoading";
 
 interface LoginComponentProps {
 }

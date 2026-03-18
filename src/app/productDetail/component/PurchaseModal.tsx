@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import ticketIconBlack from '../../../images/icons/ticket-icon-black.svg';
+import ticketIconBlack from '@/images/icons/ticket-icon-black.svg';
 import './purchase-modal.css';
 
 interface PurchaseModalProps {

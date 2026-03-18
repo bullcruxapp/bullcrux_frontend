@@ -2,12 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import planeIcon from '../../../../images/icons/plane-icon.svg';
-import checkIcon from '../../../../images/icons/check-icon.svg';
-import ticketIcon from '../../../../images/icons/ticket-icon.svg';
-import iphoneImage from '../../../../images/iphone.jpg';
-import macbookImage from '../../../../images/macbook.jpg';
-import tecladoImage from '../../../../images/teclado.png';
+import planeIcon from '@/images/icons/plane-icon.svg';
+import checkIcon from '@/images/icons/check-icon.svg';
+import ticketIcon from '@/images/icons/ticket-icon.svg';
+import iphoneImage from '@/images/iphone.jpg';
+import macbookImage from '@/images/macbook.jpg';
+import tecladoImage from '@/images/teclado.png';
 import '../purchase-success.css';
 
 interface PurchaseSuccessComponentProps {

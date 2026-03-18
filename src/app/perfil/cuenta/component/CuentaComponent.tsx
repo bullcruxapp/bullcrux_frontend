@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import './cuenta-component.css';
 
-import flagArg from '../../../../images/icons/flag-arg.png';
+import flagArg from '@/images/icons/flag-arg.png';
 
 interface CuentaComponentProps {
 }

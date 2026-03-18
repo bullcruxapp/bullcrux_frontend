@@ -1,8 +1,8 @@
 'use server'
-import { authOptions } from "lib/auth";
+import { authOptions } from "@/lib/auth";
 import ComprarCoinsComponent from "./component/ComprarCoinsComponent";
 import "./comprar-coins.css";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 
 export default async function ComprarCoinsPage() {
 

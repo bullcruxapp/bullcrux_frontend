@@ -5,11 +5,11 @@ import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import './perfil-component.css';
 
-import cuentaIcon from '../../../images/icons/cuenta.png';
-import contrasenaIcon from '../../../images/icons/contrasena.png';
-import politicasIcon from '../../../images/icons/politicas.png';
-import notificacionesIcon from '../../../images/icons/notificaciones.png';
-import idiomaIcon from '../../../images/icons/idioma.png';
+import cuentaIcon from '@/images/icons/cuenta.png';
+import contrasenaIcon from '@/images/icons/contrasena.png';
+import politicasIcon from '@/images/icons/politicas.png';
+import notificacionesIcon from '@/images/icons/notificaciones.png';
+import idiomaIcon from '@/images/icons/idioma.png';
 
 interface PerfilComponentProps {
 }

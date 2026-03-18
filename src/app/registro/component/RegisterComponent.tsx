@@ -1,4 +1,4 @@
-import { TextInputComponent } from "components/TextInput/TextInputComponent"
+import { TextInputComponent } from "@/components/TextInput/TextInputComponent"
 
 const RegisterComponent = () => {
     return (

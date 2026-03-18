@@ -3,13 +3,11 @@
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import cardPlaceholder from '../../../../images/card-placeholder.png';
-import checkIcon from '../../../../images/icons/check2.png';
+import cardPlaceholder from '@/images/card-placeholder.png';
+import checkIcon from '@/images/icons/check2.png';
 import './comprar-coins-component.css';
 import { useState } from 'react';
-import { getServerSession } from 'next-auth';
-import { authOptions } from 'lib/auth';
-import { getPaymentLinkFromMercadoPago } from 'services/transaction.service';
+import { getPaymentLinkFromMercadoPago } from '@/services/transaction.service';
 
 const RECARGAS = [{
     label: '$ 500',

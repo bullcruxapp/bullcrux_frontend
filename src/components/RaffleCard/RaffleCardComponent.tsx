@@ -3,17 +3,17 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import heartIcon from '../../images/icons/heart-icon.svg';
-import heartSelectedIcon from '../../images/icons/heart-selected-icon.svg';
-import clockIcon from '../../images/icons/clock-icon.svg';
-import fireIcon from '../../images/icons/fire-icon.svg';
-import exclamationIcon from '../../images/icons/exclamation-icon.svg';
-import limitedIcon from '../../images/icons/limited-icon.svg';
-import checkIcon from '../../images/icons/check-icon.svg';
-import ticketIcon from '../../images/icons/ticket-icon.svg';
-import ticketArrowIcon from '../../images/icons/ticket-arrow.svg';
+import heartIcon from '@/images/icons/heart-icon.svg';
+import heartSelectedIcon from '@/images/icons/heart-selected-icon.svg';
+import clockIcon from '@/images/icons/clock-icon.svg';
+import fireIcon from '@/images/icons/fire-icon.svg';
+import exclamationIcon from '@/images/icons/exclamation-icon.svg';
+import limitedIcon from '@/images/icons/limited-icon.svg';
+import checkIcon from '@/images/icons/check-icon.svg';
+import ticketIcon from '@/images/icons/ticket-icon.svg';
+import ticketArrowIcon from '@/images/icons/ticket-arrow.svg';
 import './raffle-card.css';
-import FreeTicketButton from 'components/FreeTicketButton/FreeTicketButton';
+import FreeTicketButton from '../FreeTicketButton/FreeTicketButton';
 
 export type BadgeType = 'last-day' | 'selling-fast' | 'ends-soon' | 'limited-stock' | 'activo';
 

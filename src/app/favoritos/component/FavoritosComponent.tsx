@@ -4,13 +4,13 @@ import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import searchIcon from '../../../images/icons/search-icon.svg';
-import macbookImage from '../../../images/macbook.jpg';
-import iphoneImage from '../../../images/iphone.jpg';
-import tecladoImage from '../../../images/teclado.png';
+import searchIcon from '@/images/icons/search-icon.svg';
+import macbookImage from '@/images/macbook.jpg';
+import iphoneImage from '@/images/iphone.jpg';
+import tecladoImage from '@/images/teclado.png';
 import './favoritos-component.css';
-import RaffleLargeComponent from 'components/RaffleCard/RaffleLargeComponent';
-import RaffleCardComponent from 'components/RaffleCard/RaffleCardComponent';
+import RaffleLargeComponent from '@/components/RaffleCard/RaffleLargeComponent';
+import RaffleCardComponent from '@/components/RaffleCard/RaffleCardComponent';
 
 interface FavoritosComponentProps {
 }
@@ -116,7 +116,7 @@ const FavoritosComponent = (props: FavoritosComponentProps) => {
                     className={`tab-item ${activeTab === 'mis-sorteos' ? 'active' : ''}`}
                     onClick={() => setActiveTab('mis-sorteos')}
                 >
-                    Mis Sorteos
+                    Mis Participaciones
                 </button>
             </div>
 

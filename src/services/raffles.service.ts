@@ -1,4 +1,4 @@
-import { Raffle } from "models/raffle.model";
+import { Raffle } from "@/models/raffle.model";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

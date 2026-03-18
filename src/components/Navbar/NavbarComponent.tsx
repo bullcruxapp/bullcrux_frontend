@@ -3,11 +3,11 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import homeIcon from '../../images/icons/home-icon.svg';
-import heartIcon from '../../images/icons/heart-icon.svg';
-import heartSelectedIcon from '../../images/icons/heart-selected-icon.svg';
-import walletIcon from '../../images/icons/shape-icon.svg';
-import profileIcon from '../../images/icons/profile-icon.svg';
+import homeIcon from '@/images/icons/home-icon.svg';
+import heartIcon from '@/images/icons/heart-icon.svg';
+import heartSelectedIcon from '@/images/icons/heart-selected-icon.svg';
+import walletIcon from '@/images/icons/shape-icon.svg';
+import profileIcon from '@/images/icons/profile-icon.svg';
 import './navbar.css';
 
 interface NavItem {

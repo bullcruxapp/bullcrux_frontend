@@ -1,17 +1,15 @@
 'use client'
 
 import Image from 'next/image';
-import bullcruxIcon from '../../../images/icons/bullcrux-icon.svg';
-import searchIcon from '../../../images/icons/search-icon.svg';
+import bullcruxIcon from '@/images/icons/bullcrux-icon.svg';
+import searchIcon from '@/images/icons/search-icon.svg';
 import NotificationComponent from './NotificationComponent';
-import reyDelTicketIcon from '../../../images/rey-del-ticket.png';
-import macbookImage from '../../../images/macbook.jpg';
-import iphoneImage from '../../../images/iphone.jpg';
-import tecladoImage from '../../../images/teclado.png';
-import CategoryFilterComponent from '../../../components/CategoryFilter/CategoryFilterComponent';
-import RaffleCardComponent from 'components/RaffleCard/RaffleCardComponent';
-import RaffleLargeComponent from 'components/RaffleCard/RaffleLargeComponent';
-import { Raffle } from 'models/raffle.model';
+import reyDelTicketIcon from '@/images/rey-del-ticket.png';
+import macbookImage from '@/images/macbook.jpg';
+import CategoryFilterComponent from '@/components/CategoryFilter/CategoryFilterComponent';
+import RaffleCardComponent from '@/components/RaffleCard/RaffleCardComponent';
+import { Raffle } from '@/models/raffle.model';
+import RaffleLargeComponent from '@/components/RaffleCard/RaffleLargeComponent';
 
 interface HomePageComponentProps {
     raffles: Raffle[];
@@ -20,8 +18,6 @@ interface HomePageComponentProps {
 const HomePageComponent = (props: HomePageComponentProps) => {
 
     const { raffles } = props;
-
-    console.log('Raffles:', raffles);
 
     return (
         <div className="homepage-container">
@@ -85,19 +81,6 @@ const HomePageComponent = (props: HomePageComponentProps) => {
 
                         )
                     }
-                    {/* <RaffleCardComponent
-                        image={tecladoImage}
-                        badge="last-day"
-                        isFavorite={false}
-                        progress={23}
-                        available="250 Disponibles"
-                        progressText="75/325"
-                        title="Kryboard K500"
-                        description="Ergonomic Design"
-                        price="C$ 250"
-                        onFreeTicketClick={() => console.log('Free ticket clicked')}
-                        productId="kryboard-k500"
-                    /> */}
                 </div>
             </div>
         </div>

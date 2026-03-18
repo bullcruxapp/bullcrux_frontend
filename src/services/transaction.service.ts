@@ -1,7 +1,6 @@
 'use server'
+import { TransactionType } from "@/models/enums/TransactionType";
 import axios from "axios";
-import { TransactionType } from "models/enums/TransactionType";
-import { Transaction } from "models/transaction.model";
 
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;

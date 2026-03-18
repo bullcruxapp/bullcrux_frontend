@@ -4,10 +4,10 @@ import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import searchIcon from '../../../images/icons/search-icon.svg';
-import rendimientoIcon from '../../../images/icons/rendimiento.png';
+import searchIcon from '@/images/icons/search-icon.svg';
+import rendimientoIcon from '@/images/icons/rendimiento.png';
 import './cartera-component.css';
-import { TransactionType } from 'models/enums/TransactionType';
+import { TransactionType } from '@/models/enums/TransactionType';
 
 interface Transaction {
     id: string;
@@ -33,6 +33,7 @@ const CarteraComponent = (props: CarteraComponentProps) => {
 
     const { balance, transactions } = props;
 
+    console.log(balance, 'balance');
     const userName = session?.user?.name || session?.user?.email || 'Usuario';
     const userImage = session?.user?.image || null;
 

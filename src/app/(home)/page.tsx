@@ -1,8 +1,8 @@
 'use server'
+import { getAllRaffles } from "@/services/raffles.service";
 import HomePageComponent from "./component/HomePageComponent"
-import { getServerSession } from "next-auth";
 import "./homepage.css";
-import { getAllRaffles } from "services/raffles.service";
+import { getServerSession } from "next-auth/next";
 
 export default async function HomePage() {
 
