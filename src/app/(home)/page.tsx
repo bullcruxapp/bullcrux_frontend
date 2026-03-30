@@ -1,21 +1,19 @@
-import { getServerSession } from "next-auth"
-import { getAllRaffles } from "services/raffles.service";
+'use server'
+import { getAllRaffles } from "@/services/raffles.service";
+import HomePageComponent from "./component/HomePageComponent"
+import "./homepage.css";
+import { getServerSession } from "next-auth/next";
 
-export default async function Home() {
+export default async function HomePage() {
 
-    //CON ESTA VARIABLE PODEMOS SABER SI EL USUARIO ESTA LOGUEADO O NO
     const session = await getServerSession();
 
-
     const [raffles] = await Promise.all([
-        getAllRaffles(),
+        getAllRaffles()
     ]);
-
-    console.log(raffles);
-
+    
     return (
-        <main>
-            <h1>Welcome to the Home Page, {session?.user?.email || 'Logueate amigo'}</h1>
-        </main>
+        <HomePageComponent raffles={raffles} />
     )
 }
+

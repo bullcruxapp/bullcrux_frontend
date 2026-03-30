@@ -1,0 +1,184 @@
+.raffle-large {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: 122px;
+    border-radius: 16px;
+    display: flex;
+    overflow: hidden;
+    background-color: #262626;
+    box-sizing: border-box;
+}
+
+.raffle-large-image {
+    width: 50%;
+    min-width: 185px;
+    height: 122px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.raffle-large-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.raffle-large-content {
+    flex: 1;
+    background-color: #262626;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.raffle-large-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.raffle-large-progress-container {
+    width: 100%;
+    max-width: 156px;
+}
+
+.raffle-large-progress-section-favorites {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.raffle-large-progress-info-favorites {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.raffle-large-progress-bar-favorites {
+    width: 100%;
+    height: 6px;
+    background-color: #E8E8E8;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.raffle-large-progress-bar {
+    width: 100%;
+    max-width: 156px;
+    height: 6px;
+    background-color: #E8E8E8;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.raffle-large-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0B5210 0%, #127319 100%);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.raffle-large-price {
+    font-size: 14px;
+    color: #FFFFFF;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.raffle-large-price-label {
+    font-weight: 400;
+    font-size: 10px;
+    color: #E8E8E8;
+}
+
+.raffle-large-price-value {
+    font-weight: 700;
+    font-size: 10px;
+    color: #FFFFFF;
+}
+
+/* Estilos para vista de favoritos */
+.raffle-large-favorites {
+    height: 164px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+.raffle-large-image-favorites {
+    height: 164px;
+}
+
+.raffle-large-content-favorites {
+    position: relative;
+}
+
+.raffle-large-header-favorites {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+.raffle-large-bell-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.raffle-large-title-favorites {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.raffle-large-available-favorites {
+    font-size: 11px;
+    font-weight: 400;
+    color: #FFFFFF;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.raffle-large-progress-text-favorites {
+    font-size: 11px;
+    font-weight: 400;
+    color: #FFFFFF;
+    white-space: nowrap;
+}
+
+.raffle-large-details-button {
+    width: 100%;
+    height: 32px;
+    background-color: #94FF31;
+    border: none;
+    border-radius: 16px;
+    color: #062D09;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    cursor: pointer;
+    margin-top: auto;
+    transition: opacity 0.2s;
+}
+
+.raffle-large-details-button:hover {
+    opacity: 0.9;
+}
+
+.raffle-large-details-button:active {
+    opacity: 0.8;
+}

@@ -14,3 +14,22 @@ export async function loginService(user: string, password: string) {
         throw new Error('Login failed');
     }
 }
+
+export async function getUserSettings(email: string, token: string) {
+
+    try {
+        const response = await axios.get(apiUrl + '/users/profile', {
+            params: {
+                email: email
+            },
+            headers:{
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch user settings');
+    }
+
+}
