@@ -123,7 +123,7 @@ const FavoritosComponent = (props: FavoritosComponentProps) => {
             <div className="favoritos-content">
                 {activeTab === 'favoritos' ? (
                     <div className="raffle-large-container">
-                        <RaffleLargeComponent
+                        {/* <RaffleLargeComponent
                             image={macbookImage}
                             title="Apple Macbook Pro 2019"
                             progress={65}
@@ -133,12 +133,12 @@ const FavoritosComponent = (props: FavoritosComponentProps) => {
                             isFavoritesView={true}
                             available="150 Disponibles"
                             progressText="23/127"
-                        />
+                        /> */}
                     </div>
                 ) : (
                     <div className="raffle-cards-container">
                         <div className="raffle-cards-grid">
-                            <RaffleCardComponent
+                            {/* <RaffleCardComponent
                                 image={tecladoImage}
                                 badge="activo"
                                 isFavorite={false}
@@ -161,7 +161,7 @@ const FavoritosComponent = (props: FavoritosComponentProps) => {
                                 price="C$ 1150"
                                 productId="iphone-16-pro-max"
                                 isMyRafflesView={true}
-                            />
+                            /> */}
                         </div>
                     </div>
                 )}
