@@ -66,13 +66,15 @@ const HomePageComponent = (props: HomePageComponentProps) => {
             <div className="raffle-cards-container mt-6">
                 <div className="raffle-cards-grid">
                     {
+                        //    const available = productData.totalTickets - productData.ticketsSold;
+    //                          const progress = Math.round((productData.ticketsSold / productData.totalTickets) * 100);
                         raffles.map(raffle => <RaffleCardComponent
                             // image={raffle.productImage || ''}
                             image={raffle.productImages}
                             isFavorite={false}
-                            progress={23} // VER COMO PODEMOS CALCULAR ESTO DESPUES
-                            available='23' // VER COMO PODEMOS CALCULAR ESTO DESPUES
-                            progressText='75/325' //VER COMO PODEMOS CALCULAR ESTO DESPUES
+                            progress={ Math.round((raffle.ticketsSold / raffle.totalTickets) * 100)}
+                            available={`${raffle.totalTickets - raffle.ticketsSold}`} 
+                            progressText={`${raffle.ticketsSold}/${raffle.totalTickets}`} 
                             title={raffle.title}
                             description={raffle.description}
                             price={`C$ ${raffle.ticketPriceCoins}`}
