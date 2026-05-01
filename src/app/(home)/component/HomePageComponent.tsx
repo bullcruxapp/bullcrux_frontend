@@ -19,6 +19,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
 
     const { raffles } = props;
 
+
     return (
         <div className="homepage-container">
             <div className="header flex justify-between items-center">
@@ -66,7 +67,8 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                 <div className="raffle-cards-grid">
                     {
                         raffles.map(raffle => <RaffleCardComponent
-                            image={raffle.productImage || ''}
+                            // image={raffle.productImage || ''}
+                            image={raffle.productImages}
                             isFavorite={false}
                             progress={23} // VER COMO PODEMOS CALCULAR ESTO DESPUES
                             available='23' // VER COMO PODEMOS CALCULAR ESTO DESPUES

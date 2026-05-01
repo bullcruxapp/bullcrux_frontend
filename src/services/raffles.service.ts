@@ -26,7 +26,6 @@ export const getAllRaffles = async () => {
 }
 
 export const getRaffleById = async (raffleId: string) => {
-
     try{
         const response = await fetch(`${API_URL}/raffle/${raffleId}`, {
             method: 'GET',

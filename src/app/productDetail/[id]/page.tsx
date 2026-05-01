@@ -1,4 +1,5 @@
 'use server'
+import { getRaffleById } from "@/services/raffles.service";
 import ProductDetailComponent from "../component/ProductDetailComponent";
 import "../productDetail.css";
 
@@ -9,8 +10,10 @@ export default async function ProductDetailPage({
 }) {
     const { id } = await params;
 
+    const data = await getRaffleById(id);
+
     return (
-        <ProductDetailComponent productId={id} />
+        <ProductDetailComponent productId={id} data={data} />
     );
 }
 

@@ -9,53 +9,34 @@ import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import iphoneImage from '@/images/iphone.jpg';
-import macbookImage from '@/images/macbook.jpg';
-import tecladoImage from '@/images/teclado.png';
-import fireIcon from '@/images/icons/fire-icon.svg';
 import ticketIcon from '@/images/icons/ticket-icon.svg';
 import ticketIconBlack from '@/images/icons/ticket-icon-black.svg';
 import shareIcon from '@/images/icons/share-icon.svg';
 import PurchaseModal from './PurchaseModal';
 import '../productDetail.css';
+import { Raffle } from '@/models/raffle.model';
 
 interface ProductDetailComponentProps {
     productId: string;
+    data: Raffle;
 }
 
-const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
+const ProductDetailComponent = ({ productId, data }: ProductDetailComponentProps) => {
     const router = useRouter();
     const [activeIndex, setActiveIndex] = useState(0);
     const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
     const swiperRef = useRef<SwiperType | null>(null);
+    const productData = data
+    const productImages = data.productImages || [];
 
-    // Por ahora usamos imágenes estáticas, luego se cambiarán desde la base de datos
-    const productImages = [
-        iphoneImage,
-        macbookImage,
-        tecladoImage,
-        iphoneImage,
-        macbookImage,
-    ];
 
     const handleBack = () => {
         router.back();
     };
 
-    // Datos del producto (temporal, luego vendrá de la base de datos)
-    const productData = {
-        title: 'iPhone 16 Pro Max',
-        price: 'CS 250',
-        priceValue: 250, // Valor numérico para cálculos
-        badge: {
-            text: 'SELLING FAST',
-            icon: fireIcon,
-        },
-        progress: 25,
-        available: '250 Disponibles',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-        image: productImages[0], // Primera imagen del slider
-    };
+    const available = productData.totalTickets - productData.ticketsSold;
+    const progress = Math.round((productData.ticketsSold / productData.totalTickets) * 100);
+
 
     return (
         <div className="product-detail-container">
@@ -85,7 +66,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                         <SwiperSlide key={index}>
                             <div className="product-detail-slide">
                                 <Image
-                                    src={image}
+                                    src={image.url}
                                     alt={`${productData.title} - Imagen ${index + 1}`}
                                     fill
                                     style={{ objectFit: 'cover' }}
@@ -104,12 +85,12 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                     <div className="product-detail-progress-bar">
                         <div
                             className="product-detail-progress-fill"
-                            style={{ width: `${productData.progress}%` }}
+                            style={{ width: `${progress}%` }}
                         />
                     </div>
                     <div className="product-detail-progress-info">
-                        <span className="product-detail-available">{productData.available}</span>
-                        <span className="product-detail-progress-percent">{productData.progress}%</span>
+                        <span className="product-detail-available">{available}</span>
+                        <span className="product-detail-progress-percent">{progress}%</span>
                     </div>
                 </div>
 
@@ -124,9 +105,9 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                                 width={20}
                                 height={16}
                             />
-                            <span>{productData.price}</span>
+                            <span>CS {productData.ticketPriceCoins}</span>
                         </div>
-                        {productData.badge && (
+                        {/* {productData.badge && (
                             <div className="product-detail-badge">
                                 <Image
                                     src={productData.badge.icon}
@@ -136,7 +117,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                                 />
                                 <span>{productData.badge.text}</span>
                             </div>
-                        )}
+                        )} */}
                         <button className="product-detail-share-button">
                             <Image
                                 src={shareIcon}
@@ -150,7 +131,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
 
                 {/* Descripción */}
                 <div className="product-detail-description-section">
-                    <h2 className="product-detail-description-title">Title</h2>
+                    <h2 className="product-detail-description-title">{productData.title}</h2>
                     <p className="product-detail-description-text">{productData.description}</p>
                 </div>
 
@@ -179,10 +160,10 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                 isOpen={isPurchaseModalOpen}
                 onClose={() => setIsPurchaseModalOpen(false)}
                 product={{
-                    image: productData.image,
+                    image: productData.productImages[0],
                     title: productData.title,
-                    price: productData.price,
-                    priceValue: productData.priceValue,
+                    price: `CS ${productData.ticketPriceCoins}`,
+                    priceValue: productData.ticketPriceCoins,
                 }}
                 productId={productId}
             />

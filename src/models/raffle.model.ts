@@ -1,9 +1,11 @@
+import { RaffleImage } from "./raffleImage.model";
+
 export interface Raffle {
     id: string;
     title: string;
     description: string;
     productName: string;
-    productImage: string;
+    productImages:  RaffleImage[];
     ticketPriceCoins: number;
     totalTickets: number;
     ticketsSold: number;

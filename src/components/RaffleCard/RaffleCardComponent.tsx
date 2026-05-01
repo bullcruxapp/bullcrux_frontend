@@ -14,11 +14,12 @@ import ticketIcon from '@/images/icons/ticket-icon.svg';
 import ticketArrowIcon from '@/images/icons/ticket-arrow.svg';
 import './raffle-card.css';
 import FreeTicketButton from '../FreeTicketButton/FreeTicketButton';
+import { RaffleImage } from '@/models/raffleImage.model';
 
 export type BadgeType = 'last-day' | 'selling-fast' | 'ends-soon' | 'limited-stock' | 'activo';
 
 interface RaffleCardComponentProps {
-    image: string | any;
+    image: RaffleImage[]
     badge?: BadgeType;
     isFavorite?: boolean;
     onFavoriteClick?: () => void;
@@ -107,7 +108,7 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
         <div className={`raffle-card ${isMyRafflesView ? 'raffle-card-my-raffles' : ''}`} onClick={isMyRafflesView ? undefined : handleCardClick} style={{ cursor: (onClick || productId) && !isMyRafflesView ? 'pointer' : 'default' }}>
             <div className="raffle-card-image-container">
                 <Image
-                    src={image}
+                    src={image[0].url}
                     alt={title}
                     width={176}
                     height={120}
