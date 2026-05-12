@@ -33,7 +33,6 @@ const CarteraComponent = (props: CarteraComponentProps) => {
 
     const { balance, transactions } = props;
 
-    console.log(balance, 'balance');
     const userName = session?.user?.name || session?.user?.email || 'Usuario';
     const userImage = session?.user?.image || null;
 

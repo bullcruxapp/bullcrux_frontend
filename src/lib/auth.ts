@@ -1,5 +1,5 @@
-import CredentialsProvider from "next-auth/providers/credentials";// lib/auth.ts (TypeScript)
-import GoogleProvider from "next-auth/providers/google"
+import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import type { NextAuthOptions } from "next-auth";
 
 export const authOptions: NextAuthOptions = {
@@ -19,19 +19,19 @@ export const authOptions: NextAuthOptions = {
                     }),
                     headers: { "Content-Type": "application/json" }
                 });
+
                 const data = await res.json();
 
                 if (res.ok && data) {
-                    return {
+                    const result = {
                         id: data.user.id,
                         name: data.user.name,
                         email: data.user.email,
                         accessToken: data.token
                     };
-
-                } else {
-                    return null;
+                    return result;
                 }
+                return null;
             }
         }),
         GoogleProvider({
@@ -41,29 +41,10 @@ export const authOptions: NextAuthOptions = {
     ],
     secret: process.env.NEXTAUTH_SECRET,
     session: {
-        strategy: "jwt",  // recomendado en App Router
+        strategy: "jwt",
     },
     callbacks: {
-
-        async jwt({ token, user }) {
-            if (user) {
-                token.id = user.id;
-                token.accessToken = (user as any).accessToken;
-            }
-            return token;
-        },
-
-        async session({ session, token }) {
-            if (session.user) {
-                session.user.id = token.id as string;
-            }
-
-            (session as any).accessToken = token.accessToken;
-
-            return session;
-        },
-
-        async signIn({ user, account, profile, email, credentials }) {
+        async signIn({ user, account }) {
             if (account?.provider === "google") {
                 const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/auth/external-login', {
                     method: 'POST',
@@ -75,26 +56,34 @@ export const authOptions: NextAuthOptions = {
                     headers: { "Content-Type": "application/json" }
                 });
 
-
-                if (!response.ok) {
-                    return false;
-                }
+                if (!response.ok) return false;
 
                 const data = await response.json();
 
-                if (data && data.user) {
-                    user.id = data.user.id; // Asignar el ID del usuario retornado por el backend
-
+                if (data?.user) {
+                    user.id = data.user.id;
+                    user.accessToken = data.token; // ← esto faltaba
                     return true;
-                } else {
-                    return false;
                 }
 
-
-            } else {
-                return true;
+                return false;
             }
-        }
-    },
 
+            return true;
+        },
+
+        async jwt({ token, user, account }) {
+            if (user) {
+                token.id = user.id;
+                token.accessToken = user.accessToken; // ← ahora llega correctamente
+            }
+            return token;
+        },
+
+        async session({ session, token }) {
+            session.user.id = token.id;
+            session.accessToken = token.accessToken;
+            return session;
+        },
+    },
 };

@@ -19,9 +19,11 @@ import { Raffle } from '@/models/raffle.model';
 interface ProductDetailComponentProps {
     productId: string;
     data: Raffle;
+    userId: string;
+    bearerToken: string;
 }
 
-const ProductDetailComponent = ({ productId, data }: ProductDetailComponentProps) => {
+const ProductDetailComponent = ({ productId, data, userId, bearerToken }: ProductDetailComponentProps) => {
     const router = useRouter();
     const [activeIndex, setActiveIndex] = useState(0);
     const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
@@ -159,13 +161,10 @@ const ProductDetailComponent = ({ productId, data }: ProductDetailComponentProps
             <PurchaseModal
                 isOpen={isPurchaseModalOpen}
                 onClose={() => setIsPurchaseModalOpen(false)}
-                product={{
-                    image: productData.productImages[0],
-                    title: productData.title,
-                    price: `CS ${productData.ticketPriceCoins}`,
-                    priceValue: productData.ticketPriceCoins,
-                }}
+                product={productData}
                 productId={productId}
+                userId={userId}
+                token={bearerToken}
             />
         </div>
     );

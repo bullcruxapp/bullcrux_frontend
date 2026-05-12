@@ -9,30 +9,18 @@ import iphoneImage from '@/images/iphone.jpg';
 import macbookImage from '@/images/macbook.jpg';
 import tecladoImage from '@/images/teclado.png';
 import '../purchase-success.css';
+import { Raffle } from '@/models/raffle.model';
 
 interface PurchaseSuccessComponentProps {
     productId: string;
     quantity: number;
+    data: Raffle;
 }
 
-const PurchaseSuccessComponent = ({ productId, quantity }: PurchaseSuccessComponentProps) => {
+const PurchaseSuccessComponent = ({ productId, quantity, data }: PurchaseSuccessComponentProps) => {
     const router = useRouter();
 
-    // Datos del producto (temporal, luego vendrá de la base de datos)
-    // Por ahora usamos datos estáticos basados en el productId
-    const getProductData = () => {
-        if (productId === 'iphone-16-pro-max') {
-            return { image: iphoneImage, title: 'iPhone 16 Pro Max', price: 'BC$ 250' };
-        } else if (productId === 'macbook-pro-2019') {
-            return { image: macbookImage, title: 'Apple Macbook Pro 2019', price: 'BC$ 1150' };
-        } else if (productId === 'kryboard-k500') {
-            return { image: tecladoImage, title: 'Kryboard K500', price: 'BC$ 250' };
-        }
-        // Default
-        return { image: iphoneImage, title: 'iPhone 16 Pro Max', price: 'BC$ 250' };
-    };
-
-    const productData = getProductData();
+    const productData = data;
 
     const handleShare = () => {
         // Funcionalidad de compartir (a implementar)
@@ -40,7 +28,7 @@ const PurchaseSuccessComponent = ({ productId, quantity }: PurchaseSuccessCompon
     };
 
     const handleGoHome = () => {
-        router.push('/homepage');
+        router.push('/');
     };
 
     return (
@@ -48,12 +36,14 @@ const PurchaseSuccessComponent = ({ productId, quantity }: PurchaseSuccessCompon
             {/* Card con imagen y texto */}
             <div className="purchase-success-card">
                 <div className="purchase-success-image-container">
-                    <Image
-                        src={productData.image}
-                        alt={productData.title}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                    />
+                    {productData.productImages && productData.productImages.length > 0 && (
+                        <Image
+                            src={productData.productImages[0].url}
+                            alt={productData.title}
+                            fill
+                            style={{ objectFit: 'cover' }}
+                        />
+                    )}
                     {/* Texto sobre la imagen */}
                     <div className="purchase-success-text-overlay">
                         <h1>Ya estás participando!</h1>
@@ -80,7 +70,7 @@ const PurchaseSuccessComponent = ({ productId, quantity }: PurchaseSuccessCompon
                         width={12}
                         height={10}
                     />
-                    <span>{productData.price}</span>
+                    <span>{productData.ticketPriceCoins}</span>
                 </div>
             </div>
 

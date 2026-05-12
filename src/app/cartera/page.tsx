@@ -9,7 +9,7 @@ import { getUserSettings } from "@/services/user.service";
 export default async function CarteraPage() {
 
     const session = await getServerSession(authOptions);
-    if (!session || session.user) {
+    if (!session || !session.user) {
         redirect('/login');
     }
 
@@ -19,7 +19,6 @@ export default async function CarteraPage() {
         redirect('/login');
     }
 
-    console.log(user, 'user')
 
     return (
         <CarteraComponent balance={user.balanceCoins || 0} transactions={user.transactions || []} />

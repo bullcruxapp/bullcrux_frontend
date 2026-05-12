@@ -65,7 +65,5 @@ export const createRaffle = async (raffleData: Raffle) => {
     }
 }
 
-export const enterRaffle = async (raffleId: string, userData: any) => {
 
-}
 
