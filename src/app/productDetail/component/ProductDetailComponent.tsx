@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
@@ -9,15 +10,13 @@ import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import iphoneImage from '@/images/iphone.jpg';
-import macbookImage from '@/images/macbook.jpg';
-import tecladoImage from '@/images/teclado.png';
 import fireIcon from '@/images/icons/fire-icon.svg';
 import ticketIcon from '@/images/icons/ticket-icon.svg';
-import ticketIconBlack from '@/images/icons/ticket-icon-black.svg';
 import shareIcon from '@/images/icons/share-icon.svg';
 import PurchaseModal from './PurchaseModal';
 import '../productDetail.css';
+import { getRaffleById } from '@/services/raffles.service';
+import { Raffle } from '@/models/raffle.model';
 
 interface ProductDetailComponentProps {
     productId: string;
@@ -25,170 +24,174 @@ interface ProductDetailComponentProps {
 
 const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
     const router = useRouter();
+    const { data: session } = useSession();
     const [activeIndex, setActiveIndex] = useState(0);
     const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
+    const [raffle, setRaffle] = useState<Raffle | null>(null);
+    const [loading, setLoading] = useState(true);
     const swiperRef = useRef<SwiperType | null>(null);
 
-    // Por ahora usamos imágenes estáticas, luego se cambiarán desde la base de datos
-    const productImages = [
-        iphoneImage,
-        macbookImage,
-        tecladoImage,
-        iphoneImage,
-        macbookImage,
-    ];
+    useEffect(() => {
+        const fetchRaffle = async () => {
+            try {
+                const data = await getRaffleById(productId);
+                setRaffle(data);
+            } catch (error) {
+                console.error('Error fetching raffle:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchRaffle();
+    }, [productId]);
 
-    const handleBack = () => {
-        router.back();
+    const handleBack = () => router.back();
+
+    const getProgress = () => {
+        if (!raffle || raffle.totalTickets === 0) return 0;
+        return Math.round((raffle.ticketsSold / raffle.totalTickets) * 100);
     };
 
-    // Datos del producto (temporal, luego vendrá de la base de datos)
-    const productData = {
-        title: 'iPhone 16 Pro Max',
-        price: 'CS 250',
-        priceValue: 250, // Valor numérico para cálculos
-        badge: {
-            text: 'SELLING FAST',
-            icon: fireIcon,
-        },
-        progress: 25,
-        available: '250 Disponibles',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-        image: productImages[0], // Primera imagen del slider
+    const getImages = () => {
+        if (raffle?.productImages && raffle.productImages.length > 0) {
+            return raffle.productImages.map(img => img.url);
+        }
+        if (raffle?.productImage) return [raffle.productImage];
+        return [];
     };
+
+    const images = getImages();
+    const progress = getProgress();
+    const available = raffle ? raffle.totalTickets - raffle.ticketsSold : 0;
+    const isOpen = raffle?.status === 'OPEN';
+
+    if (loading) {
+        return (
+            <div className="product-detail-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <p style={{ color: '#fff' }}>Cargando...</p>
+            </div>
+        );
+    }
+
+    if (!raffle) {
+        return (
+            <div className="product-detail-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <p style={{ color: '#fff' }}>Sorteo no encontrado.</p>
+            </div>
+        );
+    }
 
     return (
         <div className="product-detail-container">
-            {/* Header con botón de retroceso */}
             <div className="product-detail-header">
                 <button className="product-detail-back-button" onClick={handleBack}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </button>
             </div>
 
-            {/* Slider de imágenes */}
             <div className="product-detail-slider-container">
-                <Swiper
-                    modules={[Navigation, Pagination]}
-                    spaceBetween={0}
-                    slidesPerView={1}
-                    pagination={{
-                        clickable: true,
-                    }}
-                    onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
-                    onSwiper={(swiper) => (swiperRef.current = swiper)}
-                    className="product-detail-swiper"
-                >
-                    {productImages.map((image, index) => (
-                        <SwiperSlide key={index}>
-                            <div className="product-detail-slide">
-                                <Image
-                                    src={image}
-                                    alt={`${productData.title} - Imagen ${index + 1}`}
-                                    fill
-                                    style={{ objectFit: 'cover' }}
-                                    priority={index === 0}
-                                />
-                            </div>
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
+                {images.length > 0 ? (
+                    <Swiper
+                        modules={[Navigation, Pagination]}
+                        spaceBetween={0}
+                        slidesPerView={1}
+                        pagination={{ clickable: true }}
+                        onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+                        onSwiper={(swiper) => (swiperRef.current = swiper)}
+                        className="product-detail-swiper"
+                    >
+                        {images.map((image, index) => (
+                            <SwiperSlide key={index}>
+                                <div className="product-detail-slide">
+                                    <Image
+                                        src={image}
+                                        alt={`${raffle.productName} - Imagen ${index + 1}`}
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                        priority={index === 0}
+                                        unoptimized
+                                    />
+                                </div>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                ) : (
+                    <div className="product-detail-slide" style={{ background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <p style={{ color: '#666' }}>Sin imagen</p>
+                    </div>
+                )}
             </div>
 
-            {/* Contenido del producto */}
             <div className="product-detail-content">
-                {/* Barra de progreso */}
+                <div className="product-detail-title-row">
+                    <h1 className="product-detail-title">{raffle.productName}</h1>
+                    <button className="product-detail-share-button">
+                        <Image src={shareIcon} alt="Compartir" width={20} height={20} />
+                    </button>
+                </div>
+
+                <div className="product-detail-badge">
+                    <Image src={fireIcon} alt="Badge" width={12} height={12} />
+                    <span>{raffle.status === 'SOLD_OUT' ? 'AGOTADO' : 'ACTIVO'}</span>
+                </div>
+
                 <div className="product-detail-progress-section">
                     <div className="product-detail-progress-bar">
-                        <div
-                            className="product-detail-progress-fill"
-                            style={{ width: `${productData.progress}%` }}
-                        />
+                        <div className="product-detail-progress-fill" style={{ width: `${progress}%` }} />
                     </div>
                     <div className="product-detail-progress-info">
-                        <span className="product-detail-available">{productData.available}</span>
-                        <span className="product-detail-progress-percent">{productData.progress}%</span>
+                        <span>{available} disponibles</span>
+                        <span>{raffle.ticketsSold}/{raffle.totalTickets}</span>
                     </div>
                 </div>
 
-                {/* Título y precio */}
-                <div className="product-detail-title-section">
-                    <h1 className="product-detail-title">{productData.title}</h1>
-                    <div className="product-detail-price-section">
-                        <div className="product-detail-price">
-                            <Image
-                                src={ticketIcon}
-                                alt="Ticket"
-                                width={20}
-                                height={16}
-                            />
-                            <span>{productData.price}</span>
-                        </div>
-                        {productData.badge && (
-                            <div className="product-detail-badge">
-                                <Image
-                                    src={productData.badge.icon}
-                                    alt={productData.badge.text}
-                                    width={11}
-                                    height={11}
-                                />
-                                <span>{productData.badge.text}</span>
-                            </div>
-                        )}
-                        <button className="product-detail-share-button">
-                            <Image
-                                src={shareIcon}
-                                alt="Compartir"
-                                width={20}
-                                height={20}
-                            />
-                        </button>
+                <p className="product-detail-description">{raffle.description}</p>
+
+                <div className="product-detail-price-row">
+                    <div className="product-detail-price">
+                        <Image src={ticketIcon} alt="Ticket" width={17} height={13} />
+                        <span>C$ {raffle.ticketPriceCoins} por participación</span>
                     </div>
-                </div>
-
-                {/* Descripción */}
-                <div className="product-detail-description-section">
-                    <h2 className="product-detail-description-title">Title</h2>
-                    <p className="product-detail-description-text">{productData.description}</p>
-                </div>
-
-                {/* Botones de acción */}
-                <div className="product-detail-actions">
-                    <button
-                        className="product-detail-buy-button"
-                        onClick={() => setIsPurchaseModalOpen(true)}
-                    >
-                        <Image
-                            src={ticketIconBlack}
-                            alt="Ticket"
-                            width={18}
-                            height={14}
-                        />
-                        <span>Comprar un ticket</span>
-                    </button>
-                    <button className="product-detail-free-button">
-                        <span>Obtener un ticket Gratis</span>
-                    </button>
                 </div>
             </div>
 
-            {/* Modal de compra */}
-            <PurchaseModal
-                isOpen={isPurchaseModalOpen}
-                onClose={() => setIsPurchaseModalOpen(false)}
-                product={{
-                    image: productData.image,
-                    title: productData.title,
-                    price: productData.price,
-                    priceValue: productData.priceValue,
-                }}
-                productId={productId}
-            />
+            <div className="product-detail-footer">
+                {isOpen ? (
+                    <button
+                        className="product-detail-buy-button"
+                        onClick={() => {
+                            if (!session) { router.push('/login'); return; }
+                            setIsPurchaseModalOpen(true);
+                        }}
+                    >
+                        <Image src={ticketIcon} alt="Ticket" width={18} height={14} />
+                        <span>Comprar participación</span>
+                    </button>
+                ) : (
+                    <button className="product-detail-buy-button" disabled style={{ opacity: 0.5 }}>
+                        <span>{raffle.status === 'SOLD_OUT' ? 'Sorteo cerrado' : 'Sorteo finalizado'}</span>
+                    </button>
+                )}
+            </div>
+
+            {raffle && (
+                <PurchaseModal
+                    isOpen={isPurchaseModalOpen}
+                    onClose={() => setIsPurchaseModalOpen(false)}
+                    product={{
+                        image: images[0] || '',
+                        title: raffle.productName,
+                        price: `C$ ${raffle.ticketPriceCoins}`,
+                        priceValue: raffle.ticketPriceCoins,
+                    }}
+                    productId={raffle.id}
+                    token={session?.accessToken || ''}
+                />
+            )}
         </div>
     );
 };
 
 export default ProductDetailComponent;
-
