@@ -5,7 +5,7 @@ import bullcruxIcon from '@/images/icons/bullcrux-icon.svg';
 import searchIcon from '@/images/icons/search-icon.svg';
 import NotificationComponent from './NotificationComponent';
 import reyDelTicketIcon from '@/images/rey-del-ticket.png';
-import CategoryFilterComponent from '@/components/CategoryFilter/CategoryFilterComponent';
+import CategoryFilterComponent, { Category } from '@/components/CategoryFilter/CategoryFilterComponent';
 import RaffleCardComponent from '@/components/RaffleCard/RaffleCardComponent';
 import { Raffle } from '@/models/raffle.model';
 import RaffleLargeComponent from '@/components/RaffleCard/RaffleLargeComponent';
@@ -17,7 +17,7 @@ interface HomePageComponentProps {
 
 const HomePageComponent = (props: HomePageComponentProps) => {
     const { raffles } = props;
-    const [selectedCategory, setSelectedCategory] = useState('Todos');
+    const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(undefined);
 
     const openRaffles = raffles.filter(r => r.status === 'OPEN' || r.status === 'SOLD_OUT');
     const featuredRaffle = openRaffles[0] || null;
