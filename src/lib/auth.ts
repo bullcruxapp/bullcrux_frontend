@@ -1,6 +1,8 @@
-import CredentialsProvider from "next-auth/providers/credentials";// lib/auth.ts (TypeScript)
+import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google"
 import type { NextAuthOptions } from "next-auth";
+
+const API_URL = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -11,7 +13,7 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials: Record<string, string> | undefined) {
-                const res = await fetch(process.env.NEXT_PUBLIC_API_URL + '/auth/login', {
+                const res = await fetch(API_URL + '/auth/login', {
                     method: 'POST',
                     body: JSON.stringify({
                         email: credentials?.email,
@@ -28,7 +30,6 @@ export const authOptions: NextAuthOptions = {
                         email: data.user.email,
                         accessToken: data.token
                     };
-
                 } else {
                     return null;
                 }
@@ -41,15 +42,34 @@ export const authOptions: NextAuthOptions = {
     ],
     secret: process.env.NEXTAUTH_SECRET,
     session: {
-        strategy: "jwt",  // recomendado en App Router
+        strategy: "jwt",
     },
     callbacks: {
 
-        async jwt({ token, user }) {
+        async jwt({ token, user, account }) {
             if (user) {
                 token.id = user.id;
                 token.accessToken = (user as any).accessToken;
             }
+
+            if (account?.provider === 'google') {
+                const response = await fetch(API_URL + '/auth/external-login', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        email: token.email,
+                        name: token.name,
+                        googleId: account.providerAccountId,
+                    }),
+                    headers: { "Content-Type": "application/json" }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    token.accessToken = data.token;
+                    token.id = data.user.id;
+                }
+            }
+
             return token;
         },
 
@@ -57,44 +77,15 @@ export const authOptions: NextAuthOptions = {
             if (session.user) {
                 session.user.id = token.id as string;
             }
-
             (session as any).accessToken = token.accessToken;
-
             return session;
         },
 
-        async signIn({ user, account, profile, email, credentials }) {
+        async signIn({ account }) {
             if (account?.provider === "google") {
-                const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/auth/external-login', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        email: user.email,
-                        name: user.name,
-                        googleId: account.providerAccountId,
-                    }),
-                    headers: { "Content-Type": "application/json" }
-                });
-
-
-                if (!response.ok) {
-                    return false;
-                }
-
-                const data = await response.json();
-
-                if (data && data.user) {
-                    user.id = data.user.id; // Asignar el ID del usuario retornado por el backend
-
-                    return true;
-                } else {
-                    return false;
-                }
-
-
-            } else {
                 return true;
             }
+            return true;
         }
     },
-
 };
