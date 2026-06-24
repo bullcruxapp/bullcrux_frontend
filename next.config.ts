@@ -9,5 +9,8 @@ const nextConfig: NextConfig = {
   experimental: {
     typedRoutes: false,
   },
+  images: {
+    domains: ['i.imgur.com', 'lh3.googleusercontent.com'],
+  },
 };
 export default nextConfig;
