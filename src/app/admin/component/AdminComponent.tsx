@@ -1,37 +1,109 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+interface ProductImage {
+    url: string;
+    order: number;
+}
+
+interface Raffle {
+    id: string;
+    title: string;
+    productName: string;
+    description: string;
+    ticketPriceCoins: number;
+    totalTickets: number;
+    ticketsSold: number;
+    status: string;
+    productImages: ProductImage[];
+}
 
 interface AdminComponentProps {
     token: string;
 }
 
+const emptyForm = {
+    title: '',
+    productName: '',
+    description: '',
+    ticketPriceCoins: '',
+    totalTickets: '',
+    imageUrl: '',
+};
+
 const AdminComponent = ({ token }: AdminComponentProps) => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
+    const [success, setSuccess] = useState('');
     const [error, setError] = useState('');
+    const [raffles, setRaffles] = useState<Raffle[]>([]);
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [form, setForm] = useState(emptyForm);
 
-    const [form, setForm] = useState({
-        title: '',
-        productName: '',
-        description: '',
-        ticketPriceCoins: '',
-        totalTickets: '',
-        imageUrl: '',
-    });
+    const fetchRaffles = async () => {
+        try {
+            const res = await fetch(`${API_URL}/raffle`);
+            const data = await res.json();
+            setRaffles(data);
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    useEffect(() => {
+        fetchRaffles();
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    const handleEdit = (raffle: Raffle) => {
+        setEditingId(raffle.id);
+        setForm({
+            title: raffle.title,
+            productName: raffle.productName,
+            description: raffle.description || '',
+            ticketPriceCoins: String(raffle.ticketPriceCoins),
+            totalTickets: String(raffle.totalTickets),
+            imageUrl: raffle.productImages?.[0]?.url || '',
+        });
+        window.scrollTo(0, 0);
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!confirm('¿Seguro que querés eliminar este sorteo?')) return;
+        try {
+            const res = await fetch(`${API_URL}/raffle/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
+            if (res.ok) {
+                setSuccess('Sorteo eliminado');
+                fetchRaffles();
+            } else {
+                setError('Error al eliminar');
+            }
+        } catch (e) {
+            setError('Error al eliminar');
+        }
+    };
+
+    const handleCancel = () => {
+        setEditingId(null);
+        setForm(emptyForm);
+        setError('');
+        setSuccess('');
+    };
+
     const handleSubmit = async () => {
         setLoading(true);
         setError('');
-        setSuccess(false);
+        setSuccess('');
 
         try {
             const body: any = {
@@ -46,8 +118,11 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                 body.productImages = [{ url: form.imageUrl, order: 0 }];
             }
 
-            const response = await fetch(`${API_URL}/raffle`, {
-                method: 'POST',
+            const url = editingId ? `${API_URL}/raffle/${editingId}` : `${API_URL}/raffle`;
+            const method = editingId ? 'PUT' : 'POST';
+
+            const response = await fetch(url, {
+                method,
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
@@ -57,18 +132,13 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
 
             if (!response.ok) {
                 const data = await response.json();
-                throw new Error(data.message || 'Error al crear el sorteo');
+                throw new Error(data.message || 'Error');
             }
 
-            setSuccess(true);
-            setForm({
-                title: '',
-                productName: '',
-                description: '',
-                ticketPriceCoins: '',
-                totalTickets: '',
-                imageUrl: '',
-            });
+            setSuccess(editingId ? '¡Sorteo actualizado!' : '¡Sorteo creado!');
+            setForm(emptyForm);
+            setEditingId(null);
+            fetchRaffles();
         } catch (err: any) {
             setError(err.message);
         } finally {
@@ -76,75 +146,71 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
         }
     };
 
+    const inputStyle = { padding: '12px', borderRadius: '8px', background: '#1a1a1a', border: '1px solid #333', color: '#fff', fontSize: '14px', outline: 'none', width: '100%', boxSizing: 'border-box' as const };
+
     return (
         <div style={{ padding: '24px', maxWidth: '600px', margin: '0 auto', color: '#fff' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                <h1 style={{ fontSize: '24px', fontWeight: 'bold' }}>Panel de Admin</h1>
+                <h1 style={{ fontSize: '22px', fontWeight: '500', margin: 0 }}>Panel de admin</h1>
                 <button onClick={() => router.push('/')} style={{ background: 'none', border: '1px solid #555', color: '#fff', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer' }}>
                     ← Volver
                 </button>
             </div>
 
-            <h2 style={{ fontSize: '18px', marginBottom: '16px' }}>Crear sorteo</h2>
+            <h2 style={{ fontSize: '16px', fontWeight: '500', marginBottom: '16px' }}>
+                {editingId ? 'Editar sorteo' : 'Crear sorteo'}
+            </h2>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <input
-                    name="title"
-                    placeholder="Título"
-                    value={form.title}
-                    onChange={handleChange}
-                    style={{ padding: '12px', borderRadius: '8px', background: '#1a1a1a', border: '1px solid #333', color: '#fff' }}
-                />
-                <input
-                    name="productName"
-                    placeholder="Nombre del producto"
-                    value={form.productName}
-                    onChange={handleChange}
-                    style={{ padding: '12px', borderRadius: '8px', background: '#1a1a1a', border: '1px solid #333', color: '#fff' }}
-                />
-                <textarea
-                    name="description"
-                    placeholder="Descripción"
-                    value={form.description}
-                    onChange={handleChange}
-                    rows={3}
-                    style={{ padding: '12px', borderRadius: '8px', background: '#1a1a1a', border: '1px solid #333', color: '#fff', resize: 'none' }}
-                />
-                <input
-                    name="ticketPriceCoins"
-                    placeholder="Precio del ticket (coins)"
-                    type="number"
-                    value={form.ticketPriceCoins}
-                    onChange={handleChange}
-                    style={{ padding: '12px', borderRadius: '8px', background: '#1a1a1a', border: '1px solid #333', color: '#fff' }}
-                />
-                <input
-                    name="totalTickets"
-                    placeholder="Total de tickets"
-                    type="number"
-                    value={form.totalTickets}
-                    onChange={handleChange}
-                    style={{ padding: '12px', borderRadius: '8px', background: '#1a1a1a', border: '1px solid #333', color: '#fff' }}
-                />
-                <input
-                    name="imageUrl"
-                    placeholder="URL de imagen (opcional)"
-                    value={form.imageUrl}
-                    onChange={handleChange}
-                    style={{ padding: '12px', borderRadius: '8px', background: '#1a1a1a', border: '1px solid #333', color: '#fff' }}
-                />
+                <input name="title" placeholder="Título" value={form.title} onChange={handleChange} style={inputStyle} />
+                <input name="productName" placeholder="Nombre del producto" value={form.productName} onChange={handleChange} style={inputStyle} />
+                <textarea name="description" placeholder="Descripción" value={form.description} onChange={handleChange} rows={3} style={{ ...inputStyle, resize: 'none' }} />
+                <input name="ticketPriceCoins" placeholder="Precio del ticket (coins)" type="number" value={form.ticketPriceCoins} onChange={handleChange} style={inputStyle} />
+                <input name="totalTickets" placeholder="Total de tickets" type="number" value={form.totalTickets} onChange={handleChange} style={inputStyle} />
+                <input name="imageUrl" placeholder="URL de imagen (ej: https://i.imgur.com/xxx.jpg)" value={form.imageUrl} onChange={handleChange} style={inputStyle} />
 
-                {error && <p style={{ color: '#ff4444' }}>{error}</p>}
-                {success && <p style={{ color: '#44ff44' }}>¡Sorteo creado exitosamente!</p>}
+                {error && <p style={{ color: '#ff4444', margin: 0 }}>{error}</p>}
+                {success && <p style={{ color: '#44ff44', margin: 0 }}>{success}</p>}
 
-                <button
-                    onClick={handleSubmit}
-                    disabled={loading}
-                    style={{ padding: '14px', borderRadius: '8px', background: '#ABDA53', color: '#000', fontWeight: 'bold', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}
-                >
-                    {loading ? 'Creando...' : 'Crear sorteo'}
-                </button>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <button onClick={handleSubmit} disabled={loading} style={{ flex: 1, padding: '14px', borderRadius: '8px', background: '#ABDA53', color: '#000', fontWeight: '500', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}>
+                        {loading ? 'Guardando...' : editingId ? 'Guardar cambios' : 'Crear sorteo'}
+                    </button>
+                    {editingId && (
+                        <button onClick={handleCancel} style={{ padding: '14px 20px', borderRadius: '8px', background: 'none', border: '1px solid #555', color: '#fff', cursor: 'pointer' }}>
+                            Cancelar
+                        </button>
+                    )}
+                </div>
             </div>
+
+            <h2 style={{ fontSize: '16px', fontWeight: '500', margin: '32px 0 16px' }}>Sorteos existentes</h2>
+
+            {raffles.length === 0 ? (
+                <p style={{ color: '#666' }}>No hay sorteos.</p>
+            ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {raffles.map(raffle => (
+                        <div key={raffle.id} style={{ background: '#1a1a1a', border: '1px solid #333', borderRadius: '8px', padding: '16px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                <div>
+                                    <p style={{ margin: '0 0 4px', fontWeight: '500' }}>{raffle.title}</p>
+                                    <p style={{ margin: '0 0 4px', fontSize: '13px', color: '#aaa' }}>{raffle.ticketsSold}/{raffle.totalTickets} tickets · C$ {raffle.ticketPriceCoins}</p>
+                                    <p style={{ margin: 0, fontSize: '12px', color: raffle.status === 'OPEN' ? '#ABDA53' : '#888' }}>{raffle.status}</p>
+                                </div>
+                                <div style={{ display: 'flex', gap: '8px' }}>
+                                    <button onClick={() => handleEdit(raffle)} style={{ padding: '8px 12px', borderRadius: '6px', background: 'none', border: '1px solid #555', color: '#fff', cursor: 'pointer', fontSize: '13px' }}>
+                                        Editar
+                                    </button>
+                                    <button onClick={() => handleDelete(raffle.id)} style={{ padding: '8px 12px', borderRadius: '6px', background: 'none', border: '1px solid #ff4444', color: '#ff4444', cursor: 'pointer', fontSize: '13px' }}>
+                                        Eliminar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };
