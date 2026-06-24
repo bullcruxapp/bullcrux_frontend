@@ -22,13 +22,13 @@ export const authOptions: NextAuthOptions = {
                     headers: { "Content-Type": "application/json" }
                 });
                 const data = await res.json();
-
                 if (res.ok && data) {
                     return {
                         id: data.user.id,
                         name: data.user.name,
                         email: data.user.email,
-                        accessToken: data.token
+                        accessToken: data.token,
+                        isAdmin: data.user.isAdmin,
                     };
                 } else {
                     return null;
@@ -45,13 +45,12 @@ export const authOptions: NextAuthOptions = {
         strategy: "jwt",
     },
     callbacks: {
-
         async jwt({ token, user, account }) {
             if (user) {
                 token.id = user.id;
                 token.accessToken = (user as any).accessToken;
+                token.isAdmin = (user as any).isAdmin;
             }
-
             if (account?.provider === 'google') {
                 const response = await fetch(API_URL + '/auth/external-login', {
                     method: 'POST',
@@ -62,25 +61,23 @@ export const authOptions: NextAuthOptions = {
                     }),
                     headers: { "Content-Type": "application/json" }
                 });
-
                 if (response.ok) {
                     const data = await response.json();
                     token.accessToken = data.token;
                     token.id = data.user.id;
+                    token.isAdmin = data.user.isAdmin;
                 }
             }
-
             return token;
         },
-
         async session({ session, token }) {
             if (session.user) {
                 session.user.id = token.id as string;
             }
             (session as any).accessToken = token.accessToken;
+            (session as any).isAdmin = token.isAdmin;
             return session;
         },
-
         async signIn({ account }) {
             if (account?.provider === "google") {
                 return true;
