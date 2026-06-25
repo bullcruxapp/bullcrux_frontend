@@ -13,15 +13,14 @@ import { useState } from 'react';
 
 interface HomePageComponentProps {
     raffles: Raffle[];
+    featuredRaffle?: Raffle | null;
 }
 
 const HomePageComponent = (props: HomePageComponentProps) => {
-    const { raffles } = props;
+    const { raffles, featuredRaffle } = props;
     const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(undefined);
 
     const openRaffles = raffles.filter(r => r.status === 'OPEN' || r.status === 'SOLD_OUT');
-    const featuredRaffle = openRaffles[0] || null;
-    const restRaffles = openRaffles.slice(1);
 
     const getProgress = (raffle: Raffle) => {
         if (raffle.totalTickets === 0) return 0;
@@ -38,7 +37,6 @@ const HomePageComponent = (props: HomePageComponentProps) => {
     const getAutoBadge = (raffle: Raffle): BadgeType | undefined => {
         const available = raffle.totalTickets - raffle.ticketsSold;
         const progress = getProgress(raffle);
-
         if (available <= 20) return 'limited-stock';
         if (progress >= 70) return 'selling-fast';
         return undefined;
@@ -81,7 +79,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
 
             <div className="raffle-cards-container mt-6">
                 <div className="raffle-cards-grid">
-                    {restRaffles.map(raffle => (
+                    {openRaffles.map(raffle => (
                         <RaffleCardComponent
                             key={raffle.id}
                             image={getImageUrl(raffle)}
