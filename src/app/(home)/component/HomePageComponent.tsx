@@ -6,7 +6,7 @@ import searchIcon from '@/images/icons/search-icon.svg';
 import NotificationComponent from './NotificationComponent';
 import reyDelTicketIcon from '@/images/rey-del-ticket.png';
 import CategoryFilterComponent, { Category } from '@/components/CategoryFilter/CategoryFilterComponent';
-import RaffleCardComponent from '@/components/RaffleCard/RaffleCardComponent';
+import RaffleCardComponent, { BadgeType } from '@/components/RaffleCard/RaffleCardComponent';
 import { Raffle } from '@/models/raffle.model';
 import RaffleLargeComponent from '@/components/RaffleCard/RaffleLargeComponent';
 import { useState } from 'react';
@@ -33,6 +33,15 @@ const HomePageComponent = (props: HomePageComponentProps) => {
             return raffle.productImages[0].url;
         }
         return raffle.productImage || '';
+    };
+
+    const getAutoBadge = (raffle: Raffle): BadgeType | undefined => {
+        const available = raffle.totalTickets - raffle.ticketsSold;
+        const progress = getProgress(raffle);
+
+        if (available <= 20) return 'limited-stock';
+        if (progress >= 70) return 'selling-fast';
+        return undefined;
     };
 
     return (
@@ -82,11 +91,11 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                             key={raffle.id}
                             image={getImageUrl(raffle)}
                             isFavorite={false}
+                            badge={getAutoBadge(raffle)}
                             progress={getProgress(raffle)}
                             available={`${raffle.totalTickets - raffle.ticketsSold} disponibles`}
                             progressText={`${raffle.ticketsSold}/${raffle.totalTickets}`}
                             title={raffle.title}
-                            description={raffle.description}
                             price={`C$ ${raffle.ticketPriceCoins}`}
                             onFreeTicketClick={() => console.log('Free ticket clicked')}
                             productId={raffle.id}
