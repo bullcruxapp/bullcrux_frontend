@@ -1,7 +1,7 @@
 .notification-container {
     display: flex;
     align-items: center;
-    background-color: #FFFD02;
+    background-color: #1a1a1a;
     height: 26px;
     gap: 8px;
     padding-left: 12px;
@@ -10,32 +10,45 @@
     min-width: 0;
     flex: 1;
     overflow: hidden;
+    border: 1px solid #333;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
-.notification-profile-image {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
+.notification-pump {
+    border-width: 1px;
+    border-style: solid;
 }
 
-.notification-profile-placeholder {
-    width: 18px;
-    height: 18px;
+.notification-dot {
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background-color: #E8E8E8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     flex-shrink: 0;
+    animation: pulse 1.5s infinite;
 }
 
 .notification-text {
-    font-size: 14px;
-    color: #000;
-    font-weight: 500;
+    font-size: 11px;
+    color: #fff;
+    font-weight: 400;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.notification-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.notification-hidden {
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
 }
