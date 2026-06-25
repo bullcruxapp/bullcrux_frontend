@@ -1,54 +1,45 @@
 .notification-container {
     display: flex;
     align-items: center;
-    background-color: #1a1a1a;
+    background-color: #FFFD02;
     height: 26px;
     gap: 8px;
-    padding-left: 12px;
+    padding-left: 6px;
     padding-right: 12px;
     border-radius: 8px;
     min-width: 0;
     flex: 1;
     overflow: hidden;
-    border: 1px solid #333;
-    transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
-.notification-pump {
-    border-width: 1px;
-    border-style: solid;
-}
-
-.notification-dot {
-    width: 8px;
-    height: 8px;
+.notification-avatar {
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
+    object-fit: cover;
     flex-shrink: 0;
-    animation: pulse 1.5s infinite;
 }
 
 .notification-text {
     font-size: 11px;
-    color: #fff;
-    font-weight: 400;
+    color: #000;
+    font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.notification-visible {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+.notification-buzz {
+    animation: buzz 0.4s ease;
 }
 
-.notification-hidden {
-    opacity: 0;
-    transform: translateY(-4px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
+@keyframes buzz {
+    0%   { transform: translateX(0); }
+    15%  { transform: translateX(-3px); }
+    30%  { transform: translateX(3px); }
+    45%  { transform: translateX(-3px); }
+    60%  { transform: translateX(3px); }
+    75%  { transform: translateX(-2px); }
+    90%  { transform: translateX(2px); }
+    100% { transform: translateX(0); }
 }

@@ -13,9 +13,15 @@ const FAKE_PRODUCTS = [
     'iPad Air', 'Google TV', 'Kryboard K500'
 ];
 
-const COLORS = [
-    '#ABDA53', '#FFD700', '#FF6B35', '#00E5FF', '#FF3CAC',
-    '#7B2FBE', '#00FF88', '#FF9500'
+const FAKE_AVATARS = [
+    'https://i.pravatar.cc/32?img=1',
+    'https://i.pravatar.cc/32?img=2',
+    'https://i.pravatar.cc/32?img=3',
+    'https://i.pravatar.cc/32?img=4',
+    'https://i.pravatar.cc/32?img=5',
+    'https://i.pravatar.cc/32?img=6',
+    'https://i.pravatar.cc/32?img=7',
+    'https://i.pravatar.cc/32?img=8',
 ];
 
 const getRandomItem = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
@@ -25,32 +31,30 @@ interface Notification {
     user: string;
     tickets: number;
     product: string;
-    color: string;
+    avatar: string;
 }
 
 const generateNotification = (): Notification => ({
     user: getRandomItem(FAKE_USERS),
     tickets: getRandomInt(1, 10),
     product: getRandomItem(FAKE_PRODUCTS),
-    color: getRandomItem(COLORS),
+    avatar: getRandomItem(FAKE_AVATARS),
 });
 
 const NotificationComponent = () => {
     const [current, setCurrent] = useState<Notification>(generateNotification());
-    const [visible, setVisible] = useState(true);
+    const [buzzing, setBuzzing] = useState(false);
 
     useEffect(() => {
         let timeout: NodeJS.Timeout;
 
         const schedule = () => {
-            const delay = getRandomInt(2000, 6000);
+            const delay = getRandomInt(2500, 6000);
             timeout = setTimeout(() => {
-                setVisible(false);
-                setTimeout(() => {
-                    setCurrent(generateNotification());
-                    setVisible(true);
-                    schedule();
-                }, 400);
+                setCurrent(generateNotification());
+                setBuzzing(true);
+                setTimeout(() => setBuzzing(false), 500);
+                schedule();
             }, delay);
         };
 
@@ -59,16 +63,14 @@ const NotificationComponent = () => {
     }, []);
 
     return (
-        <div
-            className={`notification-container notification-pump ${visible ? 'notification-visible' : 'notification-hidden'}`}
-            style={{ borderColor: current.color, boxShadow: `0 0 8px ${current.color}33` }}
-        >
-            <div className="notification-dot" style={{ background: current.color }} />
-            <span className="notification-text" style={{ color: '#fff' }}>
-                <span style={{ color: current.color, fontWeight: 600 }}>{current.user}</span>
-                {' '}compró{' '}
-                <span style={{ color: current.color, fontWeight: 600 }}>{current.tickets}tks</span>
-                {' '}de {current.product}
+        <div className={`notification-container ${buzzing ? 'notification-buzz' : ''}`}>
+            <img
+                src={current.avatar}
+                alt="Profile"
+                className="notification-avatar"
+            />
+            <span className="notification-text">
+                {current.user} compró {current.tickets}tks de {current.product}
             </span>
         </div>
     );
