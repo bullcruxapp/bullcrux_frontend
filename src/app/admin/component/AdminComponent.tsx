@@ -19,6 +19,7 @@ interface Raffle {
     totalTickets: number;
     ticketsSold: number;
     status: string;
+    featured: boolean;
     productImages: ProductImage[];
 }
 
@@ -33,6 +34,7 @@ const emptyForm = {
     ticketPriceCoins: '',
     totalTickets: '',
     imageUrl: '',
+    featured: false,
 };
 
 const AdminComponent = ({ token }: AdminComponentProps) => {
@@ -71,6 +73,7 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
             ticketPriceCoins: String(raffle.ticketPriceCoins),
             totalTickets: String(raffle.totalTickets),
             imageUrl: raffle.productImages?.[0]?.url || '',
+            featured: raffle.featured || false,
         });
         window.scrollTo(0, 0);
     };
@@ -93,6 +96,24 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
         }
     };
 
+    const handleToggleFeatured = async (raffle: Raffle) => {
+        try {
+            const res = await fetch(`${API_URL}/raffle/${raffle.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ ...raffle, featured: !raffle.featured }),
+            });
+            if (res.ok) {
+                fetchRaffles();
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
     const handleCancel = () => {
         setEditingId(null);
         setForm(emptyForm);
@@ -112,6 +133,7 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                 description: form.description,
                 ticketPriceCoins: parseInt(form.ticketPriceCoins),
                 totalTickets: parseInt(form.totalTickets),
+                featured: form.featured,
             };
 
             if (form.imageUrl) {
@@ -164,10 +186,23 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <input name="title" placeholder="Título" value={form.title} onChange={handleChange} style={inputStyle} />
                 <input name="productName" placeholder="Nombre del producto" value={form.productName} onChange={handleChange} style={inputStyle} />
-                <textarea name="description" placeholder="Descripción" value={form.description} onChange={handleChange} rows={3} style={{ ...inputStyle, resize: 'none' }} />
+                <textarea name="description" placeholder="Descripción corta (aparece en Rey del Ticket)" value={form.description} onChange={handleChange} rows={2} style={{ ...inputStyle, resize: 'none' }} />
                 <input name="ticketPriceCoins" placeholder="Precio del ticket (coins)" type="number" value={form.ticketPriceCoins} onChange={handleChange} style={inputStyle} />
                 <input name="totalTickets" placeholder="Total de tickets" type="number" value={form.totalTickets} onChange={handleChange} style={inputStyle} />
                 <input name="imageUrl" placeholder="URL de imagen (ej: https://i.imgur.com/xxx.jpg)" value={form.imageUrl} onChange={handleChange} style={inputStyle} />
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: '#1a1a1a', border: '1px solid #333', borderRadius: '8px' }}>
+                    <input
+                        type="checkbox"
+                        id="featured"
+                        checked={form.featured}
+                        onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+                        style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                    />
+                    <label htmlFor="featured" style={{ cursor: 'pointer', fontSize: '14px' }}>
+                        ⭐ Destacar en Rey del Ticket
+                    </label>
+                </div>
 
                 {error && <p style={{ color: '#ff4444', margin: 0 }}>{error}</p>}
                 {success && <p style={{ color: '#44ff44', margin: 0 }}>{success}</p>}
@@ -191,20 +226,31 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
             ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {raffles.map(raffle => (
-                        <div key={raffle.id} style={{ background: '#1a1a1a', border: '1px solid #333', borderRadius: '8px', padding: '16px' }}>
+                        <div key={raffle.id} style={{ background: '#1a1a1a', border: `1px solid ${raffle.featured ? '#ABDA53' : '#333'}`, borderRadius: '8px', padding: '16px' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                 <div>
-                                    <p style={{ margin: '0 0 4px', fontWeight: '500' }}>{raffle.title}</p>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                                        <p style={{ margin: 0, fontWeight: '500' }}>{raffle.title}</p>
+                                        {raffle.featured && <span style={{ fontSize: '11px', color: '#ABDA53', border: '1px solid #ABDA53', borderRadius: '4px', padding: '1px 6px' }}>REY DEL TICKET</span>}
+                                    </div>
                                     <p style={{ margin: '0 0 4px', fontSize: '13px', color: '#aaa' }}>{raffle.ticketsSold}/{raffle.totalTickets} tickets · C$ {raffle.ticketPriceCoins}</p>
                                     <p style={{ margin: 0, fontSize: '12px', color: raffle.status === 'OPEN' ? '#ABDA53' : '#888' }}>{raffle.status}</p>
                                 </div>
-                                <div style={{ display: 'flex', gap: '8px' }}>
-                                    <button onClick={() => handleEdit(raffle)} style={{ padding: '8px 12px', borderRadius: '6px', background: 'none', border: '1px solid #555', color: '#fff', cursor: 'pointer', fontSize: '13px' }}>
-                                        Editar
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
+                                    <button
+                                        onClick={() => handleToggleFeatured(raffle)}
+                                        style={{ padding: '6px 10px', borderRadius: '6px', background: raffle.featured ? '#ABDA53' : 'none', border: `1px solid ${raffle.featured ? '#ABDA53' : '#555'}`, color: raffle.featured ? '#000' : '#fff', cursor: 'pointer', fontSize: '12px' }}
+                                    >
+                                        ⭐ {raffle.featured ? 'Destacado' : 'Destacar'}
                                     </button>
-                                    <button onClick={() => handleDelete(raffle.id)} style={{ padding: '8px 12px', borderRadius: '6px', background: 'none', border: '1px solid #ff4444', color: '#ff4444', cursor: 'pointer', fontSize: '13px' }}>
-                                        Eliminar
-                                    </button>
+                                    <div style={{ display: 'flex', gap: '8px' }}>
+                                        <button onClick={() => handleEdit(raffle)} style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #555', color: '#fff', cursor: 'pointer', fontSize: '12px' }}>
+                                            Editar
+                                        </button>
+                                        <button onClick={() => handleDelete(raffle.id)} style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #ff4444', color: '#ff4444', cursor: 'pointer', fontSize: '12px' }}>
+                                            Eliminar
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
