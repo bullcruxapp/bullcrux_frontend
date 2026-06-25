@@ -62,7 +62,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                 <div className="raffle-large-container mt-6">
                     <RaffleLargeComponent
                         image={getImageUrl(featuredRaffle)}
-                        title={featuredRaffle.productName}
+                        title={featuredRaffle.title}
                         progress={getProgress(featuredRaffle)}
                         price={`C$ ${featuredRaffle.ticketPriceCoins}`}
                         onFreeTicketClick={() => console.log('Free ticket clicked')}
