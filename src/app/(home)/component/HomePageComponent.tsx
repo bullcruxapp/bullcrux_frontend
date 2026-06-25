@@ -50,12 +50,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                 <div className="bullcrux-icon">
                     <Image src={bullcruxIcon} alt="Bullcrux icon" width={24} />
                 </div>
-                <NotificationComponent
-                    username="@bullcrux"
-                    message="sorteo activo"
-                    product={featuredRaffle?.productName || ''}
-                    ticketsCount={featuredRaffle?.ticketsSold || 0}
-                />
+                <NotificationComponent />
                 <div className="search-input">
                     <Image src={searchIcon} alt="Search icon" width={18} height={18} />
                 </div>
@@ -69,7 +64,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                 <div className="raffle-large-container mt-6">
                     <RaffleLargeComponent
                         image={getImageUrl(featuredRaffle)}
-                        title={featuredRaffle.productName}
+                        title={featuredRaffle.description || featuredRaffle.productName}
                         progress={getProgress(featuredRaffle)}
                         price={`C$ ${featuredRaffle.ticketPriceCoins}`}
                         onFreeTicketClick={() => console.log('Free ticket clicked')}
