@@ -40,15 +40,22 @@ const NotificationComponent = () => {
     const [visible, setVisible] = useState(true);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setVisible(false);
-            setTimeout(() => {
-                setCurrent(generateNotification());
-                setVisible(true);
-            }, 400);
-        }, 3500);
+        let timeout: NodeJS.Timeout;
 
-        return () => clearInterval(interval);
+        const schedule = () => {
+            const delay = getRandomInt(2000, 6000);
+            timeout = setTimeout(() => {
+                setVisible(false);
+                setTimeout(() => {
+                    setCurrent(generateNotification());
+                    setVisible(true);
+                    schedule();
+                }, 400);
+            }, delay);
+        };
+
+        schedule();
+        return () => clearTimeout(timeout);
     }, []);
 
     return (
