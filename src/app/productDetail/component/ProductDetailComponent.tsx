@@ -16,7 +16,6 @@ import shareIcon from '@/images/icons/share-icon.svg';
 import PurchaseModal from './PurchaseModal';
 import '../productDetail.css';
 import { getRaffleById } from '@/services/raffles.service';
-
 import { Raffle } from '@/models/raffle.model';
 
 interface ProductDetailComponentProps {
@@ -26,7 +25,6 @@ interface ProductDetailComponentProps {
 const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
     const router = useRouter();
     const { data: session } = useSession();
-    const [activeIndex, setActiveIndex] = useState(0);
     const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
     const [raffle, setRaffle] = useState<Raffle | null>(null);
     const [loading, setLoading] = useState(true);
@@ -53,7 +51,6 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
     const handleFreeTicket = async () => {
         if (!session) { router.push('/login'); return; }
         if (claiming) return;
-
         setClaiming(true);
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ticket/claim-ad`, {
@@ -131,7 +128,6 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                         spaceBetween={0}
                         slidesPerView={1}
                         pagination={{ clickable: true }}
-                        onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
                         onSwiper={(swiper) => (swiperRef.current = swiper)}
                         className="product-detail-swiper"
                     >
@@ -158,36 +154,44 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
             </div>
 
             <div className="product-detail-content">
-                <div className="product-detail-title-row">
-                    <h1 className="product-detail-title">{raffle.productName}</h1>
-                    <button className="product-detail-share-button">
-                        <Image src={shareIcon} alt="Compartir" width={20} height={20} />
-                    </button>
-                </div>
-
-                <div className="product-detail-badge">
-                    <Image src={fireIcon} alt="Badge" width={12} height={12} />
-                    <span>{raffle.status === 'SOLD_OUT' ? 'AGOTADO' : 'ACTIVO'}</span>
-                </div>
-
+                {/* Progress */}
                 <div className="product-detail-progress-section">
                     <div className="product-detail-progress-bar">
                         <div className="product-detail-progress-fill" style={{ width: `${progress}%` }} />
                     </div>
                     <div className="product-detail-progress-info">
-                        <span>{available} disponibles</span>
-                        <span>{raffle.ticketsSold}/{raffle.totalTickets}</span>
+                        <span>{available} Disponibles</span>
+                        <span>{progress}%</span>
                     </div>
                 </div>
 
-                <p className="product-detail-description">{raffle.description}</p>
+                {/* Title */}
+                <h1 className="product-detail-title">{raffle.productName}</h1>
 
-                <div className="product-detail-price-row">
+                {/* Price + Badge + Share */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <div className="product-detail-price">
                         <Image src={ticketIcon} alt="Ticket" width={17} height={13} />
-                        <span>C$ {raffle.ticketPriceCoins} por participación</span>
+                        <span>C$ {raffle.ticketPriceCoins}</span>
                     </div>
+                    <div className="product-detail-badge">
+                        <Image src={fireIcon} alt="Badge" width={12} height={12} />
+                        <span>{raffle.status === 'SOLD_OUT' ? 'AGOTADO' : 'ACTIVO'}</span>
+                    </div>
+                    <button className="product-detail-share-button">
+                        <Image src={shareIcon} alt="Compartir" width={20} height={20} />
+                    </button>
                 </div>
+
+                {/* Separator */}
+                <div style={{ width: '100%', height: '1px', background: 'rgba(255,255,255,0.1)' }} />
+
+                {/* Description */}
+                {raffle.description && (
+                    <p style={{ fontSize: '15px', color: '#949596', lineHeight: 1.5, margin: 0 }}>
+                        {raffle.description}
+                    </p>
+                )}
             </div>
 
             <div className="product-detail-footer">
@@ -201,7 +205,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                             }}
                         >
                             <Image src={ticketIcon} alt="Ticket" width={18} height={14} />
-                            <span>Comprar participación</span>
+                            <span>Comprar un ticket</span>
                         </button>
                         <button
                             className="product-detail-free-button"
