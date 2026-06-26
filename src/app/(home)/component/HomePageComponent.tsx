@@ -62,8 +62,8 @@ const HomePageComponent = (props: HomePageComponentProps) => {
             await claimAdTicket(raffleId, (session as any).accessToken);
             setClaimMessages(prev => ({ ...prev, [raffleId]: '¡Ticket reclamado!' }));
         } catch (error: any) {
-            const msg = error.message?.includes('Ya reclamaste') 
-                ? 'Ya reclamaste tu ticket gratis' 
+            const msg = error.message?.includes('Ya reclamaste')
+                ? 'Ya reclamaste tu ticket gratis'
                 : 'Error al reclamar';
             setClaimMessages(prev => ({ ...prev, [raffleId]: msg }));
         } finally {
@@ -91,7 +91,9 @@ const HomePageComponent = (props: HomePageComponentProps) => {
             </div>
 
             <div className='rey-del-ticket flex justify-center items-center mt-4'>
+                <img src="/fire.gif" alt="" width={36} height={36} style={{ marginRight: '4px' }} />
                 <Image src={reyDelTicketIcon} alt="Rey del ticket" width={197} height={54} />
+                <img src="/fire.gif" alt="" width={36} height={36} style={{ marginLeft: '4px' }} />
             </div>
 
             {featuredRaffle && (
