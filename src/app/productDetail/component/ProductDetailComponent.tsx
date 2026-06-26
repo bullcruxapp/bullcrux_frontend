@@ -16,7 +16,7 @@ import shareIcon from '@/images/icons/share-icon.svg';
 import PurchaseModal from './PurchaseModal';
 import '../productDetail.css';
 import { getRaffleById } from '@/services/raffles.service';
-import { claimAdTicket } from '@/services/ticket.service';
+
 import { Raffle } from '@/models/raffle.model';
 
 interface ProductDetailComponentProps {
@@ -56,7 +56,18 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
 
         setClaiming(true);
         try {
-            await claimAdTicket(productId, (session as any).accessToken);
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ticket/claim-ad`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${(session as any).accessToken}`,
+                },
+                body: JSON.stringify({ raffleId: productId }),
+            });
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message || 'Error');
+            }
             setClaimMessage('¡Ticket gratis reclamado!');
         } catch (error: any) {
             const msg = error.message?.includes('Ya reclamaste')
