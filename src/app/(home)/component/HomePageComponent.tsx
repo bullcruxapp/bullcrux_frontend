@@ -89,10 +89,10 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                 </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '16px', gap: '4px' }}>
-                <img src="/fire.gif" alt="" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', marginTop: '16px', gap: '4px' }}>
+                <img src="/fire.gif" alt="" style={{ width: '32px', height: '32px', objectFit: 'contain', marginBottom: '8px' }} />
                 <img src="/rdt.png" alt="Rey del ticket" style={{ height: '52px', width: 'auto', objectFit: 'contain' }} />
-                <img src="/fire.gif" alt="" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
+                <img src="/fire.gif" alt="" style={{ width: '32px', height: '32px', objectFit: 'contain', marginBottom: '8px' }} />
             </div>
 
             {featuredRaffle && (
