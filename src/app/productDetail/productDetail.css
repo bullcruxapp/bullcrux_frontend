@@ -260,3 +260,16 @@
 .product-detail-free-button:active {
     background-color: rgba(148, 255, 49, 0.2);
 }
+.product-detail-free-button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 50px;
+    background: transparent;
+    border: 2px solid #ABDA53;
+    color: #ABDA53;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.product-detail-free-button:hover { opacity: 0.8; }
