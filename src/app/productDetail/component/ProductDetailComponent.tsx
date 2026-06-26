@@ -10,7 +10,6 @@ import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import fireIcon from '@/images/icons/fire-icon.svg';
 import ticketIcon from '@/images/icons/ticket-icon.svg';
 import shareIcon from '@/images/icons/share-icon.svg';
 import PurchaseModal from './PurchaseModal';
@@ -45,8 +44,6 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
         };
         fetchRaffle();
     }, [productId]);
-
-    const handleBack = () => router.back();
 
     const handleFreeTicket = async () => {
         if (!session) { router.push('/login'); return; }
@@ -90,14 +87,24 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
         return [];
     };
 
+    const getAutoBadge = () => {
+        if (!raffle) return null;
+        const available = raffle.totalTickets - raffle.ticketsSold;
+        const progress = getProgress();
+        if (available <= 20) return { text: 'LIMITED STOCK', color: '#FF6B35' };
+        if (progress >= 70) return { text: 'SELLING FAST', color: '#8A38F5' };
+        return null;
+    };
+
     const images = getImages();
     const progress = getProgress();
     const available = raffle ? raffle.totalTickets - raffle.ticketsSold : 0;
     const isOpen = raffle?.status === 'OPEN';
+    const badge = getAutoBadge();
 
     if (loading) {
         return (
-            <div className="product-detail-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ minHeight: '100vh', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <p style={{ color: '#fff' }}>Cargando...</p>
             </div>
         );
@@ -105,125 +112,119 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
 
     if (!raffle) {
         return (
-            <div className="product-detail-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ minHeight: '100vh', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <p style={{ color: '#fff' }}>Sorteo no encontrado.</p>
             </div>
         );
     }
 
     return (
-        <div className="product-detail-container">
-            <div className="product-detail-header">
-                <button className="product-detail-back-button" onClick={handleBack}>
+        <div style={{ minHeight: '100vh', background: '#000', color: '#fff', display: 'flex', flexDirection: 'column', paddingBottom: '100px' }}>
+            {/* Header */}
+            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, padding: '48px 16px 16px', background: 'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%)' }}>
+                <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </button>
             </div>
 
-            <div className="product-detail-slider-container">
+            {/* Image Slider */}
+            <div style={{ width: '100%', height: '55vh', minHeight: '380px', position: 'relative' }}>
                 {images.length > 0 ? (
                     <Swiper
-                        modules={[Navigation, Pagination]}
-                        spaceBetween={0}
+                        modules={[Pagination]}
                         slidesPerView={1}
                         pagination={{ clickable: true }}
                         onSwiper={(swiper) => (swiperRef.current = swiper)}
-                        className="product-detail-swiper"
+                        style={{ width: '100%', height: '100%' }}
                     >
                         {images.map((image, index) => (
                             <SwiperSlide key={index}>
-                                <div className="product-detail-slide">
-                                    <Image
-                                        src={image}
-                                        alt={`${raffle.productName} - Imagen ${index + 1}`}
-                                        fill
-                                        style={{ objectFit: 'cover' }}
-                                        priority={index === 0}
-                                        unoptimized
-                                    />
+                                <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+                                    <Image src={image} alt={raffle.productName} fill style={{ objectFit: 'cover' }} priority={index === 0} unoptimized />
                                 </div>
                             </SwiperSlide>
                         ))}
                     </Swiper>
                 ) : (
-                    <div className="product-detail-slide" style={{ background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '100%', height: '100%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <p style={{ color: '#666' }}>Sin imagen</p>
                     </div>
                 )}
             </div>
 
-            <div className="product-detail-content">
+            {/* Content */}
+            <div style={{ padding: '20px 20px 0', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {/* Progress */}
-                <div className="product-detail-progress-section">
-                    <div className="product-detail-progress-bar">
-                        <div className="product-detail-progress-fill" style={{ width: `${progress}%` }} />
+                <div>
+                    <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.15)', borderRadius: '2px', overflow: 'hidden' }}>
+                        <div style={{ height: '100%', width: `${progress}%`, background: '#94FF31', borderRadius: '2px' }} />
                     </div>
-                    <div className="product-detail-progress-info">
-                        <span>{available} Disponibles</span>
-                        <span>{progress}%</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px' }}>
+                        <span style={{ fontSize: '12px', color: '#fff' }}>{available} Disponibles</span>
+                        <span style={{ fontSize: '12px', color: '#fff' }}>{progress}%</span>
                     </div>
                 </div>
 
                 {/* Title */}
-                <h1 className="product-detail-title">{raffle.productName}</h1>
+                <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#fff', margin: 0, lineHeight: 1.1 }}>{raffle.productName}</h1>
 
                 {/* Price + Badge + Share */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div className="product-detail-price">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#94FF31', fontWeight: '700', fontSize: '14px' }}>
                         <Image src={ticketIcon} alt="Ticket" width={17} height={13} />
                         <span>C$ {raffle.ticketPriceCoins}</span>
                     </div>
-                    <div className="product-detail-badge">
-                        <Image src={fireIcon} alt="Badge" width={12} height={12} />
-                        <span>{raffle.status === 'SOLD_OUT' ? 'AGOTADO' : 'ACTIVO'}</span>
-                    </div>
-                    <button className="product-detail-share-button">
+                    {badge && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: badge.color + '99', borderRadius: '20px', padding: '4px 10px' }}>
+                            <span style={{ fontSize: '11px', fontWeight: '700', color: '#fff' }}>🔥 {badge.text}</span>
+                        </div>
+                    )}
+                    <button onClick={() => {}} style={{ background: 'none', border: 'none', cursor: 'pointer', marginLeft: 'auto', padding: '4px' }}>
                         <Image src={shareIcon} alt="Compartir" width={20} height={20} />
                     </button>
                 </div>
 
                 {/* Separator */}
-                <div style={{ width: '100%', height: '1px', background: 'rgba(255,255,255,0.1)' }} />
+                <div style={{ width: '100%', height: '1px', background: 'rgba(255,255,255,0.12)' }} />
 
                 {/* Description */}
                 {raffle.description && (
-                    <p style={{ fontSize: '15px', color: '#949596', lineHeight: 1.5, margin: 0 }}>
-                        {raffle.description}
-                    </p>
+                    <div>
+                        <p style={{ fontSize: '13px', fontWeight: '700', color: '#fff', margin: '0 0 6px' }}>Descripción</p>
+                        <p style={{ fontSize: '15px', color: '#949596', lineHeight: 1.6, margin: 0 }}>{raffle.description}</p>
+                    </div>
                 )}
             </div>
 
-            <div className="product-detail-footer">
+            {/* Footer */}
+            <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, padding: '16px 20px 32px', background: 'linear-gradient(to top, #000 80%, transparent)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {isOpen ? (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+                    <>
                         <button
-                            className="product-detail-buy-button"
-                            onClick={() => {
-                                if (!session) { router.push('/login'); return; }
-                                setIsPurchaseModalOpen(true);
-                            }}
+                            onClick={() => { if (!session) { router.push('/login'); return; } setIsPurchaseModalOpen(true); }}
+                            style={{ width: '100%', height: '52px', background: '#94FF31', border: 'none', borderRadius: '26px', color: '#000', fontSize: '16px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                         >
                             <Image src={ticketIcon} alt="Ticket" width={18} height={14} />
-                            <span>Comprar un ticket</span>
+                            Comprar un ticket
                         </button>
                         <button
-                            className="product-detail-free-button"
                             onClick={handleFreeTicket}
                             disabled={claiming}
-                            style={{ opacity: claiming ? 0.7 : 1 }}
+                            style={{ width: '100%', height: '52px', background: 'transparent', border: '2px solid #94FF31', borderRadius: '26px', color: '#fff', fontSize: '16px', fontWeight: '700', cursor: claiming ? 'not-allowed' : 'pointer', opacity: claiming ? 0.7 : 1 }}
                         >
-                            <span>{claiming ? 'Reclamando...' : 'Obtener un ticket Gratis'}</span>
+                            {claiming ? 'Reclamando...' : 'Obtener un ticket Gratis'}
                         </button>
                         {claimMessage && (
-                            <p style={{ textAlign: 'center', fontSize: '13px', color: claimMessage.includes('¡') ? '#ABDA53' : '#ff4444', margin: 0 }}>
+                            <p style={{ textAlign: 'center', fontSize: '13px', color: claimMessage.includes('¡') ? '#94FF31' : '#ff4444', margin: 0 }}>
                                 {claimMessage}
                             </p>
                         )}
-                    </div>
+                    </>
                 ) : (
-                    <button className="product-detail-buy-button" disabled style={{ opacity: 0.5 }}>
-                        <span>{raffle.status === 'SOLD_OUT' ? 'Sorteo cerrado' : 'Sorteo finalizado'}</span>
+                    <button disabled style={{ width: '100%', height: '52px', background: '#94FF31', border: 'none', borderRadius: '26px', color: '#000', fontSize: '16px', fontWeight: '700', opacity: 0.5 }}>
+                        {raffle.status === 'SOLD_OUT' ? 'Sorteo cerrado' : 'Sorteo finalizado'}
                     </button>
                 )}
             </div>
