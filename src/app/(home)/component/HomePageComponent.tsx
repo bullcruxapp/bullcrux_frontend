@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import bullcruxIcon from '@/images/icons/bullcrux-icon.svg';
 import searchIcon from '@/images/icons/search-icon.svg';
 import NotificationComponent from './NotificationComponent';
-import reyDelTicketIcon from '@/images/rey-del-ticket.png';
+
 import CategoryFilterComponent, { Category } from '@/components/CategoryFilter/CategoryFilterComponent';
 import RaffleCardComponent, { BadgeType } from '@/components/RaffleCard/RaffleCardComponent';
 import { Raffle } from '@/models/raffle.model';
@@ -92,7 +92,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
 
             <div className='rey-del-ticket flex justify-center items-center mt-4'>
                 <img src="/fire.gif" alt="" width={36} height={36} style={{ marginRight: '4px' }} />
-                <Image src={reyDelTicketIcon} alt="Rey del ticket" width={197} height={54} />
+                <img src="/rdt.png" alt="Rey del ticket" height={54} style={{ height: '54px', width: 'auto' }} />
                 <img src="/fire.gif" alt="" width={36} height={36} style={{ marginLeft: '4px' }} />
             </div>
 
