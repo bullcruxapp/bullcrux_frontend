@@ -5,21 +5,20 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 import ticketIcon from '@/images/icons/ticket-icon.svg';
 import shareIcon from '@/images/icons/share-icon.svg';
+import fireIcon from '@/images/icons/fire-icon.svg';
 import PurchaseModal from './PurchaseModal';
-import '../productDetail.css';
 import { getRaffleById } from '@/services/raffles.service';
 import { Raffle } from '@/models/raffle.model';
 
 interface ProductDetailComponentProps {
     productId: string;
 }
+
+const SF_PRO = '-apple-system, "SF Pro", "SF Pro Display", BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif';
 
 const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
     const router = useRouter();
@@ -29,6 +28,8 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
     const [loading, setLoading] = useState(true);
     const [claimMessage, setClaimMessage] = useState('');
     const [claiming, setClaiming] = useState(false);
+    const [buyHover, setBuyHover] = useState(false);
+    const [freeHover, setFreeHover] = useState(false);
     const swiperRef = useRef<SwiperType | null>(null);
 
     useEffect(() => {
@@ -104,7 +105,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
 
     if (loading) {
         return (
-            <div style={{ minHeight: '100vh', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ minHeight: '100vh', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SF_PRO }}>
                 <p style={{ color: '#fff' }}>Cargando...</p>
             </div>
         );
@@ -112,30 +113,28 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
 
     if (!raffle) {
         return (
-            <div style={{ minHeight: '100vh', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ minHeight: '100vh', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SF_PRO }}>
                 <p style={{ color: '#fff' }}>Sorteo no encontrado.</p>
             </div>
         );
     }
 
     return (
-        <div style={{ minHeight: '100vh', background: '#000', color: '#fff', display: 'flex', flexDirection: 'column', paddingBottom: '100px' }}>
-            {/* Header */}
-            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, padding: '48px 16px 16px', background: 'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%)' }}>
-                <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}>
+        <div style={{ minHeight: '100vh', background: '#000', color: '#fff', display: 'flex', flexDirection: 'column', paddingBottom: '180px', fontFamily: SF_PRO }}>
+            {/* Header con back button */}
+            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, padding: '52px 20px 16px' }}>
+                <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', display: 'flex' }}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </button>
             </div>
 
-            {/* Image Slider */}
+            {/* Image */}
             <div style={{ width: '100%', height: '55vh', minHeight: '380px', position: 'relative' }}>
                 {images.length > 0 ? (
                     <Swiper
-                        modules={[Pagination]}
                         slidesPerView={1}
-                        pagination={{ clickable: true }}
                         onSwiper={(swiper) => (swiperRef.current = swiper)}
                         style={{ width: '100%', height: '100%' }}
                     >
@@ -155,75 +154,84 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
             </div>
 
             {/* Content */}
-            <div style={{ padding: '20px 20px 0', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {/* Progress */}
+            <div style={{ padding: '20px 20px 0', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                {/* Progress bar */}
                 <div>
                     <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.15)', borderRadius: '2px', overflow: 'hidden' }}>
                         <div style={{ height: '100%', width: `${progress}%`, background: '#94FF31', borderRadius: '2px' }} />
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px' }}>
-                        <span style={{ fontSize: '12px', color: '#fff' }}>{available} Disponibles</span>
-                        <span style={{ fontSize: '12px', color: '#fff' }}>{progress}%</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px', fontFamily: SF_PRO }}>
+                        <span style={{ fontSize: '13px', color: '#fff', fontWeight: 700 }}>{available} Disponibles</span>
+                        <span style={{ fontSize: '13px', color: '#fff', fontWeight: 700 }}>{progress}%</span>
                     </div>
                 </div>
 
                 {/* Title */}
-                <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#fff', margin: 0, lineHeight: 1.1 }}>{raffle.productName}</h1>
+                <h1 style={{ fontSize: '32px', fontWeight: 700, color: '#fff', margin: 0, lineHeight: 1.05, letterSpacing: '-0.02em', fontFamily: SF_PRO }}>
+                    {raffle.productName}
+                </h1>
 
                 {/* Price + Badge + Share */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#94FF31', fontWeight: '700', fontSize: '14px' }}>
-                        <Image src={ticketIcon} alt="Ticket" width={17} height={13} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#94FF31', fontWeight: 700, fontSize: '15px', fontFamily: SF_PRO }}>
+                        <Image src={ticketIcon} alt="Ticket" width={18} height={14} />
                         <span>C$ {raffle.ticketPriceCoins}</span>
                     </div>
                     {badge && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: badge.color + '99', borderRadius: '20px', padding: '4px 10px' }}>
-                            <span style={{ fontSize: '11px', fontWeight: '700', color: '#fff' }}>🔥 {badge.text}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: badge.color, borderRadius: '20px', padding: '4px 10px' }}>
+                            <Image src={fireIcon} alt="" width={11} height={11} />
+                            <span style={{ fontSize: '11px', fontWeight: 700, color: '#fff', fontFamily: SF_PRO, letterSpacing: '0.02em' }}>{badge.text}</span>
                         </div>
                     )}
-                    <button onClick={() => {}} style={{ background: 'none', border: 'none', cursor: 'pointer', marginLeft: 'auto', padding: '4px' }}>
-                        <Image src={shareIcon} alt="Compartir" width={20} height={20} />
+                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', marginLeft: 'auto', padding: '4px', display: 'flex' }}>
+                        <Image src={shareIcon} alt="Compartir" width={22} height={22} />
                     </button>
                 </div>
 
                 {/* Separator */}
-                <div style={{ width: '100%', height: '1px', background: 'rgba(255,255,255,0.12)' }} />
+                <div style={{ width: '100%', height: '1px', background: 'rgba(255,255,255,0.12)', marginTop: '4px' }} />
 
                 {/* Description */}
                 {raffle.description && (
-                    <div>
-                        <p style={{ fontSize: '13px', fontWeight: '700', color: '#fff', margin: '0 0 6px' }}>Descripción</p>
-                        <p style={{ fontSize: '15px', color: '#949596', lineHeight: 1.6, margin: 0 }}>{raffle.description}</p>
+                    <div style={{ marginTop: '4px' }}>
+                        <p style={{ fontSize: '15px', fontWeight: 700, color: '#fff', margin: '0 0 8px', fontFamily: SF_PRO }}>Title</p>
+                        <p style={{ fontSize: '15px', color: '#9A9A9A', lineHeight: 1.5, margin: 0, fontFamily: SF_PRO, fontWeight: 400 }}>
+                            {raffle.description}
+                        </p>
                     </div>
                 )}
             </div>
 
             {/* Footer */}
-            <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, padding: '16px 20px 32px', background: 'linear-gradient(to top, #000 80%, transparent)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, padding: '16px 20px 32px', background: '#000', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {isOpen ? (
                     <>
                         <button
                             onClick={() => { if (!session) { router.push('/login'); return; } setIsPurchaseModalOpen(true); }}
-                            style={{ width: '100%', height: '52px', background: '#94FF31', border: 'none', borderRadius: '26px', color: '#000', fontSize: '16px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                            onMouseEnter={() => setBuyHover(true)}
+                            onMouseLeave={() => setBuyHover(false)}
+                            style={{ width: '100%', height: '52px', background: '#94FF31', border: 'none', borderRadius: '26px', color: '#000', fontSize: '16px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', opacity: buyHover ? 0.9 : 1, transition: 'opacity 0.2s', fontFamily: SF_PRO }}
                         >
-                            <Image src={ticketIcon} alt="Ticket" width={18} height={14} />
-                            Comprar un ticket
+                            <Image src={ticketIcon} alt="" width={20} height={16} style={{ filter: 'brightness(0)' }} />
+                            <span>Comprar un ticket</span>
                         </button>
                         <button
                             onClick={handleFreeTicket}
+                            onMouseEnter={() => setFreeHover(true)}
+                            onMouseLeave={() => setFreeHover(false)}
                             disabled={claiming}
-                            style={{ width: '100%', height: '52px', background: 'transparent', border: '2px solid #94FF31', borderRadius: '26px', color: '#fff', fontSize: '16px', fontWeight: '700', cursor: claiming ? 'not-allowed' : 'pointer', opacity: claiming ? 0.7 : 1 }}
+                            style={{ width: '100%', height: '52px', background: 'transparent', border: '1px solid #94FF31', borderRadius: '26px', color: '#fff', fontSize: '16px', fontWeight: 700, cursor: claiming ? 'not-allowed' : 'pointer', opacity: claiming ? 0.7 : (freeHover ? 0.9 : 1), transition: 'opacity 0.2s', fontFamily: SF_PRO }}
                         >
                             {claiming ? 'Reclamando...' : 'Obtener un ticket Gratis'}
                         </button>
                         {claimMessage && (
-                            <p style={{ textAlign: 'center', fontSize: '13px', color: claimMessage.includes('¡') ? '#94FF31' : '#ff4444', margin: 0 }}>
+                            <p style={{ textAlign: 'center', fontSize: '13px', color: claimMessage.includes('¡') ? '#94FF31' : '#ff4444', margin: 0, fontFamily: SF_PRO }}>
                                 {claimMessage}
                             </p>
                         )}
                     </>
                 ) : (
-                    <button disabled style={{ width: '100%', height: '52px', background: '#94FF31', border: 'none', borderRadius: '26px', color: '#000', fontSize: '16px', fontWeight: '700', opacity: 0.5 }}>
+                    <button disabled style={{ width: '100%', height: '52px', background: '#94FF31', border: 'none', borderRadius: '26px', color: '#000', fontSize: '16px', fontWeight: 700, opacity: 0.5, fontFamily: SF_PRO }}>
                         {raffle.status === 'SOLD_OUT' ? 'Sorteo cerrado' : 'Sorteo finalizado'}
                     </button>
                 )}
