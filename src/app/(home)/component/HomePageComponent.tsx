@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import bullcruxIcon from '@/images/icons/bullcrux-icon.svg';
@@ -12,6 +12,8 @@ import RaffleCardComponent, { BadgeType } from '@/components/RaffleCard/RaffleCa
 import { Raffle } from '@/models/raffle.model';
 import RaffleLargeComponent from '@/components/RaffleCard/RaffleLargeComponent';
 import { claimAdTicket } from '@/services/ticket.service';
+
+const TITLE_IMAGES = ['/rdt.png', '/tendencia.png', '/on_fire_today.png'];
 
 interface HomePageComponentProps {
     raffles: Raffle[];
@@ -25,6 +27,10 @@ const HomePageComponent = (props: HomePageComponentProps) => {
     const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(undefined);
     const [claimingId, setClaimingId] = useState<string | null>(null);
     const [claimMessages, setClaimMessages] = useState<Record<string, string>>({});
+
+    const titleImage = useMemo(() => {
+        return TITLE_IMAGES[Math.floor(Math.random() * TITLE_IMAGES.length)];
+    }, []);
 
     const openRaffles = raffles.filter(r => r.status === 'OPEN' || r.status === 'SOLD_OUT');
 
@@ -89,7 +95,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
 
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', marginTop: '16px', gap: '2px' }}>
                 <img src="/fire.gif" alt="" style={{ width: '44px', height: '44px', objectFit: 'contain', marginTop: '8px' }} />
-                <img src="/rdt.png" alt="Rey del ticket" style={{ height: '60px', width: 'auto', objectFit: 'contain' }} />
+                <img src={titleImage} alt="Rey del ticket" style={{ height: '60px', width: 'auto', objectFit: 'contain' }} />
                 <img src="/fire.gif" alt="" style={{ width: '44px', height: '44px', objectFit: 'contain', marginTop: '8px' }} />
             </div>
 
