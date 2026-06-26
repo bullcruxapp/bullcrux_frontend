@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image';
+import { useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import './perfil-component.css';
@@ -15,8 +16,14 @@ interface PerfilComponentProps {
 }
 
 const PerfilComponent = (props: PerfilComponentProps) => {
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const router = useRouter();
+
+    useEffect(() => {
+        if (status === 'unauthenticated') {
+            router.push('/login');
+        }
+    }, [status, router]);
 
     // Obtener nombre del usuario desde la sesión
     const userName = session?.user?.name || session?.user?.email || 'Usuario';
