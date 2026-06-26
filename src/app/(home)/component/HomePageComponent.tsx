@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import bullcruxIcon from '@/images/icons/bullcrux-icon.svg';
 import searchIcon from '@/images/icons/search-icon.svg';
 import NotificationComponent from './NotificationComponent';
-
 import CategoryFilterComponent, { Category } from '@/components/CategoryFilter/CategoryFilterComponent';
 import RaffleCardComponent, { BadgeType } from '@/components/RaffleCard/RaffleCardComponent';
 import { Raffle } from '@/models/raffle.model';
@@ -90,10 +89,10 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                 </div>
             </div>
 
-            <div className='rey-del-ticket flex justify-center items-center mt-4'>
-                <img src="/fire.gif" alt="" width={36} height={36} style={{ marginRight: '4px' }} />
-                <img src="/rdt.png" alt="Rey del ticket" height={54} style={{ height: '54px', width: 'auto' }} />
-                <img src="/fire.gif" alt="" width={36} height={36} style={{ marginLeft: '4px' }} />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '16px', gap: '8px' }}>
+                <img src="/fire.gif" alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+                <img src="/rdt.png" alt="Rey del ticket" style={{ height: '44px', width: 'auto', objectFit: 'contain' }} />
+                <img src="/fire.gif" alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
             </div>
 
             {featuredRaffle && (
