@@ -87,14 +87,14 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                 </div>
             </div>
 
-            <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '16px' }}>
-                <img src="/fire.gif" alt="" style={{ position: 'absolute', left: '16px', top: '-10px', width: '52px', height: '52px', objectFit: 'contain' }} />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', marginTop: '16px', gap: '2px' }}>
+                <img src="/fire.gif" alt="" style={{ width: '44px', height: '44px', objectFit: 'contain', marginBottom: '4px' }} />
                 <img src="/rdt.png" alt="Rey del ticket" style={{ height: '60px', width: 'auto', objectFit: 'contain' }} />
-                <img src="/fire.gif" alt="" style={{ position: 'absolute', right: '16px', top: '-10px', width: '52px', height: '52px', objectFit: 'contain' }} />
+                <img src="/fire.gif" alt="" style={{ width: '44px', height: '44px', objectFit: 'contain', marginBottom: '4px' }} />
             </div>
 
             {featuredRaffle && (
-                <div className="raffle-large-container mt-6">
+                <div className="raffle-large-container mt-2">
                     <RaffleLargeComponent
                         image={getImageUrl(featuredRaffle)}
                         title={featuredRaffle.title}
