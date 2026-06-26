@@ -16,6 +16,7 @@ import shareIcon from '@/images/icons/share-icon.svg';
 import PurchaseModal from './PurchaseModal';
 import '../productDetail.css';
 import { getRaffleById } from '@/services/raffles.service';
+import { claimAdTicket } from '@/services/ticket.service';
 import { Raffle } from '@/models/raffle.model';
 
 interface ProductDetailComponentProps {
@@ -29,6 +30,8 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
     const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
     const [raffle, setRaffle] = useState<Raffle | null>(null);
     const [loading, setLoading] = useState(true);
+    const [claimMessage, setClaimMessage] = useState('');
+    const [claiming, setClaiming] = useState(false);
     const swiperRef = useRef<SwiperType | null>(null);
 
     useEffect(() => {
@@ -46,6 +49,25 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
     }, [productId]);
 
     const handleBack = () => router.back();
+
+    const handleFreeTicket = async () => {
+        if (!session) { router.push('/login'); return; }
+        if (claiming) return;
+
+        setClaiming(true);
+        try {
+            await claimAdTicket(productId, (session as any).accessToken);
+            setClaimMessage('¡Ticket gratis reclamado!');
+        } catch (error: any) {
+            const msg = error.message?.includes('Ya reclamaste')
+                ? 'Ya reclamaste tu ticket gratis para este sorteo'
+                : 'Error al reclamar el ticket';
+            setClaimMessage(msg);
+        } finally {
+            setClaiming(false);
+            setTimeout(() => setClaimMessage(''), 4000);
+        }
+    };
 
     const getProgress = () => {
         if (!raffle || raffle.totalTickets === 0) return 0;
@@ -159,16 +181,31 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
 
             <div className="product-detail-footer">
                 {isOpen ? (
-                    <button
-                        className="product-detail-buy-button"
-                        onClick={() => {
-                            if (!session) { router.push('/login'); return; }
-                            setIsPurchaseModalOpen(true);
-                        }}
-                    >
-                        <Image src={ticketIcon} alt="Ticket" width={18} height={14} />
-                        <span>Comprar participación</span>
-                    </button>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+                        <button
+                            className="product-detail-buy-button"
+                            onClick={() => {
+                                if (!session) { router.push('/login'); return; }
+                                setIsPurchaseModalOpen(true);
+                            }}
+                        >
+                            <Image src={ticketIcon} alt="Ticket" width={18} height={14} />
+                            <span>Comprar participación</span>
+                        </button>
+                        <button
+                            className="product-detail-free-button"
+                            onClick={handleFreeTicket}
+                            disabled={claiming}
+                            style={{ opacity: claiming ? 0.7 : 1 }}
+                        >
+                            <span>{claiming ? 'Reclamando...' : 'Obtener un ticket Gratis'}</span>
+                        </button>
+                        {claimMessage && (
+                            <p style={{ textAlign: 'center', fontSize: '13px', color: claimMessage.includes('¡') ? '#ABDA53' : '#ff4444', margin: 0 }}>
+                                {claimMessage}
+                            </p>
+                        )}
+                    </div>
                 ) : (
                     <button className="product-detail-buy-button" disabled style={{ opacity: 0.5 }}>
                         <span>{raffle.status === 'SOLD_OUT' ? 'Sorteo cerrado' : 'Sorteo finalizado'}</span>
