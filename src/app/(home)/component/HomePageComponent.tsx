@@ -1,6 +1,9 @@
 'use client'
 
 import Image from 'next/image';
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import bullcruxIcon from '@/images/icons/bullcrux-icon.svg';
 import searchIcon from '@/images/icons/search-icon.svg';
 import NotificationComponent from './NotificationComponent';
@@ -9,7 +12,7 @@ import CategoryFilterComponent, { Category } from '@/components/CategoryFilter/C
 import RaffleCardComponent, { BadgeType } from '@/components/RaffleCard/RaffleCardComponent';
 import { Raffle } from '@/models/raffle.model';
 import RaffleLargeComponent from '@/components/RaffleCard/RaffleLargeComponent';
-import { useState } from 'react';
+import { claimAdTicket } from '@/services/ticket.service';
 
 interface HomePageComponentProps {
     raffles: Raffle[];
@@ -18,7 +21,11 @@ interface HomePageComponentProps {
 
 const HomePageComponent = (props: HomePageComponentProps) => {
     const { raffles, featuredRaffle } = props;
+    const { data: session } = useSession();
+    const router = useRouter();
     const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(undefined);
+    const [claimingId, setClaimingId] = useState<string | null>(null);
+    const [claimMessages, setClaimMessages] = useState<Record<string, string>>({});
 
     const openRaffles = raffles.filter(r => r.status === 'OPEN' || r.status === 'SOLD_OUT');
 
@@ -40,6 +47,35 @@ const HomePageComponent = (props: HomePageComponentProps) => {
         if (available <= 20) return 'limited-stock';
         if (progress >= 70) return 'selling-fast';
         return undefined;
+    };
+
+    const handleFreeTicket = async (raffleId: string) => {
+        if (!session) {
+            router.push('/login');
+            return;
+        }
+
+        if (claimingId === raffleId) return;
+
+        setClaimingId(raffleId);
+        try {
+            await claimAdTicket(raffleId, (session as any).accessToken);
+            setClaimMessages(prev => ({ ...prev, [raffleId]: '¡Ticket reclamado!' }));
+        } catch (error: any) {
+            const msg = error.message?.includes('Ya reclamaste') 
+                ? 'Ya reclamaste tu ticket gratis' 
+                : 'Error al reclamar';
+            setClaimMessages(prev => ({ ...prev, [raffleId]: msg }));
+        } finally {
+            setClaimingId(null);
+            setTimeout(() => {
+                setClaimMessages(prev => {
+                    const next = { ...prev };
+                    delete next[raffleId];
+                    return next;
+                });
+            }, 3000);
+        }
     };
 
     return (
@@ -65,7 +101,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                         title={featuredRaffle.title}
                         progress={getProgress(featuredRaffle)}
                         price={`C$ ${featuredRaffle.ticketPriceCoins}`}
-                        onFreeTicketClick={() => console.log('Free ticket clicked')}
+                        onFreeTicketClick={() => handleFreeTicket(featuredRaffle.id)}
                         productId={featuredRaffle.id}
                     />
                 </div>
@@ -80,19 +116,25 @@ const HomePageComponent = (props: HomePageComponentProps) => {
             <div className="raffle-cards-container mt-6">
                 <div className="raffle-cards-grid">
                     {openRaffles.map(raffle => (
-                        <RaffleCardComponent
-                            key={raffle.id}
-                            image={getImageUrl(raffle)}
-                            isFavorite={false}
-                            badge={getAutoBadge(raffle)}
-                            progress={getProgress(raffle)}
-                            available={`${raffle.totalTickets - raffle.ticketsSold} disponibles`}
-                            progressText={`${raffle.ticketsSold}/${raffle.totalTickets}`}
-                            title={raffle.title}
-                            price={`C$ ${raffle.ticketPriceCoins}`}
-                            onFreeTicketClick={() => console.log('Free ticket clicked')}
-                            productId={raffle.id}
-                        />
+                        <div key={raffle.id}>
+                            <RaffleCardComponent
+                                image={getImageUrl(raffle)}
+                                isFavorite={false}
+                                badge={getAutoBadge(raffle)}
+                                progress={getProgress(raffle)}
+                                available={`${raffle.totalTickets - raffle.ticketsSold} disponibles`}
+                                progressText={`${raffle.ticketsSold}/${raffle.totalTickets}`}
+                                title={raffle.title}
+                                price={`C$ ${raffle.ticketPriceCoins}`}
+                                onFreeTicketClick={() => handleFreeTicket(raffle.id)}
+                                productId={raffle.id}
+                            />
+                            {claimMessages[raffle.id] && (
+                                <p style={{ textAlign: 'center', fontSize: '12px', color: '#ABDA53', marginTop: '4px' }}>
+                                    {claimMessages[raffle.id]}
+                                </p>
+                            )}
+                        </div>
                     ))}
                 </div>
                 {openRaffles.length === 0 && (
