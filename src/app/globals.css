@@ -64,3 +64,7 @@ body {
   width: 8px !important;
   height: 8px !important;
 }
+.mobile-only-wrapper { display: block; }
+@media (min-width: 1024px) {
+    .mobile-only-wrapper { display: none !important; }
+}
