@@ -1,0 +1,239 @@
+/* Desktop layout - solo visible en >= 1024px */
+.desktop-layout {
+    display: none;
+}
+
+@media (min-width: 1024px) {
+    .desktop-layout {
+        display: flex;
+        min-height: 100vh;
+        background: #0a0a0a;
+        color: #fff;
+    }
+
+    /* Sidebar */
+    .desktop-sidebar {
+        width: 240px;
+        background: #000;
+        padding: 20px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        border-right: 1px solid rgba(255,255,255,0.06);
+        z-index: 100;
+    }
+
+    .desktop-sidebar-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 0 24px;
+        cursor: pointer;
+    }
+
+    .desktop-sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+    }
+
+    .desktop-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        background: transparent;
+        border: none;
+        color: #999;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s;
+        text-align: left;
+    }
+
+    .desktop-nav-item:hover {
+        background: rgba(255,255,255,0.04);
+        color: #fff;
+    }
+
+    .desktop-nav-item.active {
+        background: rgba(148, 255, 49, 0.1);
+        color: #94FF31;
+    }
+
+    .desktop-nav-icon {
+        font-size: 18px;
+        width: 22px;
+        text-align: center;
+    }
+
+    .desktop-recharge-btn {
+        width: 100%;
+        padding: 14px;
+        background: #94FF31;
+        color: #000;
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        margin-top: 16px;
+    }
+
+    .desktop-recharge-btn:hover {
+        opacity: 0.9;
+    }
+
+    /* Main area */
+    .desktop-main {
+        margin-left: 240px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    /* Header */
+    .desktop-header {
+        position: sticky;
+        top: 0;
+        z-index: 90;
+        background: rgba(10, 10, 10, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        padding: 14px 32px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .desktop-search {
+        flex: 1;
+        max-width: 600px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 12px;
+        padding: 10px 14px;
+        transition: border-color 0.15s;
+    }
+
+    .desktop-search:focus-within {
+        border-color: rgba(148, 255, 49, 0.4);
+    }
+
+    .desktop-search input {
+        flex: 1;
+        background: none;
+        border: none;
+        outline: none;
+        color: #fff;
+        font-size: 14px;
+        font-family: inherit;
+    }
+
+    .desktop-search input::placeholder {
+        color: #666;
+    }
+
+    .desktop-header-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-left: auto;
+    }
+
+    .desktop-balance {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 2px;
+    }
+
+    .desktop-balance-label {
+        font-size: 11px;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+    }
+
+    .desktop-balance-value {
+        font-size: 15px;
+        font-weight: 700;
+        color: #94FF31;
+    }
+
+    .desktop-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #1a1a1a;
+        border: 1px solid rgba(255,255,255,0.1);
+        overflow: hidden;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #fff;
+        transition: opacity 0.15s;
+    }
+
+    .desktop-avatar:hover {
+        opacity: 0.8;
+    }
+
+    .desktop-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .desktop-login-btn {
+        padding: 10px 20px;
+        background: #94FF31;
+        color: #000;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    .desktop-login-btn:hover {
+        opacity: 0.9;
+    }
+
+    /* Content */
+    .desktop-content {
+        flex: 1;
+        padding: 24px 32px 48px;
+        max-width: 1400px;
+        width: 100%;
+    }
+
+    /* Ocultar la navbar mobile en desktop */
+    .navbar-wrapper-mobile,
+    .navbar-container {
+        display: none !important;
+    }
+}
+
+/* Mobile - ocultar wrapper de desktop */
+@media (max-width: 1023px) {
+    .desktop-layout-wrapper-desktop {
+        display: none !important;
+    }
+}
