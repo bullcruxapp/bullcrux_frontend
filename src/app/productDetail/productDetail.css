@@ -280,3 +280,10 @@
         padding-bottom: 200px !important;
     }
 }
+
+/* Mobile - subir footer por encima del navbar */
+@media (max-width: 1023px) {
+    .product-detail-container > div[style*="position: fixed"][style*="bottom"] {
+        bottom: 80px !important;
+    }
+}
