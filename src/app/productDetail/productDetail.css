@@ -287,3 +287,10 @@
         bottom: 80px !important;
     }
 }
+
+@media (max-width: 1023px) {
+    :root { --footer-bottom: 80px; }
+}
+@media (min-width: 1024px) {
+    :root { --footer-bottom: 0px; }
+}

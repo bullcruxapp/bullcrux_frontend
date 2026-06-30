@@ -203,7 +203,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
             </div>
 
             {/* Footer */}
-            <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, padding: '16px 20px 32px', background: '#000', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ position: 'fixed', bottom: 'var(--footer-bottom, 0px)', left: 0, right: 0, padding: '16px 20px 32px', background: '#000', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {isOpen ? (
                     <>
                         <button
