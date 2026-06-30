@@ -273,3 +273,10 @@
     transition: opacity 0.2s;
 }
 .product-detail-free-button:hover { opacity: 0.8; }
+
+/* Mobile - asegurar que botones no queden tapados por navbar */
+@media (max-width: 1023px) {
+    .product-detail-container {
+        padding-bottom: 200px !important;
+    }
+}
