@@ -3,8 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import NavbarWrapper from "../components/NavbarWrapper";
 import SessionProviderWrapper from "../components/SessionProviderWrapper";
+import DesktopLayout from "../components/DesktopLayout/DesktopLayout";
 
-// Configuración de fuente SF-Pro
 const sfPro = localFont({
   src: "../fonts/SF-Pro.ttf",
   variable: "--font-sf-pro",
@@ -26,9 +26,17 @@ export default function RootLayout({
     <html lang="en">
       <body className={sfPro.variable}>
         <SessionProviderWrapper>
-          <div className="app-container">
+          {/* Desktop layout (>= 1024px) */}
+          <DesktopLayout>
             {children}
-            <NavbarWrapper />
+          </DesktopLayout>
+
+          {/* Mobile layout (< 1024px) */}
+          <div className="mobile-only-wrapper">
+            <div className="app-container">
+              {children}
+              <NavbarWrapper />
+            </div>
           </div>
         </SessionProviderWrapper>
       </body>
