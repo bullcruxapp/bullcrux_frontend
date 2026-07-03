@@ -15,6 +15,7 @@ interface Ticket {
     purchasedAt: string;
     raffle: {
         id: string;
+        title?: string;
         productName: string;
         ticketPriceCoins: number;
         totalTickets: number;
@@ -129,7 +130,7 @@ const FavoritosComponent = ({ tickets }: FavoritosComponentProps) => {
                                         progress={getProgress(ticket)}
                                         available={`${ticket.raffle.totalTickets - ticket.raffle.ticketsSold} disponibles`}
                                         progressText={`${ticket.raffle.ticketsSold}/${ticket.raffle.totalTickets}`}
-                                        title={ticket.raffle.productName}
+                                        title={ticket.raffle.title || ticket.raffle.productName}
                                         price={`C$ ${ticket.raffle.ticketPriceCoins}`}
                                         productId={ticket.raffle.id}
                                         isMyRafflesView={true}
