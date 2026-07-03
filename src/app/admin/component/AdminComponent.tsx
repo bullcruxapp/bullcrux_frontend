@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -21,6 +20,19 @@ interface Raffle {
     status: string;
     featured: boolean;
     productImages: ProductImage[];
+}
+
+interface Participant {
+    id: string;
+    number: number;
+    source: string;
+    purchasedAt: string;
+    user: {
+        id: string;
+        name: string;
+        email: string;
+        image?: string;
+    };
 }
 
 interface AdminComponentProps {
@@ -45,6 +57,8 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
     const [raffles, setRaffles] = useState<Raffle[]>([]);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [form, setForm] = useState(emptyForm);
+    const [participantsModal, setParticipantsModal] = useState<{ raffle: Raffle; participants: Participant[] } | null>(null);
+    const [loadingParticipants, setLoadingParticipants] = useState(false);
 
     const fetchRaffles = async () => {
         try {
@@ -78,42 +92,6 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
         window.scrollTo(0, 0);
     };
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('¿Seguro que querés eliminar este sorteo?')) return;
-        try {
-            const res = await fetch(`${API_URL}/raffle/${id}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${token}` },
-            });
-            if (res.ok) {
-                setSuccess('Sorteo eliminado');
-                fetchRaffles();
-            } else {
-                setError('Error al eliminar');
-            }
-        } catch (e) {
-            setError('Error al eliminar');
-        }
-    };
-
-    const handleToggleFeatured = async (raffle: Raffle) => {
-        try {
-            const res = await fetch(`${API_URL}/raffle/${raffle.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({ ...raffle, featured: !raffle.featured }),
-            });
-            if (res.ok) {
-                fetchRaffles();
-            }
-        } catch (e) {
-            console.error(e);
-        }
-    };
-
     const handleCancel = () => {
         setEditingId(null);
         setForm(emptyForm);
@@ -122,10 +100,9 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
     };
 
     const handleSubmit = async () => {
-        setLoading(true);
         setError('');
         setSuccess('');
-
+        setLoading(true);
         try {
             const body: any = {
                 title: form.title,
@@ -134,30 +111,17 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                 ticketPriceCoins: parseInt(form.ticketPriceCoins),
                 totalTickets: parseInt(form.totalTickets),
                 featured: form.featured,
+                productImages: form.imageUrl ? [{ url: form.imageUrl, order: 0 }] : [],
             };
-
-            if (form.imageUrl) {
-                body.productImages = [{ url: form.imageUrl, order: 0 }];
-            }
-
             const url = editingId ? `${API_URL}/raffle/${editingId}` : `${API_URL}/raffle`;
             const method = editingId ? 'PUT' : 'POST';
-
-            const response = await fetch(url, {
+            const res = await fetch(url, {
                 method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify(body),
             });
-
-            if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.message || 'Error');
-            }
-
-            setSuccess(editingId ? '¡Sorteo actualizado!' : '¡Sorteo creado!');
+            if (!res.ok) throw new Error('Error');
+            setSuccess(editingId ? 'Sorteo actualizado' : 'Sorteo creado');
             setForm(emptyForm);
             setEditingId(null);
             fetchRaffles();
@@ -165,6 +129,40 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
             setError(err.message);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!confirm('¿Eliminar este sorteo?')) return;
+        try {
+            await fetch(`${API_URL}/raffle/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+            fetchRaffles();
+        } catch (e) { console.error(e); }
+    };
+
+    const handleToggleFeatured = async (raffle: Raffle) => {
+        try {
+            await fetch(`${API_URL}/raffle/${raffle.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ featured: !raffle.featured }),
+            });
+            fetchRaffles();
+        } catch (e) { console.error(e); }
+    };
+
+    const handleViewParticipants = async (raffle: Raffle) => {
+        setLoadingParticipants(true);
+        try {
+            const res = await fetch(`${API_URL}/raffle/${raffle.id}/participants`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+            setParticipantsModal({ raffle, participants: data });
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setLoadingParticipants(false);
         }
     };
 
@@ -243,6 +241,12 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                                     >
                                         ⭐ {raffle.featured ? 'Destacado' : 'Destacar'}
                                     </button>
+                                    <button
+                                        onClick={() => handleViewParticipants(raffle)}
+                                        style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #4A9EFF', color: '#4A9EFF', cursor: 'pointer', fontSize: '12px' }}
+                                    >
+                                        👥 Ver participantes ({raffle.ticketsSold})
+                                    </button>
                                     <div style={{ display: 'flex', gap: '8px' }}>
                                         <button onClick={() => handleEdit(raffle)} style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #555', color: '#fff', cursor: 'pointer', fontSize: '12px' }}>
                                             Editar
@@ -255,6 +259,60 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                             </div>
                         </div>
                     ))}
+                </div>
+            )}
+
+            {/* Modal de participantes */}
+            {participantsModal && (
+                <div
+                    onClick={() => setParticipantsModal(null)}
+                    style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}
+                >
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ background: '#1a1a1a', borderRadius: '12px', padding: '24px', maxWidth: '500px', width: '100%', maxHeight: '80vh', overflowY: 'auto', border: '1px solid #333' }}
+                    >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                            <h3 style={{ margin: 0, fontSize: '18px' }}>Participantes: {participantsModal.raffle.title}</h3>
+                            <button
+                                onClick={() => setParticipantsModal(null)}
+                                style={{ background: 'none', border: 'none', color: '#fff', fontSize: '24px', cursor: 'pointer', padding: 0, lineHeight: 1 }}
+                            >
+                                ×
+                            </button>
+                        </div>
+
+                        <p style={{ fontSize: '13px', color: '#aaa', margin: '0 0 16px' }}>
+                            Total: {participantsModal.participants.length} tickets vendidos
+                        </p>
+
+                        {participantsModal.participants.length === 0 ? (
+                            <p style={{ color: '#666', textAlign: 'center', margin: '20px 0' }}>Sin participantes aún</p>
+                        ) : (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                {participantsModal.participants.map(p => (
+                                    <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px', background: '#0a0a0a', borderRadius: '8px', border: '1px solid #2a2a2a' }}>
+                                        <div style={{ background: '#ABDA53', color: '#000', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700', fontSize: '13px', flexShrink: 0 }}>
+                                            #{p.number}
+                                        </div>
+                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                            <p style={{ margin: 0, fontSize: '14px', fontWeight: '500', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.user.name}</p>
+                                            <p style={{ margin: 0, fontSize: '12px', color: '#888', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.user.email}</p>
+                                        </div>
+                                        <span style={{ fontSize: '10px', color: p.source === 'PAID' ? '#ABDA53' : '#4A9EFF', border: `1px solid ${p.source === 'PAID' ? '#ABDA53' : '#4A9EFF'}`, borderRadius: '4px', padding: '2px 6px', flexShrink: 0 }}>
+                                            {p.source === 'PAID' ? 'PAGO' : 'GRATIS'}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {loadingParticipants && (
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 999 }}>
+                    <p style={{ color: '#fff' }}>Cargando...</p>
                 </div>
             )}
         </div>
