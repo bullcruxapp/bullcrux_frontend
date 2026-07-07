@@ -20,6 +20,9 @@ interface Raffle {
     status: string;
     featured: boolean;
     productImages: ProductImage[];
+    winnerId?: string;
+    winner?: { id: string; name: string; email: string };
+    drawnAt?: string;
 }
 
 interface Participant {
@@ -31,7 +34,6 @@ interface Participant {
         id: string;
         name: string;
         email: string;
-        image?: string;
     };
 }
 
@@ -59,20 +61,18 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
     const [form, setForm] = useState(emptyForm);
     const [participantsModal, setParticipantsModal] = useState<{ raffle: Raffle; participants: Participant[] } | null>(null);
     const [loadingParticipants, setLoadingParticipants] = useState(false);
+    const [drawResult, setDrawResult] = useState<any>(null);
+    const [drawing, setDrawing] = useState(false);
 
     const fetchRaffles = async () => {
         try {
             const res = await fetch(`${API_URL}/raffle`);
             const data = await res.json();
             setRaffles(data);
-        } catch (e) {
-            console.error(e);
-        }
+        } catch (e) { console.error(e); }
     };
 
-    useEffect(() => {
-        fetchRaffles();
-    }, []);
+    useEffect(() => { fetchRaffles(); }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -100,9 +100,7 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
     };
 
     const handleSubmit = async () => {
-        setError('');
-        setSuccess('');
-        setLoading(true);
+        setError(''); setSuccess(''); setLoading(true);
         try {
             const body: any = {
                 title: form.title,
@@ -127,9 +125,7 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
             fetchRaffles();
         } catch (err: any) {
             setError(err.message);
-        } finally {
-            setLoading(false);
-        }
+        } finally { setLoading(false); }
     };
 
     const handleDelete = async (id: string) => {
@@ -159,11 +155,25 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
             });
             const data = await res.json();
             setParticipantsModal({ raffle, participants: data });
-        } catch (e) {
-            console.error(e);
-        } finally {
-            setLoadingParticipants(false);
-        }
+        } catch (e) { console.error(e); }
+        finally { setLoadingParticipants(false); }
+    };
+
+    const handleDrawWinner = async (raffle: Raffle) => {
+        if (!confirm(`¿Realizar sorteo de "${raffle.title}"? Esta acción es irreversible.`)) return;
+        setDrawing(true);
+        try {
+            const res = await fetch(`${API_URL}/raffle/${raffle.id}/draw`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || 'Error al sortear');
+            setDrawResult(data);
+            fetchRaffles();
+        } catch (err: any) {
+            alert('Error: ' + err.message);
+        } finally { setDrawing(false); }
     };
 
     const inputStyle = { padding: '12px', borderRadius: '8px', background: '#1a1a1a', border: '1px solid #333', color: '#fff', fontSize: '14px', outline: 'none', width: '100%', boxSizing: 'border-box' as const };
@@ -172,34 +182,22 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
         <div style={{ padding: '24px', maxWidth: '600px', margin: '0 auto', color: '#fff' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                 <h1 style={{ fontSize: '22px', fontWeight: '500', margin: 0 }}>Panel de admin</h1>
-                <button onClick={() => router.push('/')} style={{ background: 'none', border: '1px solid #555', color: '#fff', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer' }}>
-                    ← Volver
-                </button>
+                <button onClick={() => router.push('/')} style={{ background: 'none', border: '1px solid #555', color: '#fff', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer' }}>← Volver</button>
             </div>
 
-            <h2 style={{ fontSize: '16px', fontWeight: '500', marginBottom: '16px' }}>
-                {editingId ? 'Editar sorteo' : 'Crear sorteo'}
-            </h2>
+            <h2 style={{ fontSize: '16px', fontWeight: '500', marginBottom: '16px' }}>{editingId ? 'Editar sorteo' : 'Crear sorteo'}</h2>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <input name="title" placeholder="Título" value={form.title} onChange={handleChange} style={inputStyle} />
                 <input name="productName" placeholder="Nombre del producto" value={form.productName} onChange={handleChange} style={inputStyle} />
-                <textarea name="description" placeholder="Descripción corta (aparece en Rey del Ticket)" value={form.description} onChange={handleChange} rows={2} style={{ ...inputStyle, resize: 'none' }} />
+                <textarea name="description" placeholder="Descripción" value={form.description} onChange={handleChange} rows={2} style={{ ...inputStyle, resize: 'none' }} />
                 <input name="ticketPriceCoins" placeholder="Precio del ticket (coins)" type="number" value={form.ticketPriceCoins} onChange={handleChange} style={inputStyle} />
                 <input name="totalTickets" placeholder="Total de tickets" type="number" value={form.totalTickets} onChange={handleChange} style={inputStyle} />
-                <input name="imageUrl" placeholder="URL de imagen (ej: https://i.imgur.com/xxx.jpg)" value={form.imageUrl} onChange={handleChange} style={inputStyle} />
+                <input name="imageUrl" placeholder="URL de imagen" value={form.imageUrl} onChange={handleChange} style={inputStyle} />
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: '#1a1a1a', border: '1px solid #333', borderRadius: '8px' }}>
-                    <input
-                        type="checkbox"
-                        id="featured"
-                        checked={form.featured}
-                        onChange={(e) => setForm({ ...form, featured: e.target.checked })}
-                        style={{ width: '18px', height: '18px', cursor: 'pointer' }}
-                    />
-                    <label htmlFor="featured" style={{ cursor: 'pointer', fontSize: '14px' }}>
-                        ⭐ Destacar en Rey del Ticket
-                    </label>
+                    <input type="checkbox" id="featured" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
+                    <label htmlFor="featured" style={{ cursor: 'pointer', fontSize: '14px' }}>⭐ Destacar en Rey del Ticket</label>
                 </div>
 
                 {error && <p style={{ color: '#ff4444', margin: 0 }}>{error}</p>}
@@ -209,11 +207,7 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                     <button onClick={handleSubmit} disabled={loading} style={{ flex: 1, padding: '14px', borderRadius: '8px', background: '#ABDA53', color: '#000', fontWeight: '500', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}>
                         {loading ? 'Guardando...' : editingId ? 'Guardar cambios' : 'Crear sorteo'}
                     </button>
-                    {editingId && (
-                        <button onClick={handleCancel} style={{ padding: '14px 20px', borderRadius: '8px', background: 'none', border: '1px solid #555', color: '#fff', cursor: 'pointer' }}>
-                            Cancelar
-                        </button>
-                    )}
+                    {editingId && <button onClick={handleCancel} style={{ padding: '14px 20px', borderRadius: '8px', background: 'none', border: '1px solid #555', color: '#fff', cursor: 'pointer' }}>Cancelar</button>}
                 </div>
             </div>
 
@@ -224,37 +218,48 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
             ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {raffles.map(raffle => (
-                        <div key={raffle.id} style={{ background: '#1a1a1a', border: `1px solid ${raffle.featured ? '#ABDA53' : '#333'}`, borderRadius: '8px', padding: '16px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                                <div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                        <div key={raffle.id} style={{ background: '#1a1a1a', border: `1px solid ${raffle.winnerId ? '#FFD700' : raffle.featured ? '#ABDA53' : '#333'}`, borderRadius: '8px', padding: '16px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
                                         <p style={{ margin: 0, fontWeight: '500' }}>{raffle.title}</p>
                                         {raffle.featured && <span style={{ fontSize: '11px', color: '#ABDA53', border: '1px solid #ABDA53', borderRadius: '4px', padding: '1px 6px' }}>REY DEL TICKET</span>}
+                                        {raffle.winnerId && <span style={{ fontSize: '11px', color: '#FFD700', border: '1px solid #FFD700', borderRadius: '4px', padding: '1px 6px' }}>🏆 SORTEADO</span>}
                                     </div>
                                     <p style={{ margin: '0 0 4px', fontSize: '13px', color: '#aaa' }}>{raffle.ticketsSold}/{raffle.totalTickets} tickets · C$ {raffle.ticketPriceCoins}</p>
                                     <p style={{ margin: 0, fontSize: '12px', color: raffle.status === 'OPEN' ? '#ABDA53' : '#888' }}>{raffle.status}</p>
+                                    {raffle.winner && (
+                                        <p style={{ margin: '8px 0 0', fontSize: '13px', color: '#FFD700' }}>
+                                            Ganador: <strong>{raffle.winner.name}</strong> ({raffle.winner.email})
+                                        </p>
+                                    )}
                                 </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
-                                    <button
-                                        onClick={() => handleToggleFeatured(raffle)}
-                                        style={{ padding: '6px 10px', borderRadius: '6px', background: raffle.featured ? '#ABDA53' : 'none', border: `1px solid ${raffle.featured ? '#ABDA53' : '#555'}`, color: raffle.featured ? '#000' : '#fff', cursor: 'pointer', fontSize: '12px' }}
-                                    >
-                                        ⭐ {raffle.featured ? 'Destacado' : 'Destacar'}
-                                    </button>
-                                    <button
-                                        onClick={() => handleViewParticipants(raffle)}
-                                        style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #4A9EFF', color: '#4A9EFF', cursor: 'pointer', fontSize: '12px' }}
-                                    >
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end', flexShrink: 0 }}>
+                                    {!raffle.winnerId && (
+                                        <>
+                                            <button onClick={() => handleToggleFeatured(raffle)} style={{ padding: '6px 10px', borderRadius: '6px', background: raffle.featured ? '#ABDA53' : 'none', border: `1px solid ${raffle.featured ? '#ABDA53' : '#555'}`, color: raffle.featured ? '#000' : '#fff', cursor: 'pointer', fontSize: '12px' }}>
+                                                ⭐ {raffle.featured ? 'Destacado' : 'Destacar'}
+                                            </button>
+                                        </>
+                                    )}
+                                    <button onClick={() => handleViewParticipants(raffle)} style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #4A9EFF', color: '#4A9EFF', cursor: 'pointer', fontSize: '12px' }}>
                                         👥 Ver participantes ({raffle.ticketsSold})
                                     </button>
-                                    <div style={{ display: 'flex', gap: '8px' }}>
-                                        <button onClick={() => handleEdit(raffle)} style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #555', color: '#fff', cursor: 'pointer', fontSize: '12px' }}>
-                                            Editar
+                                    {!raffle.winnerId && raffle.ticketsSold > 0 && (
+                                        <button
+                                            onClick={() => handleDrawWinner(raffle)}
+                                            disabled={drawing}
+                                            style={{ padding: '6px 10px', borderRadius: '6px', background: '#FFD700', border: 'none', color: '#000', cursor: drawing ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: '600', opacity: drawing ? 0.7 : 1 }}
+                                        >
+                                            🎲 Sortear ganador
                                         </button>
-                                        <button onClick={() => handleDelete(raffle.id)} style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #ff4444', color: '#ff4444', cursor: 'pointer', fontSize: '12px' }}>
-                                            Eliminar
-                                        </button>
-                                    </div>
+                                    )}
+                                    {!raffle.winnerId && (
+                                        <div style={{ display: 'flex', gap: '8px' }}>
+                                            <button onClick={() => handleEdit(raffle)} style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #555', color: '#fff', cursor: 'pointer', fontSize: '12px' }}>Editar</button>
+                                            <button onClick={() => handleDelete(raffle.id)} style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #ff4444', color: '#ff4444', cursor: 'pointer', fontSize: '12px' }}>Eliminar</button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -262,39 +267,22 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                 </div>
             )}
 
-            {/* Modal de participantes */}
+            {/* Modal participantes */}
             {participantsModal && (
-                <div
-                    onClick={() => setParticipantsModal(null)}
-                    style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}
-                >
-                    <div
-                        onClick={(e) => e.stopPropagation()}
-                        style={{ background: '#1a1a1a', borderRadius: '12px', padding: '24px', maxWidth: '500px', width: '100%', maxHeight: '80vh', overflowY: 'auto', border: '1px solid #333' }}
-                    >
+                <div onClick={() => setParticipantsModal(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
+                    <div onClick={(e) => e.stopPropagation()} style={{ background: '#1a1a1a', borderRadius: '12px', padding: '24px', maxWidth: '500px', width: '100%', maxHeight: '80vh', overflowY: 'auto', border: '1px solid #333' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                             <h3 style={{ margin: 0, fontSize: '18px' }}>Participantes: {participantsModal.raffle.title}</h3>
-                            <button
-                                onClick={() => setParticipantsModal(null)}
-                                style={{ background: 'none', border: 'none', color: '#fff', fontSize: '24px', cursor: 'pointer', padding: 0, lineHeight: 1 }}
-                            >
-                                ×
-                            </button>
+                            <button onClick={() => setParticipantsModal(null)} style={{ background: 'none', border: 'none', color: '#fff', fontSize: '24px', cursor: 'pointer', padding: 0, lineHeight: 1 }}>×</button>
                         </div>
-
-                        <p style={{ fontSize: '13px', color: '#aaa', margin: '0 0 16px' }}>
-                            Total: {participantsModal.participants.length} tickets vendidos
-                        </p>
-
+                        <p style={{ fontSize: '13px', color: '#aaa', margin: '0 0 16px' }}>Total: {participantsModal.participants.length} tickets vendidos</p>
                         {participantsModal.participants.length === 0 ? (
                             <p style={{ color: '#666', textAlign: 'center', margin: '20px 0' }}>Sin participantes aún</p>
                         ) : (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 {participantsModal.participants.map(p => (
                                     <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px', background: '#0a0a0a', borderRadius: '8px', border: '1px solid #2a2a2a' }}>
-                                        <div style={{ background: '#ABDA53', color: '#000', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700', fontSize: '13px', flexShrink: 0 }}>
-                                            #{p.number}
-                                        </div>
+                                        <div style={{ background: '#ABDA53', color: '#000', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700', fontSize: '13px', flexShrink: 0 }}>#{p.number}</div>
                                         <div style={{ flex: 1, minWidth: 0 }}>
                                             <p style={{ margin: 0, fontSize: '14px', fontWeight: '500', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.user.name}</p>
                                             <p style={{ margin: 0, fontSize: '12px', color: '#888', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.user.email}</p>
@@ -310,9 +298,27 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                 </div>
             )}
 
-            {loadingParticipants && (
+            {/* Modal resultado del sorteo */}
+            {drawResult && (
+                <div onClick={() => setDrawResult(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
+                    <div onClick={(e) => e.stopPropagation()} style={{ background: 'linear-gradient(135deg, #1a1a1a, #2a2a1a)', borderRadius: '16px', padding: '32px', maxWidth: '480px', width: '100%', border: '2px solid #FFD700', textAlign: 'center' }}>
+                        <div style={{ fontSize: '64px', marginBottom: '16px' }}>🏆</div>
+                        <h2 style={{ margin: '0 0 8px', fontSize: '24px', color: '#FFD700' }}>¡Ganador!</h2>
+                        <p style={{ margin: '0 0 24px', fontSize: '14px', color: '#aaa' }}>{drawResult.raffle.title}</p>
+                        <div style={{ background: '#0a0a0a', borderRadius: '12px', padding: '20px', marginBottom: '20px', border: '1px solid #FFD70044' }}>
+                            <p style={{ margin: '0 0 8px', fontSize: '12px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Ticket ganador</p>
+                            <p style={{ margin: '0 0 16px', fontSize: '48px', fontWeight: '900', color: '#FFD700' }}>#{drawResult.winningTicket.number}</p>
+                            <p style={{ margin: '0 0 4px', fontSize: '18px', fontWeight: '600', color: '#fff' }}>{drawResult.winningTicket.user.name}</p>
+                            <p style={{ margin: 0, fontSize: '13px', color: '#aaa' }}>{drawResult.winningTicket.user.email}</p>
+                        </div>
+                        <button onClick={() => setDrawResult(null)} style={{ width: '100%', padding: '14px', borderRadius: '10px', background: '#FFD700', color: '#000', fontWeight: '700', border: 'none', cursor: 'pointer', fontSize: '15px' }}>Cerrar</button>
+                    </div>
+                </div>
+            )}
+
+            {(loadingParticipants || drawing) && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 999 }}>
-                    <p style={{ color: '#fff' }}>Cargando...</p>
+                    <p style={{ color: '#fff' }}>{drawing ? 'Sorteando...' : 'Cargando...'}</p>
                 </div>
             )}
         </div>
