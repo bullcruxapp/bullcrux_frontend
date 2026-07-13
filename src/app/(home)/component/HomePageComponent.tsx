@@ -166,6 +166,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                                 price={`C$ ${raffle.ticketPriceCoins}`}
                                 onFreeTicketClick={() => handleFreeTicket(raffle.id)}
                                 productId={raffle.id}
+                                winner={(raffle as any).winner}
                             />
                             {claimMessages[raffle.id] && (
                                 <p style={{ textAlign: 'center', fontSize: '12px', color: '#ABDA53', marginTop: '4px' }}>

@@ -32,6 +32,7 @@ interface RaffleCardComponentProps {
     productId?: string;
     onClick?: () => void;
     isMyRafflesView?: boolean;
+    winner?: { name: string } | null;
 }
 
 const RaffleCardComponent = (props: RaffleCardComponentProps) => {
@@ -49,7 +50,8 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
         onFreeTicketClick,
         productId,
         onClick,
-        isMyRafflesView = false
+        isMyRafflesView = false,
+        winner
     } = props;
 
     const router = useRouter();
@@ -122,6 +124,12 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
                         alt="Favorite"
                     />
                 </button>
+                {winner && (
+                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, background: 'linear-gradient(135deg, #FFD700, #FFA500)', padding: '6px 10px', display: 'flex', alignItems: 'center', gap: '6px', borderRadius: '16px 16px 0 0', zIndex: 5 }}>
+                        <span style={{ fontSize: '14px' }}>🏆</span>
+                        <span style={{ fontSize: '11px', fontWeight: '700', color: '#000', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Ganador: {winner.name}</span>
+                    </div>
+                )}
                 {badgeConfig && (
                     <div className="raffle-card-badge">
                         {badgeConfig.icon && (
