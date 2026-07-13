@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import bullcruxIcon from '@/images/icons/bullcrux-icon.svg';
@@ -27,10 +27,37 @@ const HomePageComponent = (props: HomePageComponentProps) => {
     const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(undefined);
     const [claimingId, setClaimingId] = useState<string | null>(null);
     const [claimMessages, setClaimMessages] = useState<Record<string, string>>({});
+    const [wins, setWins] = useState<any[]>([]);
+    const [dismissedWins, setDismissedWins] = useState<string[]>([]);
 
-    const titleImage = useMemo(() => {
-        return TITLE_IMAGES[Math.floor(Math.random() * TITLE_IMAGES.length)];
-    }, []);
+    const titleImage = useMemo(() => TITLE_IMAGES[Math.floor(Math.random() * TITLE_IMAGES.length)], []);
+
+    useEffect(() => {
+        const fetchWins = async () => {
+            if (!session) return;
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/raffle/my/wins`, {
+                    headers: { 'Authorization': `Bearer ${(session as any).accessToken}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    setWins(data);
+                }
+            } catch (e) { console.error(e); }
+        };
+        fetchWins();
+
+        const dismissed = localStorage.getItem('dismissedWins');
+        if (dismissed) setDismissedWins(JSON.parse(dismissed));
+    }, [session]);
+
+    const handleDismissWin = (raffleId: string) => {
+        const newDismissed = [...dismissedWins, raffleId];
+        setDismissedWins(newDismissed);
+        localStorage.setItem('dismissedWins', JSON.stringify(newDismissed));
+    };
+
+    const visibleWins = wins.filter(w => !dismissedWins.includes(w.id));
 
     const openRaffles = raffles.filter(r => r.status === 'OPEN' || r.status === 'SOLD_OUT');
 
@@ -55,10 +82,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
     };
 
     const handleFreeTicket = async (raffleId: string) => {
-        if (!session) {
-            router.push('/login');
-            return;
-        }
+        if (!session) { router.push('/login'); return; }
         if (claimingId === raffleId) return;
         setClaimingId(raffleId);
         try {
@@ -72,11 +96,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
         } finally {
             setClaimingId(null);
             setTimeout(() => {
-                setClaimMessages(prev => {
-                    const next = { ...prev };
-                    delete next[raffleId];
-                    return next;
-                });
+                setClaimMessages(prev => { const next = { ...prev }; delete next[raffleId]; return next; });
             }, 3000);
         }
     };
@@ -92,6 +112,19 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                     <Image src={searchIcon} alt="Search icon" width={18} height={18} />
                 </div>
             </div>
+
+            {/* Winner banners */}
+            {visibleWins.map(win => (
+                <div key={win.id} style={{ margin: '16px 16px 0', padding: '16px', background: 'linear-gradient(135deg, #FFD700, #FFA500)', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 4px 20px rgba(255, 215, 0, 0.3)' }}>
+                    <div style={{ fontSize: '32px' }}>🏆</div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ margin: 0, fontSize: '13px', fontWeight: '700', color: '#000', textTransform: 'uppercase', letterSpacing: '0.05em' }}>¡Ganaste!</p>
+                        <p style={{ margin: '2px 0 0', fontSize: '14px', color: '#000', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{win.productName}</p>
+                        <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#333' }}>Revisá tu email para coordinar la entrega</p>
+                    </div>
+                    <button onClick={() => handleDismissWin(win.id)} style={{ background: 'rgba(0,0,0,0.2)', border: 'none', color: '#000', width: '28px', height: '28px', borderRadius: '50%', cursor: 'pointer', fontSize: '18px', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }}>×</button>
+                </div>
+            ))}
 
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', marginTop: '16px', gap: '2px' }}>
                 <img src="/fire.gif" alt="" style={{ width: '44px', height: '44px', objectFit: 'contain', marginTop: '8px' }} />
