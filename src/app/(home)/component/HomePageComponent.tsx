@@ -29,6 +29,8 @@ const HomePageComponent = (props: HomePageComponentProps) => {
     const [claimMessages, setClaimMessages] = useState<Record<string, string>>({});
     const [wins, setWins] = useState<any[]>([]);
     const [dismissedWins, setDismissedWins] = useState<string[]>([]);
+    const [popupWin, setPopupWin] = useState<any>(null);
+    const [seenPopups, setSeenPopups] = useState<string[]>([]);
 
     const titleImage = useMemo(() => TITLE_IMAGES[Math.floor(Math.random() * TITLE_IMAGES.length)], []);
 
@@ -42,6 +44,12 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                 if (res.ok) {
                     const data = await res.json();
                     setWins(data);
+
+                    // Ver si hay un ganador no visto para popup
+                    const seen = JSON.parse(localStorage.getItem('seenWinPopups') || '[]');
+                    setSeenPopups(seen);
+                    const unseenWin = data.find((w: any) => !seen.includes(w.id));
+                    if (unseenWin) setPopupWin(unseenWin);
                 }
             } catch (e) { console.error(e); }
         };
@@ -51,6 +59,15 @@ const HomePageComponent = (props: HomePageComponentProps) => {
         if (dismissed) setDismissedWins(JSON.parse(dismissed));
     }, [session]);
 
+    const handleClosePopup = () => {
+        if (popupWin) {
+            const newSeen = [...seenPopups, popupWin.id];
+            setSeenPopups(newSeen);
+            localStorage.setItem('seenWinPopups', JSON.stringify(newSeen));
+            setPopupWin(null);
+        }
+    };
+
     const handleDismissWin = (raffleId: string) => {
         const newDismissed = [...dismissedWins, raffleId];
         setDismissedWins(newDismissed);
@@ -59,7 +76,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
 
     const visibleWins = wins.filter(w => !dismissedWins.includes(w.id));
 
-    const openRaffles = raffles.filter(r => r.status === 'OPEN' || r.status === 'SOLD_OUT');
+    const openRaffles = raffles.filter(r => r.status === 'OPEN' || r.status === 'SOLD_OUT' || r.status === 'DRAWN');
 
     const getProgress = (raffle: Raffle) => {
         if (raffle.totalTickets === 0) return 0;
@@ -101,8 +118,85 @@ const HomePageComponent = (props: HomePageComponentProps) => {
         }
     };
 
+    const popupImageUrl = popupWin?.productImages?.[0]?.url || popupWin?.productImage || '';
+
     return (
         <div className="homepage-container">
+            {/* Popup Ganador */}
+            {popupWin && (
+                <div
+                    onClick={handleClosePopup}
+                    style={{
+                        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        zIndex: 2000, padding: '20px', animation: 'fadeIn 0.3s ease'
+                    }}
+                >
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                            background: 'linear-gradient(135deg, #1a1a1a 0%, #2a1a00 100%)',
+                            borderRadius: '20px', padding: '32px 24px', maxWidth: '400px', width: '100%',
+                            border: '3px solid #FFD700', textAlign: 'center',
+                            boxShadow: '0 0 60px rgba(255, 215, 0, 0.4)',
+                            animation: 'popIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55)'
+                        }}
+                    >
+                        <div style={{ fontSize: '80px', marginBottom: '12px', animation: 'bounce 1s ease infinite' }}>🏆</div>
+                        <h1 style={{ margin: '0 0 8px', fontSize: '32px', color: '#FFD700', fontWeight: 900, letterSpacing: '-0.02em' }}>
+                            ¡GANASTE!
+                        </h1>
+                        <p style={{ margin: '0 0 24px', fontSize: '15px', color: '#aaa' }}>
+                            Sos el ganador del sorteo
+                        </p>
+
+                        {popupImageUrl && (
+                            <div style={{ width: '100%', height: '160px', borderRadius: '12px', overflow: 'hidden', marginBottom: '16px', border: '2px solid #FFD70055' }}>
+                                <img src={popupImageUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            </div>
+                        )}
+
+                        <div style={{ background: '#0a0a0a', border: '1px solid #FFD70033', borderRadius: '12px', padding: '16px', marginBottom: '20px' }}>
+                            <p style={{ margin: '0 0 4px', fontSize: '11px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Premio</p>
+                            <p style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#fff' }}>{popupWin.productName}</p>
+                        </div>
+
+                        <div style={{ background: '#ABDA5322', border: '1px solid #ABDA5355', borderRadius: '10px', padding: '12px', marginBottom: '20px' }}>
+                            <p style={{ margin: 0, fontSize: '13px', color: '#ABDA53', lineHeight: 1.4 }}>
+                                📧 Te enviamos un email con las instrucciones para retirar tu premio
+                            </p>
+                        </div>
+
+                        <button
+                            onClick={handleClosePopup}
+                            style={{
+                                width: '100%', padding: '14px', borderRadius: '12px',
+                                background: '#FFD700', color: '#000', fontWeight: 800,
+                                border: 'none', cursor: 'pointer', fontSize: '15px',
+                                textTransform: 'uppercase', letterSpacing: '0.05em'
+                            }}
+                        >
+                            ¡Genial!
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            <style jsx>{`
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes popIn {
+                    0% { transform: scale(0.5); opacity: 0; }
+                    100% { transform: scale(1); opacity: 1; }
+                }
+                @keyframes bounce {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-10px); }
+                }
+            `}</style>
+
             <div className="header flex justify-between items-center">
                 <div className="bullcrux-icon">
                     <Image src={bullcruxIcon} alt="Bullcrux icon" width={24} />
