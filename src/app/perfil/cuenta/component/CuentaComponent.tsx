@@ -139,12 +139,12 @@ const CuentaComponent = () => {
                                         <Image src={flagArg} alt="AR" width={24} height={18} className="cuenta-phone-flag-img" />
                                     </div>
                                     <span className="cuenta-value">{phone}</span>
-                                    <span className="cuenta-verified-badge" style={{ background: '#444', color: '#aaa' }}>Sin verificar</span>
+                                    <span className="cuenta-verified-badge" style={{ background: '#ABDA53', color: '#000', cursor: 'pointer' }}>Cambiar</span>
                                 </>
                             ) : (
                                 <>
                                     <span className="cuenta-value" style={{ color: '#888' }}>Tocá para agregar</span>
-                                    <span className="cuenta-verified-badge" style={{ background: '#444', color: '#aaa' }}>Sin verificar</span>
+                                    <span className="cuenta-verified-badge" style={{ background: '#ABDA53', color: '#000', cursor: 'pointer' }}>Cambiar</span>
                                 </>
                             )}
                         </div>
