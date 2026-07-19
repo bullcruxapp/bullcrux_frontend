@@ -110,7 +110,7 @@ const CarteraComponent = (props: CarteraComponentProps) => {
                             </div>
                             <div className="movimiento-info">
                                 <span className="movimiento-tipo">{tx.type}</span>
-                                <span className="movimiento-desc">{tx.description}</span>
+                                <span className="movimiento-desc" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', maxWidth: '100%' }}>{tx.description?.replace(/participación\(es\)/g, '$COINS')}</span>
                             </div>
                             <div className="movimiento-monto-fecha">
                                 <span className={`movimiento-monto ${tx.type === TransactionType.DEPOSIT || tx.type === TransactionType.WIN ? 'recarga' : 'gasto'}`}>{(tx.type === TransactionType.DEPOSIT || tx.type === TransactionType.WIN) ? '+' : '-'} ${tx.amount.toLocaleString('es-ES')}</span>
