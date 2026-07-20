@@ -27,12 +27,12 @@ interface FavoritosComponentProps {
     favorites: Favorite[];
 }
 
-const FavoritosComponent = ({ tickets, favorites: initialFavorites }: FavoritosComponentProps) => {
+const FavoritosComponent = ({ tickets, favorites: initialFavorites = [] }: FavoritosComponentProps) => {
     const { data: session } = useSession();
     const router = useRouter();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [activeTab, setActiveTab] = useState<'favoritos' | 'mis-sorteos'>('favoritos');
-    const [favorites, setFavorites] = useState(initialFavorites);
+    const [favorites, setFavorites] = useState(initialFavorites || []);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const userName = session?.user?.name || session?.user?.email || 'Usuario';
