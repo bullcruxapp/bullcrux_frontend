@@ -13,19 +13,24 @@ export default async function FavoritosPage() {
     }
 
     let tickets = [];
+    let favorites = [];
+
     try {
-        const response = await fetch(`${API_URL}/ticket`, {
-            headers: {
-                'Authorization': `Bearer ${(session as any).accessToken}`,
-            },
-            cache: 'no-store',
-        });
-        if (response.ok) {
-            tickets = await response.json();
-        }
+        const [ticketsRes, favoritesRes] = await Promise.all([
+            fetch(`${API_URL}/ticket`, {
+                headers: { 'Authorization': `Bearer ${(session as any).accessToken}` },
+                cache: 'no-store',
+            }),
+            fetch(`${API_URL}/favorite`, {
+                headers: { 'Authorization': `Bearer ${(session as any).accessToken}` },
+                cache: 'no-store',
+            })
+        ]);
+        if (ticketsRes.ok) tickets = await ticketsRes.json();
+        if (favoritesRes.ok) favorites = await favoritesRes.json();
     } catch (error) {
-        console.error('Error fetching tickets:', error);
+        console.error('Error fetching:', error);
     }
 
-    return <FavoritosComponent tickets={tickets} />;
+    return <FavoritosComponent tickets={tickets} favorites={favorites} />;
 }
