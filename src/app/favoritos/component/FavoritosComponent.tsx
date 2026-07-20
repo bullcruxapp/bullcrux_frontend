@@ -13,28 +13,26 @@ interface Ticket {
     number: number;
     raffleId: string;
     purchasedAt: string;
-    raffle: {
-        id: string;
-        title?: string;
-        productName: string;
-        ticketPriceCoins: number;
-        totalTickets: number;
-        ticketsSold: number;
-        status: string;
-        productImages: { url: string }[];
-        productImage?: string;
-    };
+    raffle: any;
+}
+
+interface Favorite {
+    id: string;
+    raffleId: string;
+    raffle: any;
 }
 
 interface FavoritosComponentProps {
     tickets: Ticket[];
+    favorites: Favorite[];
 }
 
-const FavoritosComponent = ({ tickets }: FavoritosComponentProps) => {
+const FavoritosComponent = ({ tickets, favorites: initialFavorites }: FavoritosComponentProps) => {
     const { data: session } = useSession();
     const router = useRouter();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [activeTab, setActiveTab] = useState<'favoritos' | 'mis-sorteos'>('favoritos');
+    const [favorites, setFavorites] = useState(initialFavorites);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const userName = session?.user?.name || session?.user?.email || 'Usuario';
@@ -55,22 +53,31 @@ const FavoritosComponent = ({ tickets }: FavoritosComponentProps) => {
         router.push('/login');
     };
 
-    const getImageUrl = (ticket: Ticket) => {
-        if (ticket.raffle.productImages && ticket.raffle.productImages.length > 0) {
-            return ticket.raffle.productImages[0].url;
-        }
-        return ticket.raffle.productImage || '';
+    const handleRemoveFavorite = async (raffleId: string) => {
+        if (!session) return;
+        setFavorites(prev => prev.filter(f => f.raffleId !== raffleId));
+        try {
+            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/favorite/${raffleId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${(session as any).accessToken}` }
+            });
+        } catch (e) { console.error(e); }
     };
 
-    const getProgress = (ticket: Ticket) => {
-        if (ticket.raffle.totalTickets === 0) return 0;
-        return Math.round((ticket.raffle.ticketsSold / ticket.raffle.totalTickets) * 100);
+    const getImageUrl = (raffle: any) => {
+        if (raffle?.productImages && raffle.productImages.length > 0) {
+            return raffle.productImages[0].url;
+        }
+        return raffle?.productImage || '';
+    };
+
+    const getProgress = (raffle: any) => {
+        if (!raffle || raffle.totalTickets === 0) return 0;
+        return Math.round((raffle.ticketsSold / raffle.totalTickets) * 100);
     };
 
     const uniqueRaffles = tickets.reduce((acc: Ticket[], ticket) => {
-        if (!acc.find(t => t.raffleId === ticket.raffleId)) {
-            acc.push(ticket);
-        }
+        if (!acc.find(t => t.raffleId === ticket.raffleId)) acc.push(ticket);
         return acc;
     }, []);
 
@@ -101,19 +108,37 @@ const FavoritosComponent = ({ tickets }: FavoritosComponentProps) => {
             </div>
 
             <div className="tabs-container">
-                <button className={`tab-item ${activeTab === 'favoritos' ? 'active' : ''}`} onClick={() => setActiveTab('favoritos')}>
-                    Favoritos
-                </button>
-                <button className={`tab-item ${activeTab === 'mis-sorteos' ? 'active' : ''}`} onClick={() => setActiveTab('mis-sorteos')}>
-                    Mis Participaciones
-                </button>
+                <button className={`tab-item ${activeTab === 'favoritos' ? 'active' : ''}`} onClick={() => setActiveTab('favoritos')}>Favoritos</button>
+                <button className={`tab-item ${activeTab === 'mis-sorteos' ? 'active' : ''}`} onClick={() => setActiveTab('mis-sorteos')}>Mis Participaciones</button>
             </div>
 
             <div className="favoritos-content">
                 {activeTab === 'favoritos' ? (
-                    <p style={{ color: 'var(--color-text-secondary)', textAlign: 'center', marginTop: '2rem' }}>
-                        No tenés favoritos todavía.
-                    </p>
+                    <div className="raffle-cards-container">
+                        {favorites.length === 0 ? (
+                            <p style={{ color: 'var(--color-text-secondary)', textAlign: 'center', marginTop: '2rem' }}>
+                                No tenés favoritos todavía.
+                            </p>
+                        ) : (
+                            <div className="raffle-cards-grid">
+                                {favorites.map((fav) => (
+                                    <RaffleCardComponent
+                                        key={fav.id}
+                                        image={getImageUrl(fav.raffle)}
+                                        isFavorite={true}
+                                        onFavoriteClick={() => handleRemoveFavorite(fav.raffleId)}
+                                        progress={getProgress(fav.raffle)}
+                                        available={`${fav.raffle.totalTickets - fav.raffle.ticketsSold} disponibles`}
+                                        progressText={`${fav.raffle.ticketsSold}/${fav.raffle.totalTickets}`}
+                                        title={fav.raffle.title || fav.raffle.productName}
+                                        price={`C$ ${fav.raffle.ticketPriceCoins}`}
+                                        productId={fav.raffle.id}
+                                        winner={fav.raffle.winner}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 ) : (
                     <div className="raffle-cards-container">
                         {uniqueRaffles.length === 0 ? (
@@ -125,9 +150,9 @@ const FavoritosComponent = ({ tickets }: FavoritosComponentProps) => {
                                 {uniqueRaffles.map((ticket) => (
                                     <RaffleCardComponent
                                         key={ticket.id}
-                                        image={getImageUrl(ticket)}
+                                        image={getImageUrl(ticket.raffle)}
                                         isFavorite={false}
-                                        progress={getProgress(ticket)}
+                                        progress={getProgress(ticket.raffle)}
                                         available={`${ticket.raffle.totalTickets - ticket.raffle.ticketsSold} disponibles`}
                                         progressText={`${ticket.raffle.ticketsSold}/${ticket.raffle.totalTickets}`}
                                         title={ticket.raffle.title || ticket.raffle.productName}
