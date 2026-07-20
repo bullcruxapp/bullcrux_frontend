@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import heartIcon from '@/images/icons/heart-icon.svg';
@@ -56,6 +56,7 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
 
     const router = useRouter();
     const [favorite, setFavorite] = useState(isFavorite);
+    useEffect(() => { setFavorite(isFavorite); }, [isFavorite]);
 
     const handleFavoriteClick = (e: React.MouseEvent) => {
         e.stopPropagation(); // Evita que se active el onClick del card
