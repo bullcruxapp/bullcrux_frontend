@@ -102,9 +102,6 @@ const FavoritosComponent = ({ tickets, favorites: initialFavorites = [] }: Favor
                         </div>
                     )}
                 </div>
-                <div className="search-input">
-                    <Image src={searchIcon} alt="Search icon" width={18} height={18} />
-                </div>
             </div>
 
             <div className="tabs-container">

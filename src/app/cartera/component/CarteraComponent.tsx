@@ -80,9 +80,6 @@ const CarteraComponent = (props: CarteraComponentProps) => {
                         </div>
                     )}
                 </div>
-                <div className="search-input">
-                    <Image src={searchIcon} alt="Search icon" width={18} height={18} />
-                </div>
             </div>
 
             <div className="saldo-card">
