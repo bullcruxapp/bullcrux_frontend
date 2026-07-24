@@ -68,14 +68,10 @@ const HomePageComponent = (props: HomePageComponentProps) => {
         if (!session) { router.push('/login'); return; }
         const token = (session as any).accessToken;
         const isFav = favoriteIds.includes(raffleId);
-        // Optimistic update
         setFavoriteIds(prev => isFav ? prev.filter(id => id !== raffleId) : [...prev, raffleId]);
         try {
             if (isFav) {
-                await fetch(`${process.env.NEXT_PUBLIC_API_URL}/favorite/${raffleId}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                await fetch(`${process.env.NEXT_PUBLIC_API_URL}/favorite/${raffleId}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
             } else {
                 await fetch(`${process.env.NEXT_PUBLIC_API_URL}/favorite`, {
                     method: 'POST',
@@ -84,7 +80,6 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                 });
             }
         } catch (e) {
-            // Revert on error
             setFavoriteIds(prev => isFav ? [...prev, raffleId] : prev.filter(id => id !== raffleId));
         }
     };
@@ -128,6 +123,14 @@ const HomePageComponent = (props: HomePageComponentProps) => {
         return undefined;
     };
 
+    const getTicketsRemaining = (raffle: any): number | null => {
+        if (!raffle.productPriceCoins || raffle.productPriceCoins <= 0) return null;
+        const raised = raffle.ticketsSold * raffle.ticketPriceCoins;
+        if (raised >= raffle.productPriceCoins) return null;
+        const remaining = raffle.productPriceCoins - raised;
+        return Math.ceil(remaining / raffle.ticketPriceCoins);
+    };
+
     const handleFreeTicket = async (raffleId: string) => {
         if (!session) { router.push('/login'); return; }
         if (claimingId === raffleId) return;
@@ -136,9 +139,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
             await claimAdTicket(raffleId, (session as any).accessToken);
             setClaimMessages(prev => ({ ...prev, [raffleId]: '¡Ticket reclamado!' }));
         } catch (error: any) {
-            const msg = error.message?.includes('Ya reclamaste')
-                ? 'Ya reclamaste tu ticket gratis'
-                : 'Error al reclamar';
+            const msg = error.message?.includes('Ya reclamaste') ? 'Ya reclamaste tu ticket gratis' : 'Error al reclamar';
             setClaimMessages(prev => ({ ...prev, [raffleId]: msg }));
         } finally {
             setClaimingId(null);
@@ -239,6 +240,8 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                                 onFreeTicketClick={() => handleFreeTicket(raffle.id)}
                                 productId={raffle.id}
                                 winner={(raffle as any).winner}
+                                countdownStartedAt={(raffle as any).countdownStartedAt}
+                                ticketsRemaining={getTicketsRemaining(raffle)}
                             />
                             {claimMessages[raffle.id] && (
                                 <p style={{ textAlign: 'center', fontSize: '12px', color: '#ABDA53', marginTop: '4px' }}>
