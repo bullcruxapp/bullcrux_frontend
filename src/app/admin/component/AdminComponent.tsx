@@ -15,6 +15,7 @@ interface Raffle {
     productName: string;
     description: string;
     ticketPriceCoins: number;
+    productPriceCoins: number;
     totalTickets: number;
     ticketsSold: number;
     status: string;
@@ -23,6 +24,7 @@ interface Raffle {
     winnerId?: string;
     winner?: { id: string; name: string; email: string };
     drawnAt?: string;
+    countdownStartedAt?: string;
 }
 
 interface Participant {
@@ -30,11 +32,7 @@ interface Participant {
     number: number;
     source: string;
     purchasedAt: string;
-    user: {
-        id: string;
-        name: string;
-        email: string;
-    };
+    user: { id: string; name: string; email: string };
 }
 
 interface AdminComponentProps {
@@ -46,6 +44,7 @@ const emptyForm = {
     productName: '',
     description: '',
     ticketPriceCoins: '',
+    productPriceCoins: '',
     totalTickets: '',
     imageUrl: '',
     featured: false,
@@ -85,6 +84,7 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
             productName: raffle.productName,
             description: raffle.description || '',
             ticketPriceCoins: String(raffle.ticketPriceCoins),
+            productPriceCoins: String(raffle.productPriceCoins || ''),
             totalTickets: String(raffle.totalTickets),
             imageUrl: raffle.productImages?.[0]?.url || '',
             featured: raffle.featured || false,
@@ -107,6 +107,7 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                 productName: form.productName,
                 description: form.description,
                 ticketPriceCoins: parseInt(form.ticketPriceCoins),
+                productPriceCoins: parseInt(form.productPriceCoins) || 0,
                 totalTickets: parseInt(form.totalTickets),
                 featured: form.featured,
                 productImages: form.imageUrl ? [{ url: form.imageUrl, order: 0 }] : [],
@@ -192,6 +193,7 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                 <input name="productName" placeholder="Nombre del producto" value={form.productName} onChange={handleChange} style={inputStyle} />
                 <textarea name="description" placeholder="Descripción" value={form.description} onChange={handleChange} rows={2} style={{ ...inputStyle, resize: 'none' }} />
                 <input name="ticketPriceCoins" placeholder="Precio del ticket (coins)" type="number" value={form.ticketPriceCoins} onChange={handleChange} style={inputStyle} />
+                <input name="productPriceCoins" placeholder="Precio del producto (coins) - activa countdown al llegarse" type="number" value={form.productPriceCoins} onChange={handleChange} style={inputStyle} />
                 <input name="totalTickets" placeholder="Total de tickets" type="number" value={form.totalTickets} onChange={handleChange} style={inputStyle} />
                 <input name="imageUrl" placeholder="URL de imagen" value={form.imageUrl} onChange={handleChange} style={inputStyle} />
 
@@ -217,57 +219,61 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                 <p style={{ color: '#666' }}>No hay sorteos.</p>
             ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    {raffles.map(raffle => (
-                        <div key={raffle.id} style={{ background: '#1a1a1a', border: `1px solid ${raffle.winnerId ? '#FFD700' : raffle.featured ? '#ABDA53' : '#333'}`, borderRadius: '8px', padding: '16px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
-                                <div style={{ flex: 1, minWidth: 0 }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
-                                        <p style={{ margin: 0, fontWeight: '500' }}>{raffle.title}</p>
-                                        {raffle.featured && <span style={{ fontSize: '11px', color: '#ABDA53', border: '1px solid #ABDA53', borderRadius: '4px', padding: '1px 6px' }}>REY DEL TICKET</span>}
-                                        {raffle.winnerId && <span style={{ fontSize: '11px', color: '#FFD700', border: '1px solid #FFD700', borderRadius: '4px', padding: '1px 6px' }}>🏆 SORTEADO</span>}
+                    {raffles.map(raffle => {
+                        const raised = raffle.ticketsSold * raffle.ticketPriceCoins;
+                        const goal = raffle.productPriceCoins;
+                        const countdownActive = !!raffle.countdownStartedAt && !raffle.winnerId;
+                        return (
+                            <div key={raffle.id} style={{ background: '#1a1a1a', border: `1px solid ${raffle.winnerId ? '#FFD700' : countdownActive ? '#FF6B35' : raffle.featured ? '#ABDA53' : '#333'}`, borderRadius: '8px', padding: '16px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
+                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', flexWrap: 'wrap' }}>
+                                            <p style={{ margin: 0, fontWeight: '500' }}>{raffle.title}</p>
+                                            {raffle.featured && <span style={{ fontSize: '11px', color: '#ABDA53', border: '1px solid #ABDA53', borderRadius: '4px', padding: '1px 6px' }}>REY DEL TICKET</span>}
+                                            {countdownActive && <span style={{ fontSize: '11px', color: '#FF6B35', border: '1px solid #FF6B35', borderRadius: '4px', padding: '1px 6px' }}>⏱️ COUNTDOWN</span>}
+                                            {raffle.winnerId && <span style={{ fontSize: '11px', color: '#FFD700', border: '1px solid #FFD700', borderRadius: '4px', padding: '1px 6px' }}>🏆 SORTEADO</span>}
+                                        </div>
+                                        <p style={{ margin: '0 0 4px', fontSize: '13px', color: '#aaa' }}>{raffle.ticketsSold}/{raffle.totalTickets} tickets · C$ {raffle.ticketPriceCoins}</p>
+                                        {goal > 0 && (
+                                            <p style={{ margin: '0 0 4px', fontSize: '12px', color: raised >= goal ? '#ABDA53' : '#888' }}>
+                                                Recaudado: C$ {raised} / C$ {goal} {raised >= goal ? '✓' : ''}
+                                            </p>
+                                        )}
+                                        <p style={{ margin: 0, fontSize: '12px', color: raffle.status === 'OPEN' ? '#ABDA53' : '#888' }}>{raffle.status}</p>
+                                        {raffle.winner && (
+                                            <p style={{ margin: '8px 0 0', fontSize: '13px', color: '#FFD700' }}>
+                                                Ganador: <strong>{raffle.winner.name}</strong> ({raffle.winner.email})
+                                            </p>
+                                        )}
                                     </div>
-                                    <p style={{ margin: '0 0 4px', fontSize: '13px', color: '#aaa' }}>{raffle.ticketsSold}/{raffle.totalTickets} tickets · C$ {raffle.ticketPriceCoins}</p>
-                                    <p style={{ margin: 0, fontSize: '12px', color: raffle.status === 'OPEN' ? '#ABDA53' : '#888' }}>{raffle.status}</p>
-                                    {raffle.winner && (
-                                        <p style={{ margin: '8px 0 0', fontSize: '13px', color: '#FFD700' }}>
-                                            Ganador: <strong>{raffle.winner.name}</strong> ({raffle.winner.email})
-                                        </p>
-                                    )}
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end', flexShrink: 0 }}>
-                                    {!raffle.winnerId && (
-                                        <>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end', flexShrink: 0 }}>
+                                        {!raffle.winnerId && (
                                             <button onClick={() => handleToggleFeatured(raffle)} style={{ padding: '6px 10px', borderRadius: '6px', background: raffle.featured ? '#ABDA53' : 'none', border: `1px solid ${raffle.featured ? '#ABDA53' : '#555'}`, color: raffle.featured ? '#000' : '#fff', cursor: 'pointer', fontSize: '12px' }}>
                                                 ⭐ {raffle.featured ? 'Destacado' : 'Destacar'}
                                             </button>
-                                        </>
-                                    )}
-                                    <button onClick={() => handleViewParticipants(raffle)} style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #4A9EFF', color: '#4A9EFF', cursor: 'pointer', fontSize: '12px' }}>
-                                        👥 Ver participantes ({raffle.ticketsSold})
-                                    </button>
-                                    {!raffle.winnerId && raffle.ticketsSold > 0 && (
-                                        <button
-                                            onClick={() => handleDrawWinner(raffle)}
-                                            disabled={drawing}
-                                            style={{ padding: '6px 10px', borderRadius: '6px', background: '#FFD700', border: 'none', color: '#000', cursor: drawing ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: '600', opacity: drawing ? 0.7 : 1 }}
-                                        >
-                                            🎲 Sortear ganador
+                                        )}
+                                        <button onClick={() => handleViewParticipants(raffle)} style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #4A9EFF', color: '#4A9EFF', cursor: 'pointer', fontSize: '12px' }}>
+                                            👥 Ver participantes ({raffle.ticketsSold})
                                         </button>
-                                    )}
-                                    {!raffle.winnerId && (
-                                        <div style={{ display: 'flex', gap: '8px' }}>
-                                            <button onClick={() => handleEdit(raffle)} style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #555', color: '#fff', cursor: 'pointer', fontSize: '12px' }}>Editar</button>
-                                            <button onClick={() => handleDelete(raffle.id)} style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #ff4444', color: '#ff4444', cursor: 'pointer', fontSize: '12px' }}>Eliminar</button>
-                                        </div>
-                                    )}
+                                        {!raffle.winnerId && raffle.ticketsSold > 0 && (
+                                            <button onClick={() => handleDrawWinner(raffle)} disabled={drawing} style={{ padding: '6px 10px', borderRadius: '6px', background: '#FFD700', border: 'none', color: '#000', cursor: drawing ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: '600', opacity: drawing ? 0.7 : 1 }}>
+                                                🎲 Sortear ganador
+                                            </button>
+                                        )}
+                                        {!raffle.winnerId && (
+                                            <div style={{ display: 'flex', gap: '8px' }}>
+                                                <button onClick={() => handleEdit(raffle)} style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #555', color: '#fff', cursor: 'pointer', fontSize: '12px' }}>Editar</button>
+                                                <button onClick={() => handleDelete(raffle.id)} style={{ padding: '6px 10px', borderRadius: '6px', background: 'none', border: '1px solid #ff4444', color: '#ff4444', cursor: 'pointer', fontSize: '12px' }}>Eliminar</button>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
 
-            {/* Modal participantes */}
             {participantsModal && (
                 <div onClick={() => setParticipantsModal(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
                     <div onClick={(e) => e.stopPropagation()} style={{ background: '#1a1a1a', borderRadius: '12px', padding: '24px', maxWidth: '500px', width: '100%', maxHeight: '80vh', overflowY: 'auto', border: '1px solid #333' }}>
@@ -298,7 +304,6 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                 </div>
             )}
 
-            {/* Modal resultado del sorteo */}
             {drawResult && (
                 <div onClick={() => setDrawResult(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
                     <div onClick={(e) => e.stopPropagation()} style={{ background: 'linear-gradient(135deg, #1a1a1a, #2a2a1a)', borderRadius: '16px', padding: '32px', maxWidth: '480px', width: '100%', border: '2px solid #FFD700', textAlign: 'center' }}>
