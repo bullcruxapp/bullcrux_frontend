@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 import NavbarComponent from './Navbar/NavbarComponent'
 
-const RUTAS_SIN_NAVBAR = ['/login', '/registro']
+const RUTAS_SIN_NAVBAR = ['/registro']
 
 export default function NavbarWrapper() {
   const pathname = usePathname()
