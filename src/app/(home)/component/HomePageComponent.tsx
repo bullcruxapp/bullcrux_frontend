@@ -99,7 +99,13 @@ const HomePageComponent = (props: HomePageComponentProps) => {
         localStorage.setItem('dismissedWins', JSON.stringify(newDismissed));
     };
 
-    const visibleWins = wins.filter(w => !dismissedWins.includes(w.id));
+    const TWO_DAYS_MS = 2 * 24 * 60 * 60 * 1000;
+    const visibleWins = wins.filter(w => {
+        if (dismissedWins.includes(w.id)) return false;
+        if (!w.drawnAt) return true;
+        const daysSince = Date.now() - new Date(w.drawnAt).getTime();
+        return daysSince < TWO_DAYS_MS;
+    });
 
     const openRaffles = raffles.filter(r => r.status === 'OPEN' || r.status === 'SOLD_OUT' || r.status === 'DRAWN');
 
