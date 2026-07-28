@@ -25,15 +25,29 @@ interface Favorite {
 interface FavoritosComponentProps {
     tickets: Ticket[];
     favorites: Favorite[];
+    notLoggedIn?: boolean;
 }
 
-const FavoritosComponent = ({ tickets, favorites: initialFavorites = [] }: FavoritosComponentProps) => {
+const FavoritosComponent = ({ tickets, favorites: initialFavorites = [], notLoggedIn }: FavoritosComponentProps) => {
     const { data: session } = useSession();
     const router = useRouter();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [activeTab, setActiveTab] = useState<'favoritos' | 'mis-sorteos'>('favoritos');
     const [favorites, setFavorites] = useState(initialFavorites || []);
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+    if (notLoggedIn) {
+        return (
+            <div className="favoritos-container">
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', padding: '20px', textAlign: 'center' }}>
+                    <div style={{ fontSize: '48px', marginBottom: '16px' }}>❤️</div>
+                    <h2 style={{ color: '#fff', margin: '0 0 8px', fontSize: '20px' }}>Iniciá sesión</h2>
+                    <p style={{ color: '#aaa', margin: '0 0 24px', fontSize: '14px' }}>Necesitás una cuenta para ver tus favoritos y participaciones</p>
+                    <button onClick={() => router.push('/login')} style={{ padding: '14px 32px', background: '#ABDA53', color: '#000', border: 'none', borderRadius: '12px', fontWeight: 700, fontSize: '15px', cursor: 'pointer' }}>Iniciar sesión</button>
+                </div>
+            </div>
+        );
+    }
 
     const userName = session?.user?.name || session?.user?.email || 'Usuario';
     const userImage = session?.user?.image || null;

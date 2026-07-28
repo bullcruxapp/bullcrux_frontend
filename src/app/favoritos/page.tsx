@@ -9,7 +9,7 @@ const API_URL = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
 export default async function FavoritosPage() {
     const session = await getServerSession(authOptions);
     if (!session || !session.user) {
-        redirect('/login');
+        return <FavoritosComponent tickets={[]} favorites={[]} notLoggedIn={true} />;
     }
 
     let tickets = [];
