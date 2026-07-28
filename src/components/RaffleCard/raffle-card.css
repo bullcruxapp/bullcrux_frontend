@@ -206,3 +206,11 @@
     text-overflow: ellipsis !important;
     max-width: 100% !important;
 }
+
+.raffle-card-content {
+    min-width: 0 !important;
+    overflow: hidden !important;
+}
+.raffle-card {
+    overflow: hidden !important;
+}
