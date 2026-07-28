@@ -200,3 +200,10 @@
 .raffle-card-details-button:active {
     opacity: 0.8;
 }
+
+h3.raffle-card-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
