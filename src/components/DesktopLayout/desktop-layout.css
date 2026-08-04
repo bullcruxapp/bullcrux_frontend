@@ -7,15 +7,15 @@
     .desktop-layout {
         display: flex;
         min-height: 100vh;
-        background: #0a0a0a;
-        color: #fff;
+        background: #101014;
+        color: #fafafa;
     }
 
     /* Sidebar */
     .desktop-sidebar {
-        width: 240px;
-        background: #000;
-        padding: 20px 16px;
+        width: 250px;
+        background: #101014;
+        padding: 20px 14px;
         display: flex;
         flex-direction: column;
         gap: 8px;
@@ -23,22 +23,29 @@
         top: 0;
         left: 0;
         height: 100vh;
-        border-right: 1px solid rgba(255,255,255,0.06);
+        border-right: 1px solid #272a2d;
         z-index: 100;
     }
 
     .desktop-sidebar-logo {
         display: flex;
         align-items: center;
-        justify-content: center;
-        padding: 12px 0 24px;
+        gap: 10px;
+        padding: 10px 8px 22px;
         cursor: pointer;
+    }
+
+    .desktop-sidebar-wordmark {
+        font-size: 17px;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        color: #fafafa;
     }
 
     .desktop-sidebar-nav {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 3px;
         flex: 1;
     }
 
@@ -46,12 +53,12 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 12px 14px;
-        border-radius: 10px;
+        padding: 11px 14px;
+        border-radius: 11px;
         background: transparent;
         border: none;
-        color: #999;
-        font-size: 15px;
+        color: #8a8d91;
+        font-size: 14.5px;
         font-weight: 600;
         cursor: pointer;
         transition: background 0.15s, color 0.15s;
@@ -59,32 +66,35 @@
     }
 
     .desktop-nav-item:hover {
-        background: rgba(255,255,255,0.04);
-        color: #fff;
+        background: rgba(250, 250, 250, 0.05);
+        color: #fafafa;
     }
 
     .desktop-nav-item.active {
-        background: rgba(148, 255, 49, 0.1);
-        color: #94FF31;
+        background: rgba(133, 239, 172, 0.14);
+        color: #85efac;
     }
 
     .desktop-nav-icon {
-        font-size: 18px;
-        width: 22px;
-        text-align: center;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
     }
 
     .desktop-recharge-btn {
         width: 100%;
-        padding: 14px;
-        background: #94FF31;
-        color: #000;
+        padding: 13px;
+        background: #85efac;
+        color: #101014;
         border: none;
         border-radius: 12px;
-        font-size: 15px;
+        font-size: 14.5px;
         font-weight: 700;
         cursor: pointer;
-        transition: opacity 0.2s;
+        transition: opacity 0.2s, transform 0.1s;
         margin-top: 16px;
     }
 
@@ -92,9 +102,13 @@
         opacity: 0.9;
     }
 
+    .desktop-recharge-btn:active {
+        transform: scale(0.98);
+    }
+
     /* Main area */
     .desktop-main {
-        margin-left: 240px;
+        margin-left: 250px;
         flex: 1;
         display: flex;
         flex-direction: column;
@@ -106,9 +120,9 @@
         position: sticky;
         top: 0;
         z-index: 90;
-        background: rgba(10, 10, 10, 0.85);
+        background: rgba(16, 16, 20, 0.85);
         backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(255,255,255,0.06);
+        border-bottom: 1px solid #272a2d;
         padding: 14px 32px;
         display: flex;
         align-items: center;
@@ -121,15 +135,15 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(250, 250, 250, 0.04);
+        border: 1px solid #272a2d;
         border-radius: 12px;
         padding: 10px 14px;
         transition: border-color 0.15s;
     }
 
     .desktop-search:focus-within {
-        border-color: rgba(148, 255, 49, 0.4);
+        border-color: rgba(133, 239, 172, 0.5);
     }
 
     .desktop-search input {
@@ -137,13 +151,13 @@
         background: none;
         border: none;
         outline: none;
-        color: #fff;
+        color: #fafafa;
         font-size: 14px;
         font-family: inherit;
     }
 
     .desktop-search input::placeholder {
-        color: #666;
+        color: #6b6e72;
     }
 
     .desktop-header-right {
@@ -162,7 +176,7 @@
 
     .desktop-balance-label {
         font-size: 11px;
-        color: #666;
+        color: #6b6e72;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         font-weight: 600;
@@ -171,22 +185,22 @@
     .desktop-balance-value {
         font-size: 15px;
         font-weight: 700;
-        color: #94FF31;
+        color: #85efac;
     }
 
     .desktop-avatar {
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background: #1a1a1a;
-        border: 1px solid rgba(255,255,255,0.1);
+        background: #18181c;
+        border: 1px solid #272a2d;
         overflow: hidden;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: 700;
-        color: #fff;
+        color: #fafafa;
         transition: opacity 0.15s;
     }
 
@@ -202,8 +216,8 @@
 
     .desktop-login-btn {
         padding: 10px 20px;
-        background: #94FF31;
-        color: #000;
+        background: #85efac;
+        color: #101014;
         border: none;
         border-radius: 10px;
         font-size: 14px;
