@@ -3,9 +3,22 @@
     height: 218px;
     border-radius: 16px;
     overflow: hidden;
-    background-color: #262626;
+    background-color: #18181c;
+    border: 1px solid #272a2d;
     display: flex;
     flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+    .raffle-card {
+        height: auto;
+        aspect-ratio: 1 / 1;
+    }
+
+    .raffle-card-image-container {
+        min-height: 0;
+        flex: 1;
+    }
 }
 
 .raffle-card-image-container {
@@ -36,7 +49,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    color: #FFFFFF;
+    color: #fafafa;
     font-size: 8px;
     font-weight: 600;
     text-transform: uppercase;
@@ -91,14 +104,14 @@
 .raffle-card-progress-bar {
     width: 100%;
     height: 4px;
-    background-color: #E8E8E8;
+    background-color: #272a2d;
     border-radius: 2px;
     overflow: hidden;
 }
 
 .raffle-card-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #0B5210 0%, #127319 100%);
+    background: linear-gradient(90deg, #4ade80 0%, #85efac 100%);
     border-radius: 2px;
     transition: width 0.3s ease;
 }
@@ -112,27 +125,27 @@
 
 .raffle-card-available {
     font-size: 10px;
-    color: #FFFFFF;
+    color: #fafafa;
     font-weight: 400;
 }
 
 .raffle-card-progress-text {
     font-size: 10px;
-    color: #FFFFFF;
+    color: #fafafa;
     font-weight: 400;
 }
 
 .raffle-card-title {
     font-size: 14px;
     font-weight: 600;
-    color: #FFFFFF;
+    color: #fafafa;
     margin: 0;
     line-height: 1.2;
 }
 
 .raffle-card-description {
     font-size: 10px;
-    color: #E8E8E8;
+    color: #a0a3a7;
     margin: 0;
     line-height: 1.2;
     opacity: 0.8;
@@ -150,13 +163,13 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    color: #94FF31;
+    color: #85efac;
     font-size: 12px;
     font-weight: 600;
 }
 
 .raffle-card-ticket-icon {
-    color: #94FF31;
+    color: #85efac;
 }
 
 /* Estilos para vista de "Mis Sorteos" */
@@ -172,7 +185,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    color: #94FF31;
+    color: #85efac;
     font-size: 10px;
     font-weight: 600;
 }
