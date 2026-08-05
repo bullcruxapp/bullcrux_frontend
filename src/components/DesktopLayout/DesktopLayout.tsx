@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import bullcruxLogo from '@/images/icons/bullcrux-logo.svg';
+import NotificationComponent from '@/app/(home)/component/NotificationComponent';
 import './desktop-layout.css';
 
 interface DesktopLayoutProps {
@@ -136,6 +137,7 @@ const DesktopLayout = ({ children }: DesktopLayoutProps) => {
                     </div>
 
                     <div className="desktop-header-right">
+                        <NotificationComponent />
                         {session ? (
                             <>
                                 <div className="desktop-balance">
