@@ -12,7 +12,12 @@
 @media (min-width: 1024px) {
     .raffle-card {
         height: auto;
-        aspect-ratio: 1 / 1;
+        aspect-ratio: 4 / 5;
+    }
+
+    /* Variante para la fila horizontal de destacadas/trending: panorámica */
+    .raffle-card-trending {
+        aspect-ratio: 3 / 2;
     }
 
     .raffle-card-image-container {

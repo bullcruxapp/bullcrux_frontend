@@ -35,6 +35,7 @@ interface RaffleCardComponentProps {
     winner?: { name: string } | null;
     countdownStartedAt?: string | null;
     ticketsRemaining?: number | null;
+    variant?: 'grid' | 'trending';
 }
 
 const COUNTDOWN_HOURS = 10;
@@ -51,7 +52,7 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
     const {
         image, badge, isFavorite = false, onFavoriteClick, progress, available, progressText,
         title, description, price, onFreeTicketClick, productId, onClick,
-        isMyRafflesView = false, winner, countdownStartedAt, ticketsRemaining
+        isMyRafflesView = false, winner, countdownStartedAt, ticketsRemaining, variant = 'grid'
     } = props;
 
     const router = useRouter();
@@ -110,7 +111,7 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
     const showTicketsRemaining = !winner && !countdownStartedAt && ticketsRemaining && ticketsRemaining > 0;
 
     return (
-        <div className={`raffle-card ${isMyRafflesView ? 'raffle-card-my-raffles' : ''}`} onClick={isMyRafflesView ? undefined : handleCardClick} style={{ cursor: (onClick || productId) && !isMyRafflesView ? 'pointer' : 'default' }}>
+        <div className={`raffle-card ${isMyRafflesView ? 'raffle-card-my-raffles' : ''} ${variant === 'trending' ? 'raffle-card-trending' : ''}`} onClick={isMyRafflesView ? undefined : handleCardClick} style={{ cursor: (onClick || productId) && !isMyRafflesView ? 'pointer' : 'default' }}>
             <div className="raffle-card-image-container">
                 <Image src={image} alt={title} width={176} height={120} style={{ objectFit: 'cover', borderRadius: '16px 16px 0 0' }} />
                 <button className="raffle-card-favorite" onClick={handleFavoriteClick}>
