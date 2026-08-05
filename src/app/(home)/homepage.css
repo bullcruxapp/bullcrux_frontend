@@ -84,7 +84,8 @@
    El ticker de compras (NotificationComponent) se mantiene y ocupa el ancho. */
 @media (min-width: 1024px) {
     .bullcrux-icon,
-    .search-input {
+    .search-input,
+    .notification-container {
         display: none;
     }
 
