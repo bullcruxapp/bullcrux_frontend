@@ -114,6 +114,11 @@ const HomePageComponent = (props: HomePageComponentProps) => {
         return Math.round((raffle.ticketsSold / raffle.totalTickets) * 100);
     };
 
+    // Fila horizontal de destacadas (desktop): los sorteos con más % vendido
+    const trendingRaffles = [...openRaffles]
+        .sort((a, b) => getProgress(b) - getProgress(a))
+        .slice(0, 6);
+
     const getImageUrl = (raffle: Raffle) => {
         if (raffle.productImages && raffle.productImages.length > 0) {
             return raffle.productImages[0].url;
@@ -220,6 +225,38 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                         onFreeTicketClick={() => handleFreeTicket(featuredRaffle.id)}
                         productId={featuredRaffle.id}
                     />
+                </div>
+            )}
+
+            {/* Fila de destacadas en horizontal — solo visible en desktop */}
+            {trendingRaffles.length > 0 && (
+                <div className="trending-row-wrapper mt-6">
+                    <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#fafafa', margin: '0 0 12px' }}>
+                        Destacadas
+                    </h2>
+                    <div className="trending-row">
+                        {trendingRaffles.map(raffle => (
+                            <div key={raffle.id}>
+                                <RaffleCardComponent
+                                    variant="trending"
+                                    image={getImageUrl(raffle)}
+                                    isFavorite={favoriteIds.includes(raffle.id)}
+                                    onFavoriteClick={() => handleToggleFavorite(raffle.id)}
+                                    badge={getAutoBadge(raffle)}
+                                    progress={getProgress(raffle)}
+                                    available={`${raffle.totalTickets - raffle.ticketsSold} disponibles`}
+                                    progressText={`${raffle.ticketsSold}/${raffle.totalTickets}`}
+                                    title={raffle.title}
+                                    price={`C$ ${raffle.ticketPriceCoins}`}
+                                    onFreeTicketClick={() => handleFreeTicket(raffle.id)}
+                                    productId={raffle.id}
+                                    winner={(raffle as any).winner}
+                                    countdownStartedAt={(raffle as any).countdownStartedAt}
+                                    ticketsRemaining={getTicketsRemaining(raffle)}
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </div>
             )}
 
