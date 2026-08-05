@@ -15,15 +15,6 @@ import { claimAdTicket } from '@/services/ticket.service';
 
 const TITLE_IMAGES = ['/rdt.png', '/tendencia.png', '/on_fire_today.png'];
 
-type SortMode = 'tendencia' | 'nuevos' | 'por-vencer' | 'menos-tickets';
-
-const SORT_OPTIONS: { id: SortMode; label: string }[] = [
-    { id: 'tendencia', label: '🔥 Tendencia' },
-    { id: 'nuevos', label: '🌱 Nuevos' },
-    { id: 'por-vencer', label: '⏱️ Por vencer' },
-    { id: 'menos-tickets', label: '🎟️ Menos tickets' },
-];
-
 interface HomePageComponentProps {
     raffles: Raffle[];
     featuredRaffle?: Raffle | null;
@@ -41,7 +32,6 @@ const HomePageComponent = (props: HomePageComponentProps) => {
     const [popupWin, setPopupWin] = useState<any>(null);
     const [seenPopups, setSeenPopups] = useState<string[]>([]);
     const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
-    const [sortMode, setSortMode] = useState<SortMode>('tendencia');
 
     const titleImage = useMemo(() => TITLE_IMAGES[Math.floor(Math.random() * TITLE_IMAGES.length)], []);
 
@@ -117,7 +107,9 @@ const HomePageComponent = (props: HomePageComponentProps) => {
         return daysSince < TWO_DAYS_MS;
     });
 
-    const openRaffles = raffles.filter(r => r.status === 'OPEN' || r.status === 'SOLD_OUT' || r.status === 'DRAWN');
+    // Sorteos activos (se muestran normalmente) vs. finalizados (van a su propia categoría)
+    const activeRaffles = raffles.filter(r => r.status === 'OPEN' || r.status === 'SOLD_OUT');
+    const finishedRaffles = raffles.filter(r => r.status === 'DRAWN');
 
     const getProgress = (raffle: Raffle) => {
         if (raffle.totalTickets === 0) return 0;
@@ -128,7 +120,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
     const heroRaffles = useMemo(() => {
         const result: Raffle[] = [];
         if (featuredRaffle) result.push(featuredRaffle);
-        const rest = [...openRaffles]
+        const rest = [...activeRaffles]
             .filter(r => r.id !== featuredRaffle?.id)
             .sort((a, b) => getProgress(b) - getProgress(a));
         for (const r of rest) {
@@ -136,27 +128,20 @@ const HomePageComponent = (props: HomePageComponentProps) => {
             result.push(r);
         }
         return result;
-    }, [openRaffles, featuredRaffle]);
+    }, [activeRaffles, featuredRaffle]);
 
-    const sortedGridRaffles = useMemo(() => {
-        const list = [...openRaffles];
-        const COUNTDOWN_HOURS = 10;
-        switch (sortMode) {
-            case 'nuevos':
-                return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-            case 'por-vencer':
-                return list.sort((a, b) => {
-                    const aEnd = (a as any).countdownStartedAt ? new Date((a as any).countdownStartedAt).getTime() + COUNTDOWN_HOURS * 3600000 : Infinity;
-                    const bEnd = (b as any).countdownStartedAt ? new Date((b as any).countdownStartedAt).getTime() + COUNTDOWN_HOURS * 3600000 : Infinity;
-                    return aEnd - bEnd;
-                });
-            case 'menos-tickets':
-                return list.sort((a, b) => (a.totalTickets - a.ticketsSold) - (b.totalTickets - b.ticketsSold));
-            case 'tendencia':
-            default:
-                return list.sort((a, b) => getProgress(b) - getProgress(a));
+    // Grid principal: si la categoría elegida es "Finalizados", muestra esos;
+    // si no, los sorteos activos ordenados por % vendido.
+    const gridRaffles = useMemo(() => {
+        if (selectedCategory === 'Finalizados') {
+            return [...finishedRaffles].sort((a, b) => {
+                const aTime = a.drawnAt ? new Date(a.drawnAt).getTime() : 0;
+                const bTime = b.drawnAt ? new Date(b.drawnAt).getTime() : 0;
+                return bTime - aTime;
+            });
         }
-    }, [openRaffles, sortMode]);
+        return [...activeRaffles].sort((a, b) => getProgress(b) - getProgress(a));
+    }, [selectedCategory, activeRaffles, finishedRaffles]);
 
     const getImageUrl = (raffle: Raffle) => {
         if (raffle.productImages && raffle.productImages.length > 0) {
@@ -286,21 +271,6 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                 </div>
             )}
 
-            {/* Tabs de orden del grid principal — desktop */}
-            <div className="sort-tabs-wrapper mt-6">
-                <div className="sort-tabs-row">
-                    {SORT_OPTIONS.map(opt => (
-                        <button
-                            key={opt.id}
-                            className={`sort-tab ${sortMode === opt.id ? 'active' : ''}`}
-                            onClick={() => setSortMode(opt.id)}
-                        >
-                            {opt.label}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
             <CategoryFilterComponent
                 selectedCategory={selectedCategory}
                 onCategoryChange={(category) => setSelectedCategory(category)}
@@ -309,7 +279,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
 
             <div className="raffle-cards-container mt-6">
                 <div className="raffle-cards-grid">
-                    {sortedGridRaffles.map(raffle => (
+                    {gridRaffles.map(raffle => (
                         <div key={raffle.id}>
                             <RaffleCardComponent
                                 image={getImageUrl(raffle)}
@@ -335,9 +305,9 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                         </div>
                     ))}
                 </div>
-                {openRaffles.length === 0 && (
+                {gridRaffles.length === 0 && (
                     <p style={{ textAlign: 'center', color: 'var(--color-text-secondary)', marginTop: '2rem' }}>
-                        No hay sorteos activos por el momento.
+                        {selectedCategory === 'Finalizados' ? 'Todavía no hay sorteos finalizados.' : 'No hay sorteos activos por el momento.'}
                     </p>
                 )}
             </div>
