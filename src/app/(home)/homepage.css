@@ -35,6 +35,10 @@
     align-items: center;
 }
 
+.trending-row-wrapper {
+    display: none;
+}
+
 .bullcrux-icon img {
     cursor: pointer;
     transition: opacity 0.2s;
@@ -85,12 +89,33 @@
     }
 
     .header {
-        max-width: 640px;
+        max-width: fit-content;
     }
 
-    /* Grid de 2 columnas, cards contenidas en ancho para que queden cuadradas */
+    /* Grilla densa tipo pump.fun: varias columnas chicas, no 2 anchas */
     .raffle-cards-grid {
-        grid-template-columns: repeat(2, minmax(0, 400px));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        gap: 16px;
+    }
+
+    /* Fila horizontal de destacadas/trending, solo desktop */
+    .trending-row-wrapper {
+        display: block;
+    }
+
+    .trending-row {
+        display: flex;
+        gap: 16px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+    }
+
+    .trending-row::-webkit-scrollbar {
+        display: none;
+    }
+
+    .trending-row > div {
+        flex: 0 0 280px;
     }
 }
