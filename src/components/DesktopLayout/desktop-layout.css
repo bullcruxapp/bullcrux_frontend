@@ -130,8 +130,8 @@
     }
 
     .desktop-search {
-        flex: 1;
-        max-width: 600px;
+        flex: 0 1 480px;
+        max-width: 480px;
         display: flex;
         align-items: center;
         gap: 10px;
@@ -140,6 +140,17 @@
         border-radius: 12px;
         padding: 10px 14px;
         transition: border-color 0.15s;
+    }
+
+    .desktop-header-center {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        min-width: 0;
+    }
+
+    .desktop-header-center .notification-container {
+        flex: 0 1 320px;
     }
 
     .desktop-search:focus-within {
