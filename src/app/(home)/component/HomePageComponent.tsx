@@ -124,10 +124,19 @@ const HomePageComponent = (props: HomePageComponentProps) => {
         return Math.round((raffle.ticketsSold / raffle.totalTickets) * 100);
     };
 
-    // Fila horizontal de destacadas (desktop): los sorteos con más % vendido
-    const trendingRaffles = [...openRaffles]
-        .sort((a, b) => getProgress(b) - getProgress(a))
-        .slice(0, 6);
+    // Cards grandes de la fila superior (desktop): destacada + top 2 por % vendido
+    const heroRaffles = useMemo(() => {
+        const result: Raffle[] = [];
+        if (featuredRaffle) result.push(featuredRaffle);
+        const rest = [...openRaffles]
+            .filter(r => r.id !== featuredRaffle?.id)
+            .sort((a, b) => getProgress(b) - getProgress(a));
+        for (const r of rest) {
+            if (result.length >= 3) break;
+            result.push(r);
+        }
+        return result;
+    }, [openRaffles, featuredRaffle]);
 
     const sortedGridRaffles = useMemo(() => {
         const list = [...openRaffles];
@@ -246,7 +255,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
             </div>
 
             {featuredRaffle && (
-                <div className="raffle-large-container mt-2">
+                <div className="raffle-large-container mt-2 mobile-hero-only">
                     <RaffleLargeComponent
                         image={getImageUrl(featuredRaffle)}
                         title={featuredRaffle.title}
@@ -258,33 +267,20 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                 </div>
             )}
 
-            {/* Fila de destacadas en horizontal — solo visible en desktop */}
-            {trendingRaffles.length > 0 && (
-                <div className="trending-row-wrapper mt-6">
-                    <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#fafafa', margin: '0 0 12px' }}>
-                        En tendencia
-                    </h2>
-                    <div className="trending-row">
-                        {trendingRaffles.map(raffle => (
-                            <div key={raffle.id}>
-                                <RaffleCardComponent
-                                    variant="trending"
-                                    image={getImageUrl(raffle)}
-                                    isFavorite={favoriteIds.includes(raffle.id)}
-                                    onFavoriteClick={() => handleToggleFavorite(raffle.id)}
-                                    badge={getAutoBadge(raffle)}
-                                    progress={getProgress(raffle)}
-                                    available={`${raffle.totalTickets - raffle.ticketsSold} disponibles`}
-                                    progressText={`${raffle.ticketsSold}/${raffle.totalTickets}`}
-                                    title={raffle.title}
-                                    price={`C$ ${raffle.ticketPriceCoins}`}
-                                    onFreeTicketClick={() => handleFreeTicket(raffle.id)}
-                                    productId={raffle.id}
-                                    winner={(raffle as any).winner}
-                                    countdownStartedAt={(raffle as any).countdownStartedAt}
-                                    ticketsRemaining={getTicketsRemaining(raffle)}
-                                />
-                            </div>
+            {/* Fila de 3 cards grandes — solo visible en desktop */}
+            {heroRaffles.length > 0 && (
+                <div className="hero-row-wrapper mt-2">
+                    <div className="hero-row">
+                        {heroRaffles.map(raffle => (
+                            <RaffleLargeComponent
+                                key={raffle.id}
+                                image={getImageUrl(raffle)}
+                                title={raffle.title}
+                                progress={getProgress(raffle)}
+                                price={`C$ ${raffle.ticketPriceCoins}`}
+                                onFreeTicketClick={() => handleFreeTicket(raffle.id)}
+                                productId={raffle.id}
+                            />
                         ))}
                     </div>
                 </div>
