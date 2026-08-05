@@ -26,7 +26,7 @@ const CategoryFilterComponent = (props: CategoryFilterComponentProps) => {
 
     return (
         <div className="category-filter-container">
-            <div className="category-filter-title">Destacadas</div>
+            <div className="category-filter-title">Categorías</div>
             <div className="category-filter-row">
                 <button 
                     className="category-filter-button"
