@@ -136,8 +136,11 @@ const DesktopLayout = ({ children }: DesktopLayoutProps) => {
                         <input type="text" placeholder="Buscar sorteos..." />
                     </div>
 
-                    <div className="desktop-header-right">
+                    <div className="desktop-header-center">
                         <NotificationComponent />
+                    </div>
+
+                    <div className="desktop-header-right">
                         {session ? (
                             <>
                                 <div className="desktop-balance">
