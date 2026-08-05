@@ -86,7 +86,7 @@
     .bullcrux-icon,
     .search-input,
     .notification-container {
-        display: none;
+        display: none !important;
     }
 
     .header {
