@@ -15,6 +15,15 @@ import { claimAdTicket } from '@/services/ticket.service';
 
 const TITLE_IMAGES = ['/rdt.png', '/tendencia.png', '/on_fire_today.png'];
 
+type SortMode = 'tendencia' | 'nuevos' | 'por-vencer' | 'menos-tickets';
+
+const SORT_OPTIONS: { id: SortMode; label: string }[] = [
+    { id: 'tendencia', label: '🔥 Tendencia' },
+    { id: 'nuevos', label: '🌱 Nuevos' },
+    { id: 'por-vencer', label: '⏱️ Por vencer' },
+    { id: 'menos-tickets', label: '🎟️ Menos tickets' },
+];
+
 interface HomePageComponentProps {
     raffles: Raffle[];
     featuredRaffle?: Raffle | null;
@@ -32,6 +41,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
     const [popupWin, setPopupWin] = useState<any>(null);
     const [seenPopups, setSeenPopups] = useState<string[]>([]);
     const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+    const [sortMode, setSortMode] = useState<SortMode>('tendencia');
 
     const titleImage = useMemo(() => TITLE_IMAGES[Math.floor(Math.random() * TITLE_IMAGES.length)], []);
 
@@ -118,6 +128,26 @@ const HomePageComponent = (props: HomePageComponentProps) => {
     const trendingRaffles = [...openRaffles]
         .sort((a, b) => getProgress(b) - getProgress(a))
         .slice(0, 6);
+
+    const sortedGridRaffles = useMemo(() => {
+        const list = [...openRaffles];
+        const COUNTDOWN_HOURS = 10;
+        switch (sortMode) {
+            case 'nuevos':
+                return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            case 'por-vencer':
+                return list.sort((a, b) => {
+                    const aEnd = (a as any).countdownStartedAt ? new Date((a as any).countdownStartedAt).getTime() + COUNTDOWN_HOURS * 3600000 : Infinity;
+                    const bEnd = (b as any).countdownStartedAt ? new Date((b as any).countdownStartedAt).getTime() + COUNTDOWN_HOURS * 3600000 : Infinity;
+                    return aEnd - bEnd;
+                });
+            case 'menos-tickets':
+                return list.sort((a, b) => (a.totalTickets - a.ticketsSold) - (b.totalTickets - b.ticketsSold));
+            case 'tendencia':
+            default:
+                return list.sort((a, b) => getProgress(b) - getProgress(a));
+        }
+    }, [openRaffles, sortMode]);
 
     const getImageUrl = (raffle: Raffle) => {
         if (raffle.productImages && raffle.productImages.length > 0) {
@@ -232,7 +262,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
             {trendingRaffles.length > 0 && (
                 <div className="trending-row-wrapper mt-6">
                     <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#fafafa', margin: '0 0 12px' }}>
-                        Destacadas
+                        En tendencia
                     </h2>
                     <div className="trending-row">
                         {trendingRaffles.map(raffle => (
@@ -260,6 +290,21 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                 </div>
             )}
 
+            {/* Tabs de orden del grid principal — desktop */}
+            <div className="sort-tabs-wrapper mt-6">
+                <div className="sort-tabs-row">
+                    {SORT_OPTIONS.map(opt => (
+                        <button
+                            key={opt.id}
+                            className={`sort-tab ${sortMode === opt.id ? 'active' : ''}`}
+                            onClick={() => setSortMode(opt.id)}
+                        >
+                            {opt.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
             <CategoryFilterComponent
                 selectedCategory={selectedCategory}
                 onCategoryChange={(category) => setSelectedCategory(category)}
@@ -268,7 +313,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
 
             <div className="raffle-cards-container mt-6">
                 <div className="raffle-cards-grid">
-                    {openRaffles.map(raffle => (
+                    {sortedGridRaffles.map(raffle => (
                         <div key={raffle.id}>
                             <RaffleCardComponent
                                 image={getImageUrl(raffle)}
