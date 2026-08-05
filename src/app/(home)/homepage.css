@@ -84,8 +84,13 @@
    El ticker de compras (NotificationComponent) se mantiene y ocupa el ancho. */
 @media (min-width: 1024px) {
     .bullcrux-icon,
-    .search-input,
-    .notification-container {
+    .search-input {
+        display: none !important;
+    }
+
+    /* Solo oculta el ticker en su ubicación vieja (dentro de .header de HomePageComponent);
+       el que vive en DesktopLayout no se toca */
+    .header .notification-container {
         display: none !important;
     }
 
