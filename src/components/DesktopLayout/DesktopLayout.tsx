@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import bullcruxIcon from '@/images/icons/bullcrux-icon.svg';
+import bullcruxLogo from '@/images/icons/bullcrux-logo.svg';
 import './desktop-layout.css';
 
 interface DesktopLayoutProps {
@@ -97,8 +97,7 @@ const DesktopLayout = ({ children }: DesktopLayoutProps) => {
             {/* Sidebar */}
             <aside className="desktop-sidebar">
                 <div className="desktop-sidebar-logo" onClick={() => router.push('/')}>
-                    <Image src={bullcruxIcon} alt="BullCrux" width={30} height={30} />
-                    <span className="desktop-sidebar-wordmark">BullCrux</span>
+                    <Image src={bullcruxLogo} alt="BullCrux" width={104} height={30} />
                 </div>
 
                 <nav className="desktop-sidebar-nav">
