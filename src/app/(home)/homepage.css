@@ -111,13 +111,14 @@
 
     /* Fila de 3 cards grandes, solo desktop */
     .hero-row-wrapper {
-        display: block;
+        display: flex;
+        justify-content: center;
     }
 
     .hero-row {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 12px;
-        max-width: 50%;
+        width: 50%;
     }
 }
