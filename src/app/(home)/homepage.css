@@ -100,23 +100,23 @@
 
     /* Grilla densa tipo pump.fun: varias columnas chicas, no 2 anchas */
     .raffle-cards-grid {
-        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)) !important;
         gap: 16px;
     }
 
     /* Card destacada única (mobile) se oculta en desktop, reemplazada por hero-row */
     .mobile-hero-only {
-        display: none;
+        display: none !important;
     }
 
     /* Fila de 3 cards grandes, solo desktop */
     .hero-row-wrapper {
-        display: flex;
+        display: flex !important;
         justify-content: center;
     }
 
     .hero-row {
-        display: grid;
+        display: grid !important;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 12px;
         width: 50%;
