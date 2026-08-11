@@ -12,6 +12,8 @@ import shareIcon from '@/images/icons/share-icon.svg';
 import fireIcon from '@/images/icons/fire-icon.svg';
 import PurchaseModal from './PurchaseModal';
 import { getRaffleById } from '@/services/raffles.service';
+import { getAdProgress, claimAdTicket } from '@/services/ticket.service';
+import AdOfferwallModal from '@/components/AdOfferwall/AdOfferwallModal';
 import { Raffle } from '@/models/raffle.model';
 
 interface ProductDetailComponentProps {
@@ -30,6 +32,8 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
     const [claiming, setClaiming] = useState(false);
     const [buyHover, setBuyHover] = useState(false);
     const [freeHover, setFreeHover] = useState(false);
+    const [showAdWall, setShowAdWall] = useState(false);
+    const [adProgress, setAdProgress] = useState<{ count: number; required: number } | null>(null);
     const swiperRef = useRef<SwiperType | null>(null);
 
     useEffect(() => {
@@ -51,18 +55,17 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
         if (claiming) return;
         setClaiming(true);
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ticket/claim-ad`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${(session as any).accessToken}`,
-                },
-                body: JSON.stringify({ raffleId: productId }),
-            });
-            if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.message || 'Error');
+            const progress = await getAdProgress(productId, (session as any).accessToken);
+            if (progress.alreadyClaimed) {
+                setClaimMessage('Ya reclamaste tu ticket gratis para este sorteo');
+                return;
             }
+            if (!progress.canClaim) {
+                setAdProgress({ count: progress.count, required: progress.required });
+                setShowAdWall(true);
+                return;
+            }
+            await claimAdTicket(productId, (session as any).accessToken);
             setClaimMessage('¡Ticket gratis reclamado!');
         } catch (error: any) {
             const msg = error.message?.includes('Ya reclamaste')
@@ -72,6 +75,22 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
         } finally {
             setClaiming(false);
             setTimeout(() => setClaimMessage(''), 4000);
+        }
+    };
+
+    const handleCloseAdWall = async () => {
+        setShowAdWall(false);
+        setAdProgress(null);
+        if (!session) return;
+        try {
+            const progress = await getAdProgress(productId, (session as any).accessToken);
+            if (progress.canClaim) {
+                await claimAdTicket(productId, (session as any).accessToken);
+                setClaimMessage('¡Ticket gratis reclamado!');
+                setTimeout(() => setClaimMessage(''), 4000);
+            }
+        } catch (e) {
+            console.error(e);
         }
     };
 
@@ -249,6 +268,16 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                     }}
                     productId={raffle.id}
                     token={session?.accessToken || ''}
+                />
+            )}
+
+            {showAdWall && session && adProgress && (
+                <AdOfferwallModal
+                    userId={(session.user as any).id}
+                    raffleId={productId}
+                    progress={adProgress.count}
+                    required={adProgress.required}
+                    onClose={handleCloseAdWall}
                 />
             )}
         </div>
