@@ -38,6 +38,22 @@ export async function claimAdTicket(raffleId: string, token: string) {
     return response.json();
 }
 
+export async function getAdProgress(raffleId: string, token: string) {
+    const response = await fetch(`${API_URL}/ticket/ad-progress/${raffleId}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+        cache: 'no-store',
+    });
+
+    if (!response.ok) {
+        throw new Error('Error al obtener progreso de anuncios');
+    }
+
+    return response.json();
+}
+
 export async function getMyTickets(token: string) {
     const response = await fetch(`${API_URL}/ticket`, {
         method: 'GET',
