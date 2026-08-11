@@ -11,7 +11,8 @@ import CategoryFilterComponent, { Category } from '@/components/CategoryFilter/C
 import RaffleCardComponent, { BadgeType } from '@/components/RaffleCard/RaffleCardComponent';
 import { Raffle } from '@/models/raffle.model';
 import RaffleLargeComponent from '@/components/RaffleCard/RaffleLargeComponent';
-import { claimAdTicket } from '@/services/ticket.service';
+import { claimAdTicket, getAdProgress } from '@/services/ticket.service';
+import AdOfferwallModal from '@/components/AdOfferwall/AdOfferwallModal';
 
 const TITLE_IMAGES = ['/rdt.png', '/tendencia.png', '/on_fire_today.png'];
 
@@ -27,6 +28,8 @@ const HomePageComponent = (props: HomePageComponentProps) => {
     const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(undefined);
     const [claimingId, setClaimingId] = useState<string | null>(null);
     const [claimMessages, setClaimMessages] = useState<Record<string, string>>({});
+    const [adWallRaffleId, setAdWallRaffleId] = useState<string | null>(null);
+    const [adProgress, setAdProgress] = useState<{ count: number; required: number } | null>(null);
     const [wins, setWins] = useState<any[]>([]);
     const [dismissedWins, setDismissedWins] = useState<string[]>([]);
     const [popupWin, setPopupWin] = useState<any>(null);
@@ -171,6 +174,16 @@ const HomePageComponent = (props: HomePageComponentProps) => {
         if (claimingId === raffleId) return;
         setClaimingId(raffleId);
         try {
+            const progress = await getAdProgress(raffleId, (session as any).accessToken);
+            if (progress.alreadyClaimed) {
+                setClaimMessages(prev => ({ ...prev, [raffleId]: 'Ya reclamaste tu ticket gratis' }));
+                return;
+            }
+            if (!progress.canClaim) {
+                setAdProgress({ count: progress.count, required: progress.required });
+                setAdWallRaffleId(raffleId);
+                return;
+            }
             await claimAdTicket(raffleId, (session as any).accessToken);
             setClaimMessages(prev => ({ ...prev, [raffleId]: '¡Ticket reclamado!' }));
         } catch (error: any) {
@@ -181,6 +194,26 @@ const HomePageComponent = (props: HomePageComponentProps) => {
             setTimeout(() => {
                 setClaimMessages(prev => { const next = { ...prev }; delete next[raffleId]; return next; });
             }, 3000);
+        }
+    };
+
+    const handleCloseAdWall = async () => {
+        const raffleId = adWallRaffleId;
+        setAdWallRaffleId(null);
+        setAdProgress(null);
+        if (!raffleId || !session) return;
+        // Al cerrar, si ya juntó los 5, reclama el ticket automáticamente
+        try {
+            const progress = await getAdProgress(raffleId, (session as any).accessToken);
+            if (progress.canClaim) {
+                await claimAdTicket(raffleId, (session as any).accessToken);
+                setClaimMessages(prev => ({ ...prev, [raffleId]: '¡Ticket reclamado!' }));
+                setTimeout(() => {
+                    setClaimMessages(prev => { const next = { ...prev }; delete next[raffleId]; return next; });
+                }, 3000);
+            }
+        } catch (e) {
+            console.error(e);
         }
     };
 
@@ -311,6 +344,16 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                     </p>
                 )}
             </div>
+
+            {adWallRaffleId && session && adProgress && (
+                <AdOfferwallModal
+                    userId={(session.user as any).id}
+                    raffleId={adWallRaffleId}
+                    progress={adProgress.count}
+                    required={adProgress.required}
+                    onClose={handleCloseAdWall}
+                />
+            )}
         </div>
     );
 };
