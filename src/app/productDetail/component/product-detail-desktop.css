@@ -50,12 +50,17 @@
         min-width: 0;
     }
 
+    .desktop-product-title-row {
+        max-width: 640px;
+        margin-bottom: 20px;
+    }
+
     .desktop-product-title {
         font-size: 32px;
         font-weight: 700;
         line-height: 1.1;
         letter-spacing: -0.02em;
-        margin: 0 0 20px;
+        margin: 0;
         color: #fafafa;
     }
 
@@ -71,8 +76,12 @@
     }
 
     .desktop-product-description {
-        margin-top: 28px;
+        margin-top: 20px;
         max-width: 640px;
+        background: #18181c;
+        border: 1px solid #272a2d;
+        border-radius: 16px;
+        padding: 20px;
     }
 
     .desktop-product-description-label {

@@ -269,11 +269,13 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                     Volver
                 </button>
 
-                <div className="desktop-product-grid">
-                    {/* Columna izquierda: título + imagen + descripción */}
-                    <div className="desktop-product-left">
-                        <h1 className="desktop-product-title">{raffle.productName}</h1>
+                <div className="desktop-product-title-row">
+                    <h1 className="desktop-product-title">{raffle.productName}</h1>
+                </div>
 
+                <div className="desktop-product-grid">
+                    {/* Columna izquierda: imagen + descripción */}
+                    <div className="desktop-product-left">
                         <div className="desktop-product-image-box">
                             {images.length > 0 ? (
                                 <Swiper slidesPerView={1} style={{ width: '100%', height: '100%' }}>
