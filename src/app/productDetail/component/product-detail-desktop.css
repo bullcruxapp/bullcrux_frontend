@@ -12,13 +12,12 @@
         min-height: 100vh;
         background: #101014;
         color: #fafafa;
-        padding: 32px;
+        padding: 24px 20px 40px 14px;
         font-family: -apple-system, "SF Pro", "SF Pro Display", BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
     }
 
     .desktop-product-container {
-        max-width: 1400px;
-        margin: 0 auto;
+        width: 100%;
     }
 
     .desktop-back-btn {
@@ -41,8 +40,8 @@
 
     .desktop-product-grid {
         display: grid;
-        grid-template-columns: 1fr 440px;
-        gap: 64px;
+        grid-template-columns: minmax(0, 1fr) 385px;
+        gap: 16px;
         align-items: start;
     }
 
@@ -51,8 +50,8 @@
     }
 
     .desktop-product-title-row {
-        max-width: 780px;
-        margin-bottom: 20px;
+        width: calc(100% - 401px);
+        margin-bottom: 14px;
     }
 
     .desktop-product-title {
@@ -66,8 +65,7 @@
 
     .desktop-product-image-box {
         width: 100%;
-        max-width: 780px;
-        aspect-ratio: 1 / 1;
+        height: 545px;
         background: #18181c;
         border: 1px solid #272a2d;
         border-radius: 16px;
@@ -76,8 +74,8 @@
     }
 
     .desktop-product-description {
-        margin-top: 20px;
-        max-width: 780px;
+        margin-top: 16px;
+        width: 100%;
         background: #18181c;
         border: 1px solid #272a2d;
         border-radius: 16px;
@@ -112,6 +110,7 @@
         display: flex;
         flex-direction: column;
         gap: 16px;
+        min-height: 545px;
     }
 
     .desktop-purchase-price {
