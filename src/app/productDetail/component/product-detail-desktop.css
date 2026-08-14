@@ -1,0 +1,205 @@
+.desktop-product-detail {
+    display: none;
+}
+
+@media (min-width: 1024px) {
+    .mobile-product-detail {
+        display: none !important;
+    }
+
+    .desktop-product-detail {
+        display: block !important;
+        min-height: 100vh;
+        background: #101014;
+        color: #fafafa;
+        padding: 32px;
+        font-family: -apple-system, "SF Pro", "SF Pro Display", BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    }
+
+    .desktop-product-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .desktop-back-btn {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: none;
+        border: none;
+        color: #a0a3a7;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 24px;
+        padding: 4px 0;
+    }
+
+    .desktop-back-btn:hover {
+        color: #fafafa;
+    }
+
+    .desktop-product-grid {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: 48px;
+        align-items: start;
+    }
+
+    .desktop-product-left {
+        min-width: 0;
+    }
+
+    .desktop-product-title {
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin: 0 0 20px;
+        color: #fafafa;
+    }
+
+    .desktop-product-image-box {
+        width: 100%;
+        max-width: 640px;
+        aspect-ratio: 1 / 1;
+        background: #18181c;
+        border: 1px solid #272a2d;
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .desktop-product-description {
+        margin-top: 28px;
+        max-width: 640px;
+    }
+
+    .desktop-product-description-label {
+        font-size: 15px;
+        font-weight: 700;
+        color: #fafafa;
+        margin: 0 0 8px;
+    }
+
+    .desktop-product-description-text {
+        font-size: 15px;
+        color: #a0a3a7;
+        line-height: 1.6;
+        margin: 0;
+        white-space: pre-line;
+    }
+
+    .desktop-product-right {
+        position: sticky;
+        top: 32px;
+    }
+
+    .desktop-purchase-card {
+        background: #18181c;
+        border: 1px solid #272a2d;
+        border-radius: 16px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .desktop-purchase-price {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #85efac;
+        font-weight: 700;
+        font-size: 22px;
+    }
+
+    .desktop-purchase-progress-bar {
+        width: 100%;
+        height: 6px;
+        background: rgba(250, 250, 250, 0.08);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .desktop-purchase-progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #4ade80 0%, #85efac 100%);
+        border-radius: 3px;
+        transition: width 0.3s ease;
+    }
+
+    .desktop-purchase-progress-info {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 6px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #fafafa;
+    }
+
+    .desktop-buy-btn {
+        width: 100%;
+        height: 52px;
+        background: #85efac;
+        border: none;
+        border-radius: 14px;
+        color: #101014;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: opacity 0.2s;
+    }
+
+    .desktop-buy-btn:hover {
+        opacity: 0.9;
+    }
+
+    .desktop-free-btn {
+        width: 100%;
+        height: 52px;
+        background: transparent;
+        border: 1px solid #85efac;
+        border-radius: 14px;
+        color: #fafafa;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: opacity 0.2s, background 0.2s;
+    }
+
+    .desktop-free-btn:hover:not(:disabled) {
+        background: rgba(133, 239, 172, 0.08);
+    }
+
+    .desktop-free-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .desktop-share-btn {
+        width: 100%;
+        height: 44px;
+        background: transparent;
+        border: 1px solid #272a2d;
+        border-radius: 14px;
+        color: #a0a3a7;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: border-color 0.2s, color 0.2s;
+    }
+
+    .desktop-share-btn:hover {
+        border-color: #3a3d41;
+        color: #fafafa;
+    }
+}

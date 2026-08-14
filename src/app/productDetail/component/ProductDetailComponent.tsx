@@ -15,6 +15,7 @@ import { getRaffleById } from '@/services/raffles.service';
 import { getAdProgress, claimAdTicket } from '@/services/ticket.service';
 import AdOfferwallModal from '@/components/AdOfferwall/AdOfferwallModal';
 import { Raffle } from '@/models/raffle.model';
+import './product-detail-desktop.css';
 
 interface ProductDetailComponentProps {
     productId: string;
@@ -139,7 +140,8 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
     }
 
     return (
-        <div style={{ minHeight: '100vh', background: '#000', color: '#fff', display: 'flex', flexDirection: 'column', paddingBottom: '180px', fontFamily: SF_PRO }}>
+        <>
+        <div className="mobile-product-detail" style={{ minHeight: '100vh', background: '#000', color: '#fff', display: 'flex', flexDirection: 'column', paddingBottom: '180px', fontFamily: SF_PRO }}>
             {/* Header con back button */}
             <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, padding: '52px 20px 16px' }}>
                 <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', display: 'flex' }}>
@@ -255,6 +257,111 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                     </button>
                 )}
             </div>
+        </div>
+
+        {/* ================= DESKTOP ================= */}
+        <div className="desktop-product-detail">
+            <div className="desktop-product-container">
+                <button onClick={() => router.back()} className="desktop-back-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    Volver
+                </button>
+
+                <div className="desktop-product-grid">
+                    {/* Columna izquierda: título + imagen + descripción */}
+                    <div className="desktop-product-left">
+                        <h1 className="desktop-product-title">{raffle.productName}</h1>
+
+                        <div className="desktop-product-image-box">
+                            {images.length > 0 ? (
+                                <Swiper slidesPerView={1} style={{ width: '100%', height: '100%' }}>
+                                    {images.map((image, index) => (
+                                        <SwiperSlide key={index}>
+                                            <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+                                                <Image src={image} alt={raffle.productName} fill style={{ objectFit: 'contain' }} priority={index === 0} unoptimized />
+                                            </div>
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            ) : (
+                                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <p style={{ color: '#666' }}>Sin imagen</p>
+                                </div>
+                            )}
+                        </div>
+
+                        {raffle.description && (
+                            <div className="desktop-product-description">
+                                <p className="desktop-product-description-label">Descripción</p>
+                                <p className="desktop-product-description-text">{raffle.description}</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Columna derecha: card de compra */}
+                    <div className="desktop-product-right">
+                        <div className="desktop-purchase-card">
+                            <div className="desktop-purchase-price">
+                                <Image src={ticketIcon} alt="Ticket" width={20} height={16} />
+                                <span>C$ {raffle.ticketPriceCoins}</span>
+                            </div>
+
+                            {badge && (
+                                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: badge.color, borderRadius: '20px', padding: '4px 10px', width: 'fit-content' }}>
+                                    <Image src={fireIcon} alt="" width={11} height={11} />
+                                    <span style={{ fontSize: '11px', fontWeight: 700, color: '#fff' }}>{badge.text}</span>
+                                </div>
+                            )}
+
+                            <div>
+                                <div className="desktop-purchase-progress-bar">
+                                    <div className="desktop-purchase-progress-fill" style={{ width: `${progress}%` }} />
+                                </div>
+                                <div className="desktop-purchase-progress-info">
+                                    <span>{available} disponibles</span>
+                                    <span>{progress}%</span>
+                                </div>
+                            </div>
+
+                            {isOpen ? (
+                                <>
+                                    <button
+                                        className="desktop-buy-btn"
+                                        onClick={() => { if (!session) { router.push('/login'); return; } setIsPurchaseModalOpen(true); }}
+                                    >
+                                        <Image src={ticketIcon} alt="" width={18} height={14} style={{ filter: 'brightness(0)' }} />
+                                        Comprar un ticket
+                                    </button>
+                                    <button
+                                        className="desktop-free-btn"
+                                        onClick={handleFreeTicket}
+                                        disabled={claiming}
+                                    >
+                                        {claiming ? 'Reclamando...' : 'Obtener un ticket gratis'}
+                                    </button>
+                                    {claimMessage && (
+                                        <p style={{ textAlign: 'center', fontSize: '13px', color: claimMessage.includes('¡') ? '#85efac' : '#ff6b6b', margin: 0 }}>
+                                            {claimMessage}
+                                        </p>
+                                    )}
+                                </>
+                            ) : (
+                                <button className="desktop-buy-btn" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                                    {raffle.status === 'SOLD_OUT' ? 'Sorteo cerrado' : 'Sorteo finalizado'}
+                                </button>
+                            )}
+
+                            <button className="desktop-share-btn">
+                                <Image src={shareIcon} alt="" width={16} height={16} />
+                                Compartir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
             {raffle && (
                 <PurchaseModal
@@ -280,7 +387,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                     onClose={handleCloseAdWall}
                 />
             )}
-        </div>
+        </>
     );
 };
 
