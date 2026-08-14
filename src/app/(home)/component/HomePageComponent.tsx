@@ -266,7 +266,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                 </div>
             ))}
 
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', marginTop: '16px', gap: '2px' }}>
+            <div className="home-title-banner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', marginTop: '16px', gap: '2px' }}>
                 <img src="/fire.gif" alt="" style={{ width: '44px', height: '44px', objectFit: 'contain', marginTop: '8px' }} />
                 <img src={titleImage} alt="Rey del ticket" style={{ height: '60px', width: 'auto', objectFit: 'contain' }} />
                 <img src="/fire.gif" alt="" style={{ width: '44px', height: '44px', objectFit: 'contain', marginTop: '8px' }} />
