@@ -8,54 +8,30 @@ import bullcruxLogo from '@/images/icons/bullcrux-logo.svg';
 import NotificationComponent from '@/app/(home)/component/NotificationComponent';
 import './desktop-layout.css';
 
+// Outline (inactivo)
+import navHome from '@/images/icons/nav-home.svg';
+import navFavoritos from '@/images/icons/nav-favoritos.svg';
+import navCartera from '@/images/icons/nav-cartera.svg';
+import navPerfil from '@/images/icons/nav-perfil.svg';
+
+// Fill (activo)
+import navHomeFill from '@/images/icons/nav-home-fill.svg';
+import navFavoritosFill from '@/images/icons/nav-favoritos-fill.svg';
+import navCarteraFill from '@/images/icons/nav-cartera-fill.svg';
+import navPerfilFill from '@/images/icons/nav-perfil-fill.svg';
+
 interface DesktopLayoutProps {
     children: React.ReactNode;
 }
 
 const SF_PRO = '-apple-system, "SF Pro", "SF Pro Display", BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif';
 
-/* ---------- Iconos de línea (sin dependencias externas) ---------- */
-const IconHome = () => (
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
-        <path d="M3 11L12 3L21 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-);
-
-const IconHeart = () => (
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
-        <path d="M12 20.5s-7.5-4.6-10-9.3C.5 7.8 2.3 4.5 5.6 4c2-.3 3.9.6 5 2.2a5.7 5.7 0 0 1 5-2.2c3.3.5 5.1 3.8 3.6 7.2-2.5 4.7-10 9.3-10 9.3z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-);
-
-const IconWallet = () => (
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
-        <rect x="2" y="6" width="20" height="14" rx="2.5" stroke="currentColor" strokeWidth="2" />
-        <path d="M2 10h20" stroke="currentColor" strokeWidth="2" />
-        <path d="M16 15h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-);
-
-const IconUser = () => (
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2" />
-        <path d="M4 20.5c1.6-3.6 4.7-5.5 8-5.5s6.4 1.9 8 5.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-);
-
-const IconSettings = () => (
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="3.2" stroke="currentColor" strokeWidth="2" />
-        <path d="M19.4 13.5a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1h-.2a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.6v-.2a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6h.1a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.6 1h.2a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-);
-
-const ICONS: Record<string, () => JSX.Element> = {
-    home: IconHome,
-    favoritos: IconHeart,
-    cartera: IconWallet,
-    perfil: IconUser,
-    admin: IconSettings,
+/* ---------- Mapa de íconos outline/fill ---------- */
+const NAV_ICONS: Record<string, { outline: any; fill: any }> = {
+    home:      { outline: navHome,      fill: navHomeFill },
+    favoritos: { outline: navFavoritos, fill: navFavoritosFill },
+    cartera:   { outline: navCartera,   fill: navCarteraFill },
+    perfil:    { outline: navPerfil,    fill: navPerfilFill },
 };
 
 const DesktopLayout = ({ children }: DesktopLayoutProps) => {
@@ -103,14 +79,30 @@ const DesktopLayout = ({ children }: DesktopLayoutProps) => {
 
                 <nav className="desktop-sidebar-nav">
                     {menuItems.map(item => {
-                        const Icon = ICONS[item.id];
+                        const isActive = pathname === item.path;
+                        const icons = NAV_ICONS[item.id];
                         return (
                             <button
                                 key={item.id}
-                                className={`desktop-nav-item ${pathname === item.path ? 'active' : ''}`}
+                                className={`desktop-nav-item ${isActive ? 'active' : ''}`}
                                 onClick={() => router.push(item.path)}
                             >
-                                <span className="desktop-nav-icon"><Icon /></span>
+                                <span className="desktop-nav-icon">
+                                    {icons ? (
+                                        <Image
+                                            src={isActive ? icons.fill : icons.outline}
+                                            alt={item.label}
+                                            width={20}
+                                            height={20}
+                                        />
+                                    ) : (
+                                        /* Admin: ícono inline hasta que suba el SVG */
+                                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
+                                            <circle cx="12" cy="12" r="3.2" stroke="currentColor" strokeWidth="2" />
+                                            <path d="M19.4 13.5a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1h-.2a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.6v-.2a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6h.1a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.6 1h.2a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    )}
+                                </span>
                                 <span className="desktop-nav-label">{item.label}</span>
                             </button>
                         );
