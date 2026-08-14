@@ -12,7 +12,7 @@
 @media (min-width: 1024px) {
     .raffle-card {
         height: auto;
-        aspect-ratio: 4 / 5;
+        aspect-ratio: auto;
     }
 
     /* Variante para la fila horizontal de destacadas/trending: panorámica */
@@ -20,9 +20,17 @@
         aspect-ratio: 3 / 2;
     }
 
-    .raffle-card-image-container {
+    /* Imagen: contenedor cuadrado arriba */
+    .raffle-card:not(.raffle-card-trending) .raffle-card-image-container {
         min-height: 0;
-        flex: 1;
+        flex: none;
+        aspect-ratio: 1 / 1;
+    }
+
+    /* Info: bloque abajo con más aire */
+    .raffle-card:not(.raffle-card-trending) .raffle-card-content {
+        padding: 16px 14px 18px;
+        gap: 10px;
     }
 }
 
