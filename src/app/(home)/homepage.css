@@ -98,10 +98,26 @@
         max-width: fit-content;
     }
 
-    /* Grilla densa tipo pump.fun: varias columnas chicas, no 2 anchas */
+    /* Grilla de cards verticales: imagen cuadrada + info abajo */
     .raffle-cards-grid {
-        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)) !important;
-        gap: 16px;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+        gap: 18px;
+    }
+
+    /* Hero (Rey del Ticket + 3 cards) contenido y centrado */
+    .home-title-banner {
+        max-width: 920px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Categorías pegada al hero, menos aire */
+    .category-filter-container {
+        margin-top: 8px !important;
+    }
+
+    .raffle-cards-container {
+        margin-top: 12px !important;
     }
 
     /* Card destacada única (mobile) se oculta en desktop, reemplazada por hero-row */
@@ -119,6 +135,7 @@
         display: grid !important;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 12px;
-        width: 50%;
+        width: 920px;
+        max-width: 100%;
     }
 }
