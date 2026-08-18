@@ -101,7 +101,15 @@
     /* Grilla de cards verticales: imagen cuadrada + info abajo */
     .raffle-cards-grid {
         grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+        grid-auto-rows: 1fr;
         gap: 15px;
+    }
+
+    /* Cada celda del grid estira su card al alto de la fila */
+    .raffle-cards-grid > div {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
     }
 
     /* Hero (Rey del Ticket + 3 cards) contenido y centrado */
