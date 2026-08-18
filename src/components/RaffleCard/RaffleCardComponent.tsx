@@ -152,8 +152,8 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
                 </div>
 
                 {showTicketsRemaining && (
-                    <p style={{ fontSize: '11px', color: '#FFA500', margin: '4px 0 0', fontWeight: 600 }}>
-                        Faltan {ticketsRemaining} tickets para activar el sorteo
+                    <p style={{ fontSize: '11px', color: '#FFA500', margin: '4px 0 0', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        Faltan {ticketsRemaining} para activar
                     </p>
                 )}
 
