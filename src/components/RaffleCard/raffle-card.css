@@ -20,6 +20,12 @@
         aspect-ratio: 3 / 2;
     }
 
+    /* Todas las cards de una fila miden lo mismo */
+    .raffle-card:not(.raffle-card-trending) {
+        height: 100%;
+        flex: 1;
+    }
+
     /* Imagen: contenedor cuadrado arriba */
     .raffle-card:not(.raffle-card-trending) .raffle-card-image-container {
         min-height: 0;
