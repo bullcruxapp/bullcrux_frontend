@@ -2,15 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import "./notification.css";
+import { getAllRaffles } from '@/services/raffles.service';
 
 const FAKE_USERS = [
     '@carlos_mza', '@sofi.ok', '@juanpe99', '@maru_wins', '@tomi_arg',
     '@lucas.bet', '@vale_lucky', '@nacho_cr', '@caro_sort', '@fer_play'
 ];
 
-const FAKE_PRODUCTS = [
-    'iPhone 15 Pro', 'MacBook Pro', 'Samsung S28', 'PS5', 'AirPods Pro',
-    'iPad Air', 'Google TV', 'Kryboard K500'
+// Fallback por si todavía no cargaron los sorteos reales (o no hay ninguno activo)
+const FALLBACK_PRODUCTS = [
+    'iPhone 15 Pro', 'MacBook Pro', 'AirPods Pro', 'iPad Air',
 ];
 
 const FAKE_AVATARS = [
@@ -34,16 +35,33 @@ interface Notification {
     avatar: string;
 }
 
-const generateNotification = (): Notification => ({
+const generateNotification = (products: string[]): Notification => ({
     user: getRandomItem(FAKE_USERS),
     tickets: getRandomInt(1, 10),
-    product: getRandomItem(FAKE_PRODUCTS),
+    product: getRandomItem(products.length > 0 ? products : FALLBACK_PRODUCTS),
     avatar: getRandomItem(FAKE_AVATARS),
 });
 
 const NotificationComponent = () => {
-    const [current, setCurrent] = useState<Notification>(generateNotification());
+    const [products, setProducts] = useState<string[]>(FALLBACK_PRODUCTS);
+    const [current, setCurrent] = useState<Notification>(generateNotification(FALLBACK_PRODUCTS));
     const [buzzing, setBuzzing] = useState(false);
+
+    // Trae los sorteos activos reales, para no mostrar productos que no existen
+    useEffect(() => {
+        let cancelled = false;
+        getAllRaffles()
+            .then((raffles: any[]) => {
+                if (cancelled) return;
+                const names = (raffles || [])
+                    .filter(r => r.status === 'OPEN' || r.status === 'SOLD_OUT')
+                    .map(r => r.productName)
+                    .filter(Boolean);
+                if (names.length > 0) setProducts(names);
+            })
+            .catch(() => { /* si falla, seguimos con el fallback */ });
+        return () => { cancelled = true; };
+    }, []);
 
     useEffect(() => {
         let timeout: NodeJS.Timeout;
@@ -51,7 +69,7 @@ const NotificationComponent = () => {
         const schedule = () => {
             const delay = getRandomInt(2500, 6000);
             timeout = setTimeout(() => {
-                setCurrent(generateNotification());
+                setCurrent(generateNotification(products));
                 setBuzzing(true);
                 setTimeout(() => setBuzzing(false), 500);
                 schedule();
@@ -60,7 +78,7 @@ const NotificationComponent = () => {
 
         schedule();
         return () => clearTimeout(timeout);
-    }, []);
+    }, [products]);
 
     return (
         <div className={`notification-container ${buzzing ? 'notification-buzz' : ''}`}>
