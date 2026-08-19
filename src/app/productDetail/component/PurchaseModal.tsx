@@ -67,7 +67,7 @@ const PurchaseModal = ({ isOpen, onClose, product, productId, token }: PurchaseM
 
                 <div className="purchase-modal-card">
                     <div className="purchase-modal-card-image">
-                        <Image src={product.image} alt={product.title} fill style={{ objectFit: 'cover' }} unoptimized />
+                        <Image src={product.image} alt={product.title} fill style={{ objectFit: 'cover' }} />
                     </div>
                     <div className="purchase-modal-card-content">
                         <h3 className="purchase-modal-product-title">{product.title}</h3>
