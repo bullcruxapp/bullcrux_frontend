@@ -248,7 +248,9 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                 <div className="bullcrux-icon">
                     <Image src={bullcruxIcon} alt="Bullcrux icon" width={24} />
                 </div>
-                <NotificationComponent />
+                <NotificationComponent
+                    productNames={raffles.filter(r => r.status === 'OPEN' || r.status === 'SOLD_OUT').map(r => r.productName).filter(Boolean)}
+                />
                 <div className="search-input">
                     <Image src={searchIcon} alt="Search icon" width={18} height={18} />
                 </div>

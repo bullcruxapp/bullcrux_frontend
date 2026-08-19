@@ -42,13 +42,18 @@ const generateNotification = (products: string[]): Notification => ({
     avatar: getRandomItem(FAKE_AVATARS),
 });
 
-const NotificationComponent = () => {
-    const [products, setProducts] = useState<string[]>(FALLBACK_PRODUCTS);
-    const [current, setCurrent] = useState<Notification>(generateNotification(FALLBACK_PRODUCTS));
+interface NotificationComponentProps {
+    productNames?: string[];
+}
+
+const NotificationComponent = ({ productNames: providedProductNames }: NotificationComponentProps) => {
+    const [products, setProducts] = useState<string[]>(providedProductNames && providedProductNames.length > 0 ? providedProductNames : FALLBACK_PRODUCTS);
+    const [current, setCurrent] = useState<Notification>(generateNotification(providedProductNames && providedProductNames.length > 0 ? providedProductNames : FALLBACK_PRODUCTS));
     const [buzzing, setBuzzing] = useState(false);
 
-    // Trae los sorteos activos reales, para no mostrar productos que no existen
+    // Si ya nos pasaron los nombres reales (la Home ya los tenía), no volvemos a pedirlos.
     useEffect(() => {
+        if (providedProductNames && providedProductNames.length > 0) return;
         let cancelled = false;
         getAllRaffles()
             .then((raffles: any[]) => {
@@ -61,7 +66,7 @@ const NotificationComponent = () => {
             })
             .catch(() => { /* si falla, seguimos con el fallback */ });
         return () => { cancelled = true; };
-    }, []);
+    }, [providedProductNames]);
 
     useEffect(() => {
         let timeout: NodeJS.Timeout;
