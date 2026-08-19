@@ -121,17 +121,17 @@ const DesktopLayout = ({ children }: DesktopLayoutProps) => {
                                 >
                                     ✕
                                 </button>
-                                <p className="desktop-referral-title">Registrate. Participá. Ganá.</p>
-                                <p className="desktop-referral-desc">Creá tu cuenta y empezá a participar por increíbles premios.</p>
+                                <p className="desktop-referral-title">Entrá a BullCrux</p>
+                                <p className="desktop-referral-desc">Registrate gratis y empezá a participar por increíbles premios.</p>
                                 <span className="desktop-referral-btn">Registrate ahora</span>
                             </div>
                         )}
 
                         <button
                             className="desktop-recharge-btn"
-                            onClick={() => router.push('/cartera')}
+                            onClick={() => router.push('/vender')}
                         >
-                            Comprá $BULL
+                            Publicá un producto
                         </button>
                     </div>
                 )}
@@ -139,10 +139,10 @@ const DesktopLayout = ({ children }: DesktopLayoutProps) => {
                 {session && (
                     <button
                         className="desktop-recharge-btn"
-                        onClick={() => router.push('/cartera')}
+                        onClick={() => router.push('/vender')}
                         style={{ marginTop: 'auto' }}
                     >
-                        Comprá $BULL
+                        Publicá un producto
                     </button>
                 )}
             </aside>
