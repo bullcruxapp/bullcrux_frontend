@@ -74,7 +74,7 @@ const PurchaseSuccessComponent = ({ productId, quantity }: PurchaseSuccessCompon
                 </h2>
                 <div className="purchase-success-product-price">
                     <Image src={ticketIcon} alt="Ticket" width={12} height={10} />
-                    <span>{quantity} participación{quantity > 1 ? 'es' : ''} — C$ {(raffle?.ticketPriceCoins || 0) * quantity}</span>
+                    <span>{quantity} participación{quantity > 1 ? 'es' : ''} — B$ {(raffle?.ticketPriceCoins || 0) * quantity}</span>
                 </div>
             </div>
 
