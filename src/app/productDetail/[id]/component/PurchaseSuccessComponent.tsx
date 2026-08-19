@@ -54,7 +54,6 @@ const PurchaseSuccessComponent = ({ productId, quantity }: PurchaseSuccessCompon
                             alt={raffle?.productName || 'Producto'}
                             fill
                             style={{ objectFit: 'cover' }}
-                            unoptimized
                         />
                     ) : (
                         <div style={{ background: '#111', width: '100%', height: '100%' }} />
