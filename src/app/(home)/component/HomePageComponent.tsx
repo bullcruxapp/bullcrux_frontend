@@ -278,7 +278,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                         image={getImageUrl(featuredRaffle)}
                         title={featuredRaffle.title}
                         progress={getProgress(featuredRaffle)}
-                        price={`C$ ${featuredRaffle.ticketPriceCoins}`}
+                        price={`B$ ${featuredRaffle.ticketPriceCoins}`}
                         onFreeTicketClick={() => handleFreeTicket(featuredRaffle.id)}
                         productId={featuredRaffle.id}
                     />
@@ -295,7 +295,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                                 image={getImageUrl(raffle)}
                                 title={raffle.title}
                                 progress={getProgress(raffle)}
-                                price={`C$ ${raffle.ticketPriceCoins}`}
+                                price={`B$ ${raffle.ticketPriceCoins}`}
                                 onFreeTicketClick={() => handleFreeTicket(raffle.id)}
                                 productId={raffle.id}
                             />
@@ -323,7 +323,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                                 available={`${raffle.totalTickets - raffle.ticketsSold} disponibles`}
                                 progressText={`${raffle.ticketsSold}/${raffle.totalTickets}`}
                                 title={raffle.title}
-                                price={`C$ ${raffle.ticketPriceCoins}`}
+                                price={`B$ ${raffle.ticketPriceCoins}`}
                                 onFreeTicketClick={() => handleFreeTicket(raffle.id)}
                                 productId={raffle.id}
                                 winner={(raffle as any).winner}
