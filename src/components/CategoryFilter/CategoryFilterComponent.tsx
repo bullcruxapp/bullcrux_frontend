@@ -5,7 +5,7 @@ import Image from 'next/image';
 import filterIcon from '@/images/icons/filter-icon.svg';
 import './category-filter.css';
 
-export type Category = 'Tecnología' | 'Gaming' | 'Hogar' | 'Moda' | 'Finalizados';
+export type Category = 'Activos' | 'Finalizados';
 
 interface CategoryFilterComponentProps {
     selectedCategory?: Category;
@@ -16,8 +16,8 @@ interface CategoryFilterComponentProps {
 const CategoryFilterComponent = (props: CategoryFilterComponentProps) => {
     const { selectedCategory, onCategoryChange, onFilterClick } = props;
     
-    const categories: Category[] = ['Tecnología', 'Gaming', 'Hogar', 'Moda', 'Finalizados'];
-    const [currentCategory, setCurrentCategory] = useState<Category | undefined>(selectedCategory || 'Tecnología');
+    const categories: Category[] = ['Activos', 'Finalizados'];
+    const [currentCategory, setCurrentCategory] = useState<Category | undefined>(selectedCategory || 'Activos');
 
     const handleCategoryClick = (category: Category) => {
         setCurrentCategory(category);
