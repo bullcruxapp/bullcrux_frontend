@@ -39,6 +39,7 @@ const DesktopLayout = ({ children }: DesktopLayoutProps) => {
     const router = useRouter();
     const pathname = usePathname();
     const [balance, setBalance] = useState<number>(0);
+    const [showReferralCard, setShowReferralCard] = useState(true);
 
     useEffect(() => {
         const fetchBalance = async () => {
@@ -109,11 +110,26 @@ const DesktopLayout = ({ children }: DesktopLayoutProps) => {
                     })}
                 </nav>
 
+                {!session && showReferralCard && (
+                    <div className="desktop-referral-card" onClick={() => router.push('/login')}>
+                        <button
+                            className="desktop-referral-close"
+                            onClick={(e) => { e.stopPropagation(); setShowReferralCard(false); }}
+                            aria-label="Cerrar"
+                        >
+                            ✕
+                        </button>
+                        <p className="desktop-referral-title">Registrate y Ganá Ahora</p>
+                        <p className="desktop-referral-desc">Usá tu código de referido y ganá $BULL compartiendo</p>
+                        <span className="desktop-referral-btn">Registrate ahora</span>
+                    </div>
+                )}
+
                 <button
                     className="desktop-recharge-btn"
                     onClick={() => router.push('/cartera')}
                 >
-                    + Comprar $COINS
+                    + Comprá $BULL
                 </button>
             </aside>
 
@@ -137,7 +153,7 @@ const DesktopLayout = ({ children }: DesktopLayoutProps) => {
                             <>
                                 <div className="desktop-balance">
                                     <span className="desktop-balance-label">Balance</span>
-                                    <span className="desktop-balance-value">C$ {balance.toLocaleString()}</span>
+                                    <span className="desktop-balance-value">B$ {balance.toLocaleString()}</span>
                                 </div>
                                 <button
                                     className="desktop-avatar"
