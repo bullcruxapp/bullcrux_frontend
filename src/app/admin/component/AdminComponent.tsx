@@ -233,10 +233,10 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                                             {countdownActive && <span style={{ fontSize: '11px', color: '#FF6B35', border: '1px solid #FF6B35', borderRadius: '4px', padding: '1px 6px' }}>⏱️ COUNTDOWN</span>}
                                             {raffle.winnerId && <span style={{ fontSize: '11px', color: '#FFD700', border: '1px solid #FFD700', borderRadius: '4px', padding: '1px 6px' }}>🏆 SORTEADO</span>}
                                         </div>
-                                        <p style={{ margin: '0 0 4px', fontSize: '13px', color: '#aaa' }}>{raffle.ticketsSold}/{raffle.totalTickets} tickets · C$ {raffle.ticketPriceCoins}</p>
+                                        <p style={{ margin: '0 0 4px', fontSize: '13px', color: '#aaa' }}>{raffle.ticketsSold}/{raffle.totalTickets} tickets · B$ {raffle.ticketPriceCoins}</p>
                                         {goal > 0 && (
                                             <p style={{ margin: '0 0 4px', fontSize: '12px', color: raised >= goal ? '#ABDA53' : '#888' }}>
-                                                Recaudado: C$ {raised} / C$ {goal} {raised >= goal ? '✓' : ''}
+                                                Recaudado: B$ {raised} / B$ {goal} {raised >= goal ? '✓' : ''}
                                             </p>
                                         )}
                                         <p style={{ margin: 0, fontSize: '12px', color: raffle.status === 'OPEN' ? '#ABDA53' : '#888' }}>{raffle.status}</p>
