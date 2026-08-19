@@ -142,7 +142,7 @@ const FavoritosComponent = ({ tickets, favorites: initialFavorites = [], notLogg
                                         available={`${fav.raffle.totalTickets - fav.raffle.ticketsSold} disponibles`}
                                         progressText={`${fav.raffle.ticketsSold}/${fav.raffle.totalTickets}`}
                                         title={fav.raffle.title || fav.raffle.productName}
-                                        price={`C$ ${fav.raffle.ticketPriceCoins}`}
+                                        price={`B$ ${fav.raffle.ticketPriceCoins}`}
                                         productId={fav.raffle.id}
                                         winner={fav.raffle.winner}
                                     />
@@ -167,7 +167,7 @@ const FavoritosComponent = ({ tickets, favorites: initialFavorites = [], notLogg
                                         available={`${ticket.raffle.totalTickets - ticket.raffle.ticketsSold} disponibles`}
                                         progressText={`${ticket.raffle.ticketsSold}/${ticket.raffle.totalTickets}`}
                                         title={ticket.raffle.title || ticket.raffle.productName}
-                                        price={`C$ ${ticket.raffle.ticketPriceCoins}`}
+                                        price={`B$ ${ticket.raffle.ticketPriceCoins}`}
                                         productId={ticket.raffle.id}
                                         isMyRafflesView={true}
                                     />
