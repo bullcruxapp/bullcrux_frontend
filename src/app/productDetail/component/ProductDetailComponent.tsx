@@ -162,7 +162,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                         {images.map((image, index) => (
                             <SwiperSlide key={index}>
                                 <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-                                    <Image src={image} alt={raffle.productName} fill style={{ objectFit: 'cover' }} priority={index === 0} unoptimized />
+                                    <Image src={image} alt={raffle.productName} fill style={{ objectFit: 'cover' }} priority={index === 0} />
                                 </div>
                             </SwiperSlide>
                         ))}
@@ -282,7 +282,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                                     {images.map((image, index) => (
                                         <SwiperSlide key={index}>
                                             <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-                                                <Image src={image} alt={raffle.productName} fill style={{ objectFit: 'contain' }} priority={index === 0} unoptimized />
+                                                <Image src={image} alt={raffle.productName} fill style={{ objectFit: 'contain' }} priority={index === 0} />
                                             </div>
                                         </SwiperSlide>
                                     ))}
