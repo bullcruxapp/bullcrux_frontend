@@ -151,11 +151,17 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
                     </div>
                 </div>
 
-                {showTicketsRemaining && (
-                    <p style={{ fontSize: '11px', color: '#FFA500', margin: '4px 0 0', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Faltan {ticketsRemaining} para activar
-                    </p>
-                )}
+                <p style={{
+                    fontSize: '11px',
+                    color: showTicketsRemaining ? '#FFA500' : 'transparent',
+                    margin: '4px 0 0',
+                    fontWeight: 600,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                }}>
+                    {showTicketsRemaining ? `Faltan ${ticketsRemaining} para activar` : '·'}
+                </p>
 
                 <h3 className="raffle-card-title">{title}</h3>
                 {isMyRafflesView ? (
