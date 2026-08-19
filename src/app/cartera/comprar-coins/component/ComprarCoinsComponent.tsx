@@ -70,7 +70,7 @@ const ComprarCoinsComponent = (props : ComprarCoinsComponentProps) => {
                         <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </button>
-                <h1 className="comprar-coins-title">Comprar $COINs</h1>
+                <h1 className="comprar-coins-title">Comprar $BULL</h1>
                 <div className="comprar-coins-spacer" />
             </div>
 
