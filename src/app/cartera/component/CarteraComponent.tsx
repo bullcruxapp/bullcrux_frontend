@@ -85,12 +85,12 @@ const CarteraComponent = (props: CarteraComponentProps) => {
             <div className="saldo-card">
                 <div className="saldo-card-inner">
                     <div className="saldo-row">
-                        <span className="saldo-amount">C$ {balance.toLocaleString('es-ES')} </span>
+                        <span className="saldo-amount">B$ {balance.toLocaleString('es-ES')} </span>
                     </div>
                     <span className="saldo-label">Saldo actual</span>
                     <div className="saldo-separator" />
                     <button type="button" className="saldo-btn-comprar" onClick={() => router.push('/cartera/comprar-coins')}>
-                        Comprar $COINs
+                        Comprar $BULL
                     </button>
                 </div>
             </div>
@@ -107,7 +107,7 @@ const CarteraComponent = (props: CarteraComponentProps) => {
                             </div>
                             <div className="movimiento-info">
                                 <span className="movimiento-tipo">{tx.type}</span>
-                                <span className="movimiento-desc" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', maxWidth: '100%' }}>{tx.description?.replace(/participación\(es\)/g, '$COINS')}</span>
+                                <span className="movimiento-desc" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', maxWidth: '100%' }}>{tx.description?.replace(/participación\(es\)/g, '$BULL')}</span>
                             </div>
                             <div className="movimiento-monto-fecha">
                                 <span className={`movimiento-monto ${tx.type === TransactionType.DEPOSIT || tx.type === TransactionType.WIN ? 'recarga' : 'gasto'}`}>{(tx.type === TransactionType.DEPOSIT || tx.type === TransactionType.WIN) ? '+' : '-'} ${tx.amount.toLocaleString('es-ES')}</span>
