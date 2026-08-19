@@ -21,7 +21,7 @@ const PrivacidadComponent = () => {
                 <p className="privacidad-date">Última actualización: Junio 2026</p>
 
                 <h2>1. Introducción</h2>
-                <p>BullCrux es una plataforma que permite a los usuarios adquirir unidades digitales de uso interno denominadas "$COINS", las cuales pueden utilizarse exclusivamente dentro de la plataforma para obtener participaciones en los sorteos disponibles. Los $COINS no constituyen moneda de curso legal, instrumento financiero, valor negociable, criptoactivo ni medio de inversión.</p>
+                <p>BullCrux es una plataforma que permite a los usuarios adquirir unidades digitales de uso interno denominadas "$BULL", las cuales pueden utilizarse exclusivamente dentro de la plataforma para obtener participaciones en los sorteos disponibles. Los $BULL no constituyen moneda de curso legal, instrumento financiero, valor negociable, criptoactivo ni medio de inversión.</p>
                 <p>BullCrux es una plataforma digital operada por su titular. Los datos de contacto se indican al final de esta política.</p>
 
                 <h2>2. Base legal del tratamiento</h2>
@@ -30,11 +30,11 @@ const PrivacidadComponent = () => {
                 <h2>3. Datos que recopilamos</h2>
                 <p>Al registrarte o usar BullCrux, recopilamos los siguientes datos:</p>
                 <p><strong>Datos de cuenta:</strong> nombre, dirección de correo electrónico e imagen de perfil. Los datos obtenidos mediante el inicio de sesión con Google serán únicamente aquellos autorizados por el usuario durante el proceso de autenticación.</p>
-                <p><strong>Historial de transacciones:</strong> compras de $COINS y participaciones en sorteos.</p>
+                <p><strong>Historial de transacciones:</strong> compras de $BULL y participaciones en sorteos.</p>
                 <p><strong>Información técnica:</strong> también podremos recopilar información técnica del dispositivo, dirección IP, navegador, identificadores de sesión y registros de actividad necesarios para el funcionamiento y la seguridad de la plataforma.</p>
 
                 <h2>4. Cómo usamos tus datos</h2>
-                <p>Los datos recopilados se utilizan para crear y gestionar tu cuenta, procesar la adquisición de $COINS, registrar tus participaciones, contactarte en caso de ser ganador y mejorar la experiencia de uso de la plataforma.</p>
+                <p>Los datos recopilados se utilizan para crear y gestionar tu cuenta, procesar la adquisición de $BULL, registrar tus participaciones, contactarte en caso de ser ganador y mejorar la experiencia de uso de la plataforma.</p>
                 <p><strong>Prevención de fraude:</strong> BullCrux podrá analizar información de uso, dispositivos, direcciones IP y patrones de comportamiento con el fin de detectar fraudes, cuentas duplicadas, automatizaciones o cualquier actividad que pueda afectar la integridad de la plataforma.</p>
 
                 <h2>5. Compartir datos con terceros</h2>
