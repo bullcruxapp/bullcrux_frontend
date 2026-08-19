@@ -51,7 +51,7 @@ const PurchaseModal = ({ isOpen, onClose, product, productId, token }: PurchaseM
     };
 
     const total = product.priceValue * quantity;
-    const totalFormatted = `C$ ${total.toLocaleString('es-CR')}`;
+    const totalFormatted = `B$ ${total.toLocaleString('es-CR')}`;
 
     return (
         <div className="purchase-modal-overlay" onClick={onClose}>

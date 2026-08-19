@@ -196,7 +196,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#94FF31', fontWeight: 700, fontSize: '15px', fontFamily: SF_PRO }}>
                         <Image src={ticketIcon} alt="Ticket" width={18} height={14} />
-                        <span>C$ {raffle.ticketPriceCoins}</span>
+                        <span>B$ {raffle.ticketPriceCoins}</span>
                     </div>
                     {badge && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: badge.color, borderRadius: '20px', padding: '4px 10px' }}>
@@ -307,7 +307,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                         <div className="desktop-purchase-card">
                             <div className="desktop-purchase-price">
                                 <Image src={ticketIcon} alt="Ticket" width={20} height={16} />
-                                <span>C$ {raffle.ticketPriceCoins}</span>
+                                <span>B$ {raffle.ticketPriceCoins}</span>
                             </div>
 
                             {badge && (
@@ -372,7 +372,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                     product={{
                         image: images[0] || '',
                         title: raffle.productName,
-                        price: `C$ ${raffle.ticketPriceCoins}`,
+                        price: `B$ ${raffle.ticketPriceCoins}`,
                         priceValue: raffle.ticketPriceCoins,
                     }}
                     productId={raffle.id}
