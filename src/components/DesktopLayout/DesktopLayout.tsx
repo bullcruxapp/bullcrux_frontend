@@ -110,27 +110,41 @@ const DesktopLayout = ({ children }: DesktopLayoutProps) => {
                     })}
                 </nav>
 
-                {!session && showReferralCard && (
-                    <div className="desktop-referral-card" onClick={() => router.push('/login')}>
+                {!session && (
+                    <div className="desktop-sidebar-bottom">
+                        {showReferralCard && (
+                            <div className="desktop-referral-card" onClick={() => router.push('/login')}>
+                                <button
+                                    className="desktop-referral-close"
+                                    onClick={(e) => { e.stopPropagation(); setShowReferralCard(false); }}
+                                    aria-label="Cerrar"
+                                >
+                                    ✕
+                                </button>
+                                <p className="desktop-referral-title">Entrá a BullCrux</p>
+                                <p className="desktop-referral-desc">Registrate gratis y empezá a participar por increíbles premios.</p>
+                                <span className="desktop-referral-btn">Registrate ahora</span>
+                            </div>
+                        )}
+
                         <button
-                            className="desktop-referral-close"
-                            onClick={(e) => { e.stopPropagation(); setShowReferralCard(false); }}
-                            aria-label="Cerrar"
+                            className="desktop-recharge-btn"
+                            onClick={() => router.push('/cartera')}
                         >
-                            ✕
+                            Comprá $BULL
                         </button>
-                        <p className="desktop-referral-title">Registrate y Ganá Ahora</p>
-                        <p className="desktop-referral-desc">Usá tu código de referido y ganá $BULL compartiendo</p>
-                        <span className="desktop-referral-btn">Registrate ahora</span>
                     </div>
                 )}
 
-                <button
-                    className="desktop-recharge-btn"
-                    onClick={() => router.push('/cartera')}
-                >
-                    + Comprá $BULL
-                </button>
+                {session && (
+                    <button
+                        className="desktop-recharge-btn"
+                        onClick={() => router.push('/cartera')}
+                        style={{ marginTop: 'auto' }}
+                    >
+                        Comprá $BULL
+                    </button>
+                )}
             </aside>
 
             {/* Main area */}
