@@ -86,14 +86,24 @@
 
     .desktop-referral-card {
         position: relative;
-        background: linear-gradient(160deg, rgba(16, 16, 20, 0.55), rgba(16, 16, 20, 0.85)),
-                    linear-gradient(135deg, #1a3d24, #0d1f13);
-        border: 1px solid #272a2d;
+        width: 190px;
+        height: 300px;
         border-radius: 14px;
-        padding: 16px 14px 14px;
+        overflow: hidden;
+        border: 1px solid #272a2d;
         margin-top: 16px;
         cursor: pointer;
         transition: opacity 0.2s;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 16px 14px 14px;
+        background-image:
+            linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.35) 55%, rgba(0, 0, 0, 0.05) 100%),
+            url('/referral-bg.jpg');
+        background-color: #18181c;
+        background-size: cover;
+        background-position: center;
     }
 
     .desktop-referral-card:hover {
