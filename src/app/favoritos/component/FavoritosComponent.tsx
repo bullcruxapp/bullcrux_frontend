@@ -90,8 +90,13 @@ const FavoritosComponent = ({ tickets, favorites: initialFavorites = [], notLogg
         return Math.round((raffle.ticketsSold / raffle.totalTickets) * 100);
     };
 
-    const uniqueRaffles = tickets.reduce((acc: Ticket[], ticket) => {
-        if (!acc.find(t => t.raffleId === ticket.raffleId)) acc.push(ticket);
+    const uniqueRaffles = tickets.reduce((acc: (Ticket & { allNumbers: number[] })[], ticket) => {
+        const existing = acc.find(t => t.raffleId === ticket.raffleId);
+        if (existing) {
+            existing.allNumbers.push(ticket.number);
+        } else {
+            acc.push({ ...ticket, allNumbers: [ticket.number] });
+        }
         return acc;
     }, []);
 
@@ -170,6 +175,7 @@ const FavoritosComponent = ({ tickets, favorites: initialFavorites = [], notLogg
                                         price={`B$ ${ticket.raffle.ticketPriceCoins}`}
                                         productId={ticket.raffle.id}
                                         isMyRafflesView={true}
+                                        myTicketNumbers={ticket.allNumbers.sort((a, b) => a - b)}
                                     />
                                 ))}
                             </div>
