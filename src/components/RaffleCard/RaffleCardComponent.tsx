@@ -32,6 +32,7 @@ interface RaffleCardComponentProps {
     productId?: string;
     onClick?: () => void;
     isMyRafflesView?: boolean;
+    myTicketNumbers?: number[];
     winner?: { name: string } | null;
     countdownStartedAt?: string | null;
     ticketsRemaining?: number | null;
@@ -52,7 +53,7 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
     const {
         image, badge, isFavorite = false, onFavoriteClick, progress, available, progressText,
         title, description, price, onFreeTicketClick, productId, onClick,
-        isMyRafflesView = false, winner, countdownStartedAt, ticketsRemaining, variant = 'grid'
+        isMyRafflesView = false, myTicketNumbers, winner, countdownStartedAt, ticketsRemaining, variant = 'grid'
     } = props;
 
     const router = useRouter();
@@ -164,6 +165,22 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
                 </p>
 
                 <h3 className="raffle-card-title">{title}</h3>
+                {isMyRafflesView && myTicketNumbers && myTicketNumbers.length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', margin: '2px 0 0' }}>
+                        {myTicketNumbers.map(n => (
+                            <span key={n} style={{
+                                fontSize: '11px',
+                                fontWeight: 700,
+                                color: '#85efac',
+                                background: 'rgba(133, 239, 172, 0.12)',
+                                borderRadius: '6px',
+                                padding: '2px 7px',
+                            }}>
+                                #{n}
+                            </span>
+                        ))}
+                    </div>
+                )}
                 {isMyRafflesView ? (
                     <div className="raffle-card-price-description">
                         <Image src={ticketArrowIcon} alt="Ticket arrow" width={20} height={16} />
