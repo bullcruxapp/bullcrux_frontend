@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import SessionProviderWrapper from "../components/SessionProviderWrapper";
 import AppShell from "../components/AppShell";
+import GoogleAnalytics from "../components/GoogleAnalytics";
 
 const sfPro = localFont({
   src: "../fonts/SF-Pro.ttf",
@@ -24,6 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={sfPro.variable}>
+        <GoogleAnalytics />
         <SessionProviderWrapper>
           <AppShell>
             {children}
