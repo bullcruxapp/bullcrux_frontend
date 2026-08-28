@@ -42,6 +42,7 @@ const PerfilComponent = (props: PerfilComponentProps) => {
     };
 
     const menuItems = [
+        { id: 'faq', label: 'Cómo funciona', icon: politicasIcon },
         { id: 'cuenta', label: 'Cuenta', icon: cuentaIcon },
         { id: 'contraseña', label: 'Contraseña', icon: contrasenaIcon },
         { id: 'privacidad', label: 'Política de privacidad', icon: politicasIcon },
@@ -50,7 +51,9 @@ const PerfilComponent = (props: PerfilComponentProps) => {
     ];
 
     const handleMenuItemClick = (itemId: string) => {
-        if (itemId === 'cuenta') {
+        if (itemId === 'faq') {
+            router.push('/perfil/faq');
+        } else if (itemId === 'cuenta') {
             router.push('/perfil/cuenta');
         } else if (itemId === 'contraseña') {
             router.push('/perfil/contrasena');
