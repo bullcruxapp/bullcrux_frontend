@@ -46,7 +46,7 @@ const emptyForm = {
     ticketPriceCoins: '',
     productPriceCoins: '',
     totalTickets: '',
-    imageUrl: '',
+    mediaUrls: [''] as string[],
     featured: false,
 };
 
@@ -77,8 +77,26 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    const handleMediaUrlChange = (index: number, value: string) => {
+        const next = [...form.mediaUrls];
+        next[index] = value;
+        setForm({ ...form, mediaUrls: next });
+    };
+
+    const handleAddMediaUrl = () => {
+        setForm({ ...form, mediaUrls: [...form.mediaUrls, ''] });
+    };
+
+    const handleRemoveMediaUrl = (index: number) => {
+        const next = form.mediaUrls.filter((_, i) => i !== index);
+        setForm({ ...form, mediaUrls: next.length > 0 ? next : [''] });
+    };
+
     const handleEdit = (raffle: Raffle) => {
         setEditingId(raffle.id);
+        const existingUrls = (raffle.productImages || [])
+            .sort((a, b) => a.order - b.order)
+            .map(img => img.url);
         setForm({
             title: raffle.title,
             productName: raffle.productName,
@@ -86,7 +104,7 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
             ticketPriceCoins: String(raffle.ticketPriceCoins),
             productPriceCoins: String(raffle.productPriceCoins || ''),
             totalTickets: String(raffle.totalTickets),
-            imageUrl: raffle.productImages?.[0]?.url || '',
+            mediaUrls: existingUrls.length > 0 ? existingUrls : [''],
             featured: raffle.featured || false,
         });
         window.scrollTo(0, 0);
@@ -110,7 +128,10 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                 productPriceCoins: parseInt(form.productPriceCoins) || 0,
                 totalTickets: parseInt(form.totalTickets),
                 featured: form.featured,
-                productImages: form.imageUrl ? [{ url: form.imageUrl, order: 0 }] : [],
+                productImages: form.mediaUrls
+                    .map(u => u.trim())
+                    .filter(Boolean)
+                    .map((url, order) => ({ url, order })),
             };
             const url = editingId ? `${API_URL}/raffle/${editingId}` : `${API_URL}/raffle`;
             const method = editingId ? 'PUT' : 'POST';
@@ -195,7 +216,36 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                 <input name="ticketPriceCoins" placeholder="Precio del ticket (coins)" type="number" value={form.ticketPriceCoins} onChange={handleChange} style={inputStyle} />
                 <input name="productPriceCoins" placeholder="Precio del producto (coins) - activa countdown al llegarse" type="number" value={form.productPriceCoins} onChange={handleChange} style={inputStyle} />
                 <input name="totalTickets" placeholder="Total de tickets" type="number" value={form.totalTickets} onChange={handleChange} style={inputStyle} />
-                <input name="imageUrl" placeholder="URL de imagen" value={form.imageUrl} onChange={handleChange} style={inputStyle} />
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <label style={{ fontSize: '13px', color: '#aaa' }}>Fotos o videos del producto (URL) — el primero es la portada</label>
+                    {form.mediaUrls.map((url, index) => (
+                        <div key={index} style={{ display: 'flex', gap: '8px' }}>
+                            <input
+                                placeholder={`URL ${index + 1} (imagen o video .mp4)`}
+                                value={url}
+                                onChange={(e) => handleMediaUrlChange(index, e.target.value)}
+                                style={{ ...inputStyle, flex: 1 }}
+                            />
+                            {form.mediaUrls.length > 1 && (
+                                <button
+                                    type="button"
+                                    onClick={() => handleRemoveMediaUrl(index)}
+                                    style={{ background: '#331a1a', border: '1px solid #663333', color: '#ff8888', borderRadius: '8px', padding: '0 14px', cursor: 'pointer' }}
+                                >
+                                    ✕
+                                </button>
+                            )}
+                        </div>
+                    ))}
+                    <button
+                        type="button"
+                        onClick={handleAddMediaUrl}
+                        style={{ background: 'none', border: '1px dashed #555', color: '#ABDA53', borderRadius: '8px', padding: '10px', cursor: 'pointer', fontSize: '13px' }}
+                    >
+                        + Agregar otra foto o video
+                    </button>
+                </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: '#1a1a1a', border: '1px solid #333', borderRadius: '8px' }}>
                     <input type="checkbox" id="featured" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
