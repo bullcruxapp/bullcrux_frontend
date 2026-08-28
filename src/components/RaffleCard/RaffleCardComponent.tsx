@@ -8,6 +8,9 @@ import heartSelectedIcon from '@/images/icons/heart-selected-icon.svg';
 import clockIcon from '@/images/icons/clock-icon.svg';
 import fireIcon from '@/images/icons/fire-icon.svg';
 import exclamationIcon from '@/images/icons/exclamation-icon.svg';
+
+/** Detecta si una URL es un video, mirando la extensión del archivo. */
+const isVideoUrl = (url: string) => typeof url === 'string' && /\.(mp4|webm|mov|ogg)(\?.*)?$/i.test(url);
 import limitedIcon from '@/images/icons/limited-icon.svg';
 import checkIcon from '@/images/icons/check-icon.svg';
 import ticketIcon from '@/images/icons/ticket-icon.svg';
@@ -114,7 +117,18 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
     return (
         <div className={`raffle-card ${isMyRafflesView ? 'raffle-card-my-raffles' : ''} ${variant === 'trending' ? 'raffle-card-trending' : ''}`} onClick={isMyRafflesView ? undefined : handleCardClick} style={{ cursor: (onClick || productId) && !isMyRafflesView ? 'pointer' : 'default' }}>
             <div className="raffle-card-image-container">
-                <Image src={image} alt={title} width={176} height={120} style={{ objectFit: 'cover', borderRadius: '16px 16px 0 0' }} />
+                {isVideoUrl(image) ? (
+                    <video
+                        src={image}
+                        muted
+                        autoPlay
+                        loop
+                        playsInline
+                        style={{ width: '100%', height: '120px', objectFit: 'cover', borderRadius: '16px 16px 0 0' }}
+                    />
+                ) : (
+                    <Image src={image} alt={title} width={176} height={120} style={{ objectFit: 'cover', borderRadius: '16px 16px 0 0' }} />
+                )}
                 <button className="raffle-card-favorite" onClick={handleFavoriteClick}>
                     <Image src={favorite ? heartSelectedIcon : heartIcon} alt="Favorite" />
                 </button>

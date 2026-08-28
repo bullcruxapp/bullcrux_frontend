@@ -6,6 +6,9 @@ import bellIcon from '@/images/icons/icon-bell.svg';
 import './raffle-large.css';
 import FreeTicketButton from '../FreeTicketButton/FreeTicketButton';
 
+/** Detecta si una URL es un video, mirando la extensión del archivo. */
+const isVideoUrl = (url: string) => typeof url === 'string' && /\.(mp4|webm|mov|ogg)(\?.*)?$/i.test(url);
+
 interface RaffleLargeComponentProps {
     image: string | any;
     title: string;
@@ -50,13 +53,24 @@ const RaffleLargeComponent = (props: RaffleLargeComponentProps) => {
             style={{ cursor: (onClick || productId) && !isFavoritesView ? 'pointer' : 'default' }}
         >
             <div className={`raffle-large-image ${isFavoritesView ? 'raffle-large-image-favorites' : ''}`}>
-                <Image
-                    src={image}
-                    alt={title}
-                    width={185}
-                    height={isFavoritesView ? 164 : 122}
-                    style={{ objectFit: 'cover', borderRadius: '16px 0 0 16px' }}
-                />
+                {isVideoUrl(image) ? (
+                    <video
+                        src={image}
+                        muted
+                        autoPlay
+                        loop
+                        playsInline
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '16px 0 0 16px' }}
+                    />
+                ) : (
+                    <Image
+                        src={image}
+                        alt={title}
+                        width={185}
+                        height={isFavoritesView ? 164 : 122}
+                        style={{ objectFit: 'cover', borderRadius: '16px 0 0 16px' }}
+                    />
+                )}
             </div>
             <div className={`raffle-large-content ${isFavoritesView ? 'raffle-large-content-favorites' : ''}`}>
                 {isFavoritesView && (
