@@ -23,6 +23,9 @@ interface ProductDetailComponentProps {
 
 const SF_PRO = '-apple-system, "SF Pro", "SF Pro Display", BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif';
 
+/** Detecta si una URL es un video, mirando la extensión del archivo. */
+const isVideoUrl = (url: string) => /\.(mp4|webm|mov|ogg)(\?.*)?$/i.test(url);
+
 const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
     const router = useRouter();
     const { data: session } = useSession();
@@ -162,7 +165,16 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                         {images.map((image, index) => (
                             <SwiperSlide key={index}>
                                 <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-                                    <Image src={image} alt={raffle.productName} fill style={{ objectFit: 'cover' }} priority={index === 0} />
+                                    {isVideoUrl(image) ? (
+                                        <video
+                                            src={image}
+                                            controls
+                                            playsInline
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        />
+                                    ) : (
+                                        <Image src={image} alt={raffle.productName} fill style={{ objectFit: 'cover' }} priority={index === 0} />
+                                    )}
                                 </div>
                             </SwiperSlide>
                         ))}
@@ -282,7 +294,16 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                                     {images.map((image, index) => (
                                         <SwiperSlide key={index}>
                                             <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-                                                <Image src={image} alt={raffle.productName} fill style={{ objectFit: 'contain' }} priority={index === 0} />
+                                                {isVideoUrl(image) ? (
+                                                    <video
+                                                        src={image}
+                                                        controls
+                                                        playsInline
+                                                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                                                    />
+                                                ) : (
+                                                    <Image src={image} alt={raffle.productName} fill style={{ objectFit: 'contain' }} priority={index === 0} />
+                                                )}
                                             </div>
                                         </SwiperSlide>
                                     ))}
