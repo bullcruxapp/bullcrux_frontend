@@ -263,6 +263,8 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
                 </div>
             </div>
 
+            <HouseAdsSection token={token} />
+
             <h2 style={{ fontSize: '16px', fontWeight: '500', margin: '32px 0 16px' }}>Sorteos existentes</h2>
 
             {raffles.length === 0 ? (
@@ -381,3 +383,111 @@ const AdminComponent = ({ token }: AdminComponentProps) => {
 };
 
 export default AdminComponent;
+
+/** Sección para manejar tus propios videos de publicidad (los que se muestran al pedir ticket gratis). */
+function HouseAdsSection({ token }: { token: string }) {
+    const [ads, setAds] = useState<{ id: string; videoUrl: string; active: boolean }[]>([]);
+    const [newUrl, setNewUrl] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const fetchAds = async () => {
+        try {
+            const res = await fetch(`${API_URL}/house-ad`, {
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
+            const data = await res.json();
+            setAds(data);
+        } catch (e) { console.error(e); }
+    };
+
+    useEffect(() => { fetchAds(); }, []);
+
+    const handleAdd = async () => {
+        if (!newUrl.trim()) return;
+        setLoading(true);
+        try {
+            await fetch(`${API_URL}/house-ad`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ videoUrl: newUrl.trim() }),
+            });
+            setNewUrl('');
+            fetchAds();
+        } catch (e) { console.error(e); }
+        finally { setLoading(false); }
+    };
+
+    const handleToggle = async (id: string) => {
+        try {
+            await fetch(`${API_URL}/house-ad/${id}/toggle`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
+            fetchAds();
+        } catch (e) { console.error(e); }
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!confirm('¿Eliminar este anuncio?')) return;
+        try {
+            await fetch(`${API_URL}/house-ad/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
+            fetchAds();
+        } catch (e) { console.error(e); }
+    };
+
+    const inputStyle = { padding: '12px', borderRadius: '8px', background: '#1a1a1a', border: '1px solid #333', color: '#fff', fontSize: '14px', outline: 'none', width: '100%', boxSizing: 'border-box' as const };
+
+    return (
+        <div style={{ marginTop: '32px', padding: '16px', background: '#141414', border: '1px solid #333', borderRadius: '10px' }}>
+            <h2 style={{ fontSize: '16px', fontWeight: '500', margin: '0 0 4px' }}>🎬 Mis anuncios (ticket gratis)</h2>
+            <p style={{ fontSize: '12.5px', color: '#888', margin: '0 0 16px' }}>
+                Videos propios que se muestran cuando alguien pide un ticket gratis. Rotan al azar entre los que estén activos.
+            </p>
+
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                <input
+                    placeholder="URL del video (.mp4)"
+                    value={newUrl}
+                    onChange={(e) => setNewUrl(e.target.value)}
+                    style={{ ...inputStyle, flex: 1 }}
+                />
+                <button
+                    onClick={handleAdd}
+                    disabled={loading}
+                    style={{ padding: '0 20px', borderRadius: '8px', background: '#ABDA53', color: '#000', fontWeight: '500', border: 'none', cursor: loading ? 'not-allowed' : 'pointer' }}
+                >
+                    Agregar
+                </button>
+            </div>
+
+            {ads.length === 0 ? (
+                <p style={{ color: '#666', fontSize: '13px' }}>Todavía no cargaste ningún anuncio.</p>
+            ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {ads.map(ad => (
+                        <div key={ad.id} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px', background: '#1a1a1a', borderRadius: '8px', border: `1px solid ${ad.active ? '#ABDA5344' : '#333'}` }}>
+                            <span style={{ flex: 1, fontSize: '13px', color: ad.active ? '#fff' : '#666', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                {ad.videoUrl}
+                            </span>
+                            <button
+                                onClick={() => handleToggle(ad.id)}
+                                style={{ fontSize: '12px', padding: '6px 10px', borderRadius: '6px', border: 'none', cursor: 'pointer', background: ad.active ? '#ABDA5333' : '#333', color: ad.active ? '#ABDA53' : '#888' }}
+                            >
+                                {ad.active ? 'Activo' : 'Pausado'}
+                            </button>
+                            <button
+                                onClick={() => handleDelete(ad.id)}
+                                style={{ fontSize: '12px', padding: '6px 10px', borderRadius: '6px', background: '#331a1a', border: '1px solid #663333', color: '#ff8888', cursor: 'pointer' }}
+                            >
+                                ✕
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
