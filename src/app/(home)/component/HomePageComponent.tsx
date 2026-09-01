@@ -12,7 +12,7 @@ import RaffleCardComponent, { BadgeType } from '@/components/RaffleCard/RaffleCa
 import { Raffle } from '@/models/raffle.model';
 import RaffleLargeComponent from '@/components/RaffleCard/RaffleLargeComponent';
 import { claimAdTicket, getAdProgress } from '@/services/ticket.service';
-import AdOfferwallModal from '@/components/AdOfferwall/AdOfferwallModal';
+import HouseAdModal from '@/components/AdOfferwall/HouseAdModal';
 
 const TITLE_IMAGES = ['/rdt.png', '/tendencia.png', '/on_fire_today.png'];
 
@@ -348,9 +348,9 @@ const HomePageComponent = (props: HomePageComponentProps) => {
             </div>
 
             {adWallRaffleId && session && adProgress && (
-                <AdOfferwallModal
-                    userId={(session.user as any).id}
+                <HouseAdModal
                     raffleId={adWallRaffleId}
+                    token={(session as any).accessToken}
                     progress={adProgress.count}
                     required={adProgress.required}
                     onClose={handleCloseAdWall}
