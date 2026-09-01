@@ -13,7 +13,7 @@ import fireIcon from '@/images/icons/fire-icon.svg';
 import PurchaseModal from './PurchaseModal';
 import { getRaffleById } from '@/services/raffles.service';
 import { getAdProgress, claimAdTicket } from '@/services/ticket.service';
-import AdOfferwallModal from '@/components/AdOfferwall/AdOfferwallModal';
+import HouseAdModal from '@/components/AdOfferwall/HouseAdModal';
 import { Raffle } from '@/models/raffle.model';
 import './product-detail-desktop.css';
 
@@ -402,9 +402,9 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
             )}
 
             {showAdWall && session && adProgress && (
-                <AdOfferwallModal
-                    userId={(session.user as any).id}
+                <HouseAdModal
                     raffleId={productId}
+                    token={session?.accessToken || ''}
                     progress={adProgress.count}
                     required={adProgress.required}
                     onClose={handleCloseAdWall}
