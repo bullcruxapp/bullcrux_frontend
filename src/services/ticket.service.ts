@@ -68,3 +68,33 @@ export async function getMyTickets(token: string) {
 
     return response.json();
 }
+
+export async function getActiveHouseAds() {
+    const response = await fetch(`${API_URL}/house-ad/active`, {
+        method: 'GET',
+        cache: 'no-store',
+    });
+
+    if (!response.ok) {
+        throw new Error('Error al obtener anuncios');
+    }
+
+    return response.json();
+}
+
+export async function recordHouseAdView(raffleId: string, token: string) {
+    const response = await fetch(`${API_URL}/ticket/house-ad-view`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ raffleId }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Error al registrar el anuncio');
+    }
+
+    return response.json();
+}
