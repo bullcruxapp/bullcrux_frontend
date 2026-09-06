@@ -130,7 +130,7 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
                     <Image src={image} alt={title} width={176} height={120} style={{ objectFit: 'cover', borderRadius: '16px 16px 0 0' }} />
                 )}
                 <button className="raffle-card-favorite" onClick={handleFavoriteClick}>
-                    <Image src={favorite ? heartSelectedIcon : heartIcon} alt="Favorite" />
+                    <Image src={favorite ? heartSelectedIcon : heartIcon} alt="Favorite" width={15} height={13} />
                 </button>
 
                 {winner && (

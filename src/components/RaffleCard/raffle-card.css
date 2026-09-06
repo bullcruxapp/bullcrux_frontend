@@ -57,7 +57,8 @@
 }
 
 .raffle-card-favorite img {
-    width: 16px;
+    width: 15px;
+    height: 13px;
 }
 
 .raffle-card-badge {
