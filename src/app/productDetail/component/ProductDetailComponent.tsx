@@ -5,8 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
+import 'swiper/css/navigation';
 import ticketIcon from '@/images/icons/ticket-icon.svg';
 import shareIcon from '@/images/icons/share-icon.svg';
 import fireIcon from '@/images/icons/fire-icon.svg';
@@ -159,6 +161,9 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                 {images.length > 0 ? (
                     <Swiper
                         slidesPerView={1}
+                        modules={[Navigation]}
+                        navigation={images.length > 1}
+                        className={images.length > 1 ? 'has-nav-arrows' : ''}
                         onSwiper={(swiper) => (swiperRef.current = swiper)}
                         style={{ width: '100%', height: '100%' }}
                     >
@@ -290,7 +295,13 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                     <div className="desktop-product-left">
                         <div className="desktop-product-image-box">
                             {images.length > 0 ? (
-                                <Swiper slidesPerView={1} style={{ width: '100%', height: '100%' }}>
+                                <Swiper
+                                    slidesPerView={1}
+                                    modules={[Navigation]}
+                                    navigation={images.length > 1}
+                                    className={images.length > 1 ? 'has-nav-arrows' : ''}
+                                    style={{ width: '100%', height: '100%' }}
+                                >
                                     {images.map((image, index) => (
                                         <SwiperSlide key={index}>
                                             <div style={{ width: '100%', height: '100%', position: 'relative' }}>

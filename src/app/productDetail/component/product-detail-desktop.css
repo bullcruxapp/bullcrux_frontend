@@ -211,3 +211,30 @@
         color: #fafafa;
     }
 }
+
+/* ---- Flechas del carrusel de fotos/video (mobile + desktop) ---- */
+.has-nav-arrows .swiper-button-next,
+.has-nav-arrows .swiper-button-prev {
+    width: 34px;
+    height: 34px;
+    background: rgba(16, 16, 20, 0.55);
+    border-radius: 50%;
+    color: #fafafa;
+    transition: background 0.2s, color 0.2s;
+}
+
+.has-nav-arrows .swiper-button-next:hover,
+.has-nav-arrows .swiper-button-prev:hover {
+    background: #85efac;
+    color: #101014;
+}
+
+.has-nav-arrows .swiper-button-next::after,
+.has-nav-arrows .swiper-button-prev::after {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.has-nav-arrows .swiper-button-disabled {
+    display: none;
+}
