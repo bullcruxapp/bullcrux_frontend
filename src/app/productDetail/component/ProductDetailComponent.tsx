@@ -41,6 +41,17 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
     const [showAdWall, setShowAdWall] = useState(false);
     const [adProgress, setAdProgress] = useState<{ count: number; required: number } | null>(null);
     const swiperRef = useRef<SwiperType | null>(null);
+    const mobileVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+    const desktopVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+
+    const pauseOtherVideos = (refs: React.MutableRefObject<(HTMLVideoElement | null)[]>, activeIndex: number) => {
+        refs.current.forEach((video, i) => {
+            if (video && i !== activeIndex) {
+                video.pause();
+                video.currentTime = 0;
+            }
+        });
+    };
 
     useEffect(() => {
         const fetchRaffle = async () => {
@@ -165,6 +176,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                         navigation={images.length > 1}
                         className={images.length > 1 ? 'has-nav-arrows' : ''}
                         onSwiper={(swiper) => (swiperRef.current = swiper)}
+                        onSlideChange={(swiper) => pauseOtherVideos(mobileVideoRefs, swiper.activeIndex)}
                         style={{ width: '100%', height: '100%' }}
                     >
                         {images.map((image, index) => (
@@ -172,6 +184,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                                 <div style={{ width: '100%', height: '100%', position: 'relative' }}>
                                     {isVideoUrl(image) ? (
                                         <video
+                                            ref={(el) => { mobileVideoRefs.current[index] = el; }}
                                             src={image}
                                             controls
                                             playsInline
@@ -300,6 +313,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                                     modules={[Navigation]}
                                     navigation={images.length > 1}
                                     className={images.length > 1 ? 'has-nav-arrows' : ''}
+                                    onSlideChange={(swiper) => pauseOtherVideos(desktopVideoRefs, swiper.activeIndex)}
                                     style={{ width: '100%', height: '100%' }}
                                 >
                                     {images.map((image, index) => (
@@ -307,6 +321,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                                             <div style={{ width: '100%', height: '100%', position: 'relative' }}>
                                                 {isVideoUrl(image) ? (
                                                     <video
+                                                        ref={(el) => { desktopVideoRefs.current[index] = el; }}
                                                         src={image}
                                                         controls
                                                         playsInline

@@ -231,7 +231,7 @@
 
 .has-nav-arrows .swiper-button-next::after,
 .has-nav-arrows .swiper-button-prev::after {
-    font-size: 14px;
+    font-size: 10px;
     font-weight: 700;
 }
 
