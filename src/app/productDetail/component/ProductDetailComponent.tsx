@@ -14,7 +14,7 @@ import shareIcon from '@/images/icons/share-icon.svg';
 import fireIcon from '@/images/icons/fire-icon.svg';
 import PurchaseModal from './PurchaseModal';
 import { getRaffleById } from '@/services/raffles.service';
-import { getAdProgress, claimAdTicket } from '@/services/ticket.service';
+import { getAdProgress, claimAdTicket, getMyTicketsForRaffle } from '@/services/ticket.service';
 import HouseAdModal from '@/components/AdOfferwall/HouseAdModal';
 import { Raffle } from '@/models/raffle.model';
 import './product-detail-desktop.css';
@@ -40,6 +40,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
     const [freeHover, setFreeHover] = useState(false);
     const [showAdWall, setShowAdWall] = useState(false);
     const [adProgress, setAdProgress] = useState<{ count: number; required: number } | null>(null);
+    const [myNumbers, setMyNumbers] = useState<number[]>([]);
     const swiperRef = useRef<SwiperType | null>(null);
     const mobileVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
     const desktopVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -67,6 +68,20 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
         fetchRaffle();
     }, [productId]);
 
+    const refreshMyNumbers = async () => {
+        if (!session) return;
+        try {
+            const numbers = await getMyTicketsForRaffle(productId, (session as any).accessToken);
+            setMyNumbers(numbers);
+        } catch (error) {
+            console.error('Error fetching my ticket numbers:', error);
+        }
+    };
+
+    useEffect(() => {
+        refreshMyNumbers();
+    }, [productId, session]);
+
     const handleFreeTicket = async () => {
         if (!session) { router.push('/login'); return; }
         if (claiming) return;
@@ -84,6 +99,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
             }
             await claimAdTicket(productId, (session as any).accessToken);
             setClaimMessage('¡Ticket gratis reclamado!');
+            refreshMyNumbers();
         } catch (error: any) {
             const msg = error.message?.includes('Ya reclamaste')
                 ? 'Ya reclamaste tu ticket gratis para este sorteo'
@@ -104,6 +120,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
             if (progress.canClaim) {
                 await claimAdTicket(productId, (session as any).accessToken);
                 setClaimMessage('¡Ticket gratis reclamado!');
+                refreshMyNumbers();
                 setTimeout(() => setClaimMessage(''), 4000);
             }
         } catch (e) {
@@ -237,6 +254,29 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                         <Image src={shareIcon} alt="Compartir" width={22} height={22} />
                     </button>
                 </div>
+
+                {myNumbers.length > 0 && (
+                    <div style={{ background: '#18181c', border: '1px solid #272a2d', borderRadius: '12px', padding: '12px 14px', marginTop: '4px' }}>
+                        <p style={{ fontSize: '12px', color: '#a0a3a7', margin: '0 0 8px', fontFamily: SF_PRO }}>
+                            {myNumbers.length > 1 ? 'Tus números en este sorteo' : 'Tu número en este sorteo'}
+                        </p>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                            {myNumbers.map(n => (
+                                <span key={n} style={{
+                                    fontSize: '14px',
+                                    fontWeight: 800,
+                                    color: '#85efac',
+                                    background: 'rgba(133, 239, 172, 0.12)',
+                                    borderRadius: '8px',
+                                    padding: '5px 10px',
+                                    fontFamily: SF_PRO,
+                                }}>
+                                    #{String(n).padStart(4, '0')}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* Separator */}
                 <div style={{ width: '100%', height: '1px', background: 'rgba(255,255,255,0.12)', marginTop: '4px' }} />
@@ -404,6 +444,21 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                                 <Image src={shareIcon} alt="" width={16} height={16} />
                                 Compartir
                             </button>
+
+                            {myNumbers.length > 0 && (
+                                <div className="desktop-my-numbers">
+                                    <p className="desktop-my-numbers-label">
+                                        {myNumbers.length > 1 ? 'Tus números en este sorteo' : 'Tu número en este sorteo'}
+                                    </p>
+                                    <div className="desktop-my-numbers-list">
+                                        {myNumbers.map(n => (
+                                            <span key={n} className="desktop-my-numbers-chip">
+                                                #{String(n).padStart(4, '0')}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -413,7 +468,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
             {raffle && (
                 <PurchaseModal
                     isOpen={isPurchaseModalOpen}
-                    onClose={() => setIsPurchaseModalOpen(false)}
+                    onClose={() => { setIsPurchaseModalOpen(false); refreshMyNumbers(); }}
                     product={{
                         image: images[0] || '',
                         title: raffle.productName,

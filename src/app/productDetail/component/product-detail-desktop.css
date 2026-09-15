@@ -238,3 +238,33 @@
 .has-nav-arrows .swiper-button-disabled {
     display: none;
 }
+
+/* ---- "Tus números en este sorteo" ---- */
+.desktop-my-numbers {
+    background: rgba(133, 239, 172, 0.06);
+    border: 1px solid #272a2d;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-top: 4px;
+}
+
+.desktop-my-numbers-label {
+    font-size: 12px;
+    color: #a0a3a7;
+    margin: 0 0 8px;
+}
+
+.desktop-my-numbers-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.desktop-my-numbers-chip {
+    font-size: 14px;
+    font-weight: 800;
+    color: #85efac;
+    background: rgba(133, 239, 172, 0.14);
+    border-radius: 8px;
+    padding: 5px 10px;
+}
