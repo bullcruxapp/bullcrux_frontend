@@ -139,7 +139,7 @@
 
     .desktop-purchase-progress-info {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         margin-top: 6px;
         font-size: 13px;
         font-weight: 700;

@@ -211,9 +211,8 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                     <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.15)', borderRadius: '2px', overflow: 'hidden' }}>
                         <div style={{ height: '100%', width: `${progress}%`, background: '#94FF31', borderRadius: '2px' }} />
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px', fontFamily: SF_PRO }}>
-                        <span style={{ fontSize: '13px', color: '#fff', fontWeight: 700 }}>{available} Disponibles</span>
-                        <span style={{ fontSize: '13px', color: '#fff', fontWeight: 700 }}>{progress}%</span>
+                    <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '6px', fontFamily: SF_PRO }}>
+                        <span style={{ fontSize: '13px', color: '#fff', fontWeight: 700 }}>{100 - progress}% disponible</span>
                     </div>
                 </div>
 
@@ -369,8 +368,7 @@ const ProductDetailComponent = ({ productId }: ProductDetailComponentProps) => {
                                     <div className="desktop-purchase-progress-fill" style={{ width: `${progress}%` }} />
                                 </div>
                                 <div className="desktop-purchase-progress-info">
-                                    <span>{available} disponibles</span>
-                                    <span>{progress}%</span>
+                                    <span>{100 - progress}% disponible</span>
                                 </div>
                             </div>
 
