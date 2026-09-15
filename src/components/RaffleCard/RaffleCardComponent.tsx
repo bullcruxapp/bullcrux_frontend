@@ -162,7 +162,6 @@ const RaffleCardComponent = (props: RaffleCardComponentProps) => {
                     </div>
                     <div className="raffle-card-progress-info">
                         <span className="raffle-card-available">{available}</span>
-                        <span className="raffle-card-progress-text">{progressText}</span>
                     </div>
                 </div>
 
