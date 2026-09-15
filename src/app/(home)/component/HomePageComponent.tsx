@@ -249,7 +249,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                     <Image src={bullcruxIcon} alt="Bullcrux icon" width={24} />
                 </div>
                 <NotificationComponent
-                    productNames={raffles.filter(r => r.status === 'OPEN' || r.status === 'SOLD_OUT').map(r => r.productName).filter(Boolean)}
+                    productNames={raffles.filter(r => r.status === 'OPEN' || r.status === 'SOLD_OUT').map(r => r.title).filter(Boolean)}
                 />
                 <div className="search-input">
                     <Image src={searchIcon} alt="Search icon" width={18} height={18} />
@@ -320,8 +320,7 @@ const HomePageComponent = (props: HomePageComponentProps) => {
                                 onFavoriteClick={() => handleToggleFavorite(raffle.id)}
                                 badge={getAutoBadge(raffle)}
                                 progress={getProgress(raffle)}
-                                available={`${raffle.totalTickets - raffle.ticketsSold} disponibles`}
-                                progressText={`${raffle.ticketsSold}/${raffle.totalTickets}`}
+                                available={`${100 - getProgress(raffle)}% disponible`}
                                 title={raffle.title}
                                 price={`B$ ${raffle.ticketPriceCoins}`}
                                 onFreeTicketClick={() => handleFreeTicket(raffle.id)}

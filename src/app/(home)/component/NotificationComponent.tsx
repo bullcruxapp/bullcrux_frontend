@@ -60,7 +60,7 @@ const NotificationComponent = ({ productNames: providedProductNames }: Notificat
                 if (cancelled) return;
                 const names = (raffles || [])
                     .filter(r => r.status === 'OPEN' || r.status === 'SOLD_OUT')
-                    .map(r => r.productName)
+                    .map(r => r.title)
                     .filter(Boolean);
                 if (names.length > 0) setProducts(names);
             })
@@ -93,7 +93,7 @@ const NotificationComponent = ({ productNames: providedProductNames }: Notificat
                 className="notification-avatar"
             />
             <span className="notification-text">
-                {current.user} compró {current.tickets}tks de {current.product}
+                {current.user} compró {current.tickets} $BULL de {current.product}
             </span>
         </div>
     );
