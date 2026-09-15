@@ -144,8 +144,7 @@ const FavoritosComponent = ({ tickets, favorites: initialFavorites = [], notLogg
                                         isFavorite={true}
                                         onFavoriteClick={() => handleRemoveFavorite(fav.raffleId)}
                                         progress={getProgress(fav.raffle)}
-                                        available={`${fav.raffle.totalTickets - fav.raffle.ticketsSold} disponibles`}
-                                        progressText={`${fav.raffle.ticketsSold}/${fav.raffle.totalTickets}`}
+                                        available={`${100 - getProgress(fav.raffle)}% disponible`}
                                         title={fav.raffle.title || fav.raffle.productName}
                                         price={`B$ ${fav.raffle.ticketPriceCoins}`}
                                         productId={fav.raffle.id}
@@ -169,8 +168,7 @@ const FavoritosComponent = ({ tickets, favorites: initialFavorites = [], notLogg
                                         image={getImageUrl(ticket.raffle)}
                                         isFavorite={false}
                                         progress={getProgress(ticket.raffle)}
-                                        available={`${ticket.raffle.totalTickets - ticket.raffle.ticketsSold} disponibles`}
-                                        progressText={`${ticket.raffle.ticketsSold}/${ticket.raffle.totalTickets}`}
+                                        available={`${100 - getProgress(ticket.raffle)}% disponible`}
                                         title={ticket.raffle.title || ticket.raffle.productName}
                                         price={`B$ ${ticket.raffle.ticketPriceCoins}`}
                                         productId={ticket.raffle.id}
