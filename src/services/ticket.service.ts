@@ -98,3 +98,19 @@ export async function recordHouseAdView(raffleId: string, token: string) {
 
     return response.json();
 }
+
+export async function getMyTicketsForRaffle(raffleId: string, token: string): Promise<number[]> {
+    const response = await fetch(`${API_URL}/ticket/mine/${raffleId}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+        cache: 'no-store',
+    });
+
+    if (!response.ok) {
+        throw new Error('Error al obtener tus números');
+    }
+
+    return response.json();
+}
