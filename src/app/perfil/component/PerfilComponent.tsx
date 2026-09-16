@@ -46,6 +46,7 @@ const PerfilComponent = (props: PerfilComponentProps) => {
         { id: 'cuenta', label: 'Cuenta', icon: cuentaIcon },
         { id: 'contraseña', label: 'Contraseña', icon: contrasenaIcon },
         { id: 'privacidad', label: 'Política de privacidad', icon: politicasIcon },
+        { id: 'terminos', label: 'Términos y condiciones', icon: politicasIcon },
         { id: 'notificaciones', label: 'Notificaciones', icon: notificacionesIcon },
         { id: 'idioma', label: 'Idioma', icon: idiomaIcon },
     ];
@@ -59,6 +60,8 @@ const PerfilComponent = (props: PerfilComponentProps) => {
             router.push('/perfil/contrasena');
         } else if (itemId === 'privacidad') {
             router.push('/perfil/privacidad');
+        } else if (itemId === 'terminos') {
+            router.push('/perfil/terminos');
         } else if (itemId === 'notificaciones') {
             router.push('/perfil/notificaciones');
         } else if (itemId === 'idioma') {
